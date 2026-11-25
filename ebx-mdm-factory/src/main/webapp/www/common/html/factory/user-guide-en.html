@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MDM Factory - user guide</title>
+<style>
+/* audit F-44: the accent follows the perspective the wizard was shown in (the help link carries its colours, see the script below);
+   the Factory violet is the fallback when the page is opened on its own. */
+:root{--ink:#172033;--muted:#667085;--line:#e6eaf0;--accent:var(--ebx-main,#684bc0);--accent-fg:var(--ebx-main-ink,#684bc0);--focus:var(--ebx-focus,var(--accent));
+  --soft:color-mix(in srgb,var(--accent) 5%,#fff);--warn:#b54708;--warn-soft:#fffaeb}
+*{box-sizing:border-box}
+body{margin:0;background:#fff;color:var(--ink);font:15px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
+main{max-width:860px;margin:0 auto;padding:32px 20px 64px}
+h1{font-size:28px;margin:0 0 6px}
+h2{font-size:20px;margin:40px 0 8px;padding-top:12px;border-top:1px solid var(--line)}
+h3{font-size:16px;margin:22px 0 4px}
+p,li{max-width:72ch}
+a{color:var(--accent-fg)}
+a:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+.lead{color:var(--muted);font-size:16px}
+nav ol{columns:2;padding-left:20px}
+.note{background:var(--soft);border-left:3px solid var(--accent-fg);padding:10px 14px;border-radius:6px}
+.warn{background:var(--warn-soft);border-left:3px solid var(--warn);padding:10px 14px;border-radius:6px}
+kbd{border:1px solid var(--line);border-bottom-width:2px;border-radius:4px;padding:0 5px;font-size:13px}
+table{border-collapse:collapse;width:100%;margin:8px 0}
+th,td{text-align:left;vertical-align:top;border-bottom:1px solid var(--ebx-table-border,var(--line));padding:6px 8px}
+th{background:var(--ebx-table-header,transparent)}
+@media (max-width:640px){nav ol{columns:1}}
+</style>
+<script>
+/* audit F-44: the wizard's help link carries the perspective's colours as ebx-<token>=<colour> (ThemeTokens.query);
+   each value is checked again here - a colour or nothing - before it becomes a --ebx-* custom property. */
+(function(){var p;try{p=new URLSearchParams(window.location.search);}catch(e){return;}
+var ok=/^(#[0-9a-f]{3}|#[0-9a-f]{6}|rgb\(\d{1,3},\d{1,3},\d{1,3}\)|[a-z]{3,20})$/i;
+["main","main-text","main-ink","focus","header","header-text","second-header","button","button-text","table-header","table-odd","table-even","table-border","selection"].forEach(function(n){
+var v=p.get("ebx-"+n);if(v&&ok.test(v)){document.documentElement.style.setProperty("--ebx-"+n,v);}});})();
+</script>
+</head>
+<body>
+<main>
+<h1>MDM Factory - user guide</h1>
+<p class="lead">The MDM Factory builds a master data hub in ON EBX from the applications that hold your records: it brings their data in, proposes one trusted record per person, company or product, and keeps the trail of where every value came from. This guide follows the wizard step by step.</p>
+
+<nav aria-label="Contents">
+<ol>
+<li><a href="#step-1">Project</a></li>
+<li><a href="#step-2">Sources</a></li>
+<li><a href="#step-3">Landing</a></li>
+<li><a href="#step-4">Staging</a></li>
+<li><a href="#step-5">Master</a></li>
+<li><a href="#step-6">Matching</a></li>
+<li><a href="#step-7">Distribution</a></li>
+<li><a href="#step-8">Summary and production</a></li>
+<li><a href="#screens">The screens</a></li>
+<li><a href="#tasks">Background tasks</a></li>
+<li><a href="#schedule">Run on a schedule</a></li>
+<li><a href="#delivery">Deliver to another instance</a></li>
+<li><a href="#rights">Who may do what</a></li>
+<li><a href="#problems">When something goes wrong</a></li>
+</ol>
+</nav>
+
+<h2>How the wizard works</h2>
+<p>The wizard has eight steps, shown in the rail at the top. A step opens once the steps it depends on are done; a greyed step says, when you point at it, what it is waiting for. Nothing is generated from a proposal that nobody accepted: the factory proposes, you decide.</p>
+<p>Long actions (reading an application, building a zone, loading data, asking the language model, running the matching) run in the background. You can leave the page: the work goes on, and the <a href="#tasks">task banner and the Recent tasks list</a> tell you how it ended.</p>
+<p>The <strong>Help</strong> link next to the step name opens this guide at the section of the step you are on.</p>
+
+<h2 id="step-1">1. Project</h2>
+<p>Give the project a code and a name, say who owns it and where its master data will live. The code names the dataspaces the factory creates (<em>code</em>_Landing, _Staging, _Master), so choose it once.</p>
+<p>The <strong>implementation style</strong> cards compare the usual ways of running an MDM. Consolidation - one golden record built from every application, which keep their own copy - is the one the factory builds today; the other cards are there to compare and are not selectable yet.</p>
+<p><strong>What may reach the language model</strong>: the factory can ask a language model for proposals. Choose whether it may see only the structure (names and types), or also a small sample of values. Your administrator sets the most the instance allows.</p>
+
+<h2 id="step-2">2. Sources</h2>
+<p>Add each application that holds the records you want to master (an ERP, a CRM...). Pick its connection, and the factory reads what it contains - tables, columns, a profile of the values - through the data catalog. If an application has no catalog entry yet, the onboarding panel walks you through creating one and scanning it; you never need to open Connectors or the catalog yourself.</p>
+<p>An application without a readable structure (a file, an API with no schema) can be described by a sample file; the factory deduces its tables and asks you to confirm each one.</p>
+<p>The <strong>trust rank</strong> of an application tells the matching which source wins when two disagree.</p>
+
+<h2 id="step-3">3. Landing</h2>
+<p>The landing zone is a faithful copy of each application's data inside EBX. One click plans it, finds each table's key, builds the landing tables, writes the flows and loads the data.</p>
+<p>A table stops for you when no key is certain enough, and whenever the key comes from the language model: a key the model proposes is never applied on its own, whatever its confidence. <strong>Choose the key</strong> then opens on its proposal, already ticked: one click confirms it. Otherwise the wizard shows a sample and the candidate keys, and <strong>Study the key</strong> can ask the language model for an opinion. Once a table is built, its key is changed with <strong>Change the key...</strong>, which empties the table and rebuilds its flow.</p>
+
+<h2 id="step-4">4. Staging</h2>
+<p>The staging zone is your target model: one entity per business object (Person, Company, Address...) with the attributes you decide to keep, and a mapping from each application's columns to those attributes.</p>
+<p><strong>Propose the staging</strong> reads the landing and proposes entities, attributes and mappings; when a language model is configured it then unifies the applications into shared entities. Accept or reject each proposal - one by one, by entity, or above a confidence threshold. The <strong>Mapping matrix</strong> and the <strong>Feed designer</strong> show the same mappings as a grid and as a drawing; both are reachable from this step.</p>
+<p>Quality rules and script constraints (a phone number check, a VAT number check...) are proposed here too. A rule in severity <em>Reject</em> stops a row before the master; a warning only flags it.</p>
+<p>When every accepted attribute has a mapping, generate and load the staging. Rows that fail a blocking rule are held back and listed for review.</p>
+
+<h2 id="step-5">5. Master</h2>
+<p>The master zone holds one table per business object you accepted. The factory generates it, then fills it from the staging of every application, and records for each master record which source rows built it (the cross-references that <a href="#step-8">record lineage</a> shows).</p>
+
+<h2 id="step-6">6. Matching</h2>
+<p>For each business object the factory proposes a matching plan: which fields to compare, how close is close enough, and which pairs are sure matches versus pairs a person must look at. <strong>Simulate</strong> tries a plan on real records without changing anything. <strong>Configure</strong> writes it into Match and Merge; <strong>Run (every record)</strong> runs it over the whole table, <strong>Run (last loaded batch)</strong> only over the records loaded last.</p>
+<p>The list of pairs to decide is shown ten groups at a time: the buttons at its foot page through it (for example "21-25 / 25"), and a line says how many more groups exist beyond the ones stored for the screen ("138 more groups not shown here"). The <em>Merged</em> and <em>Different</em> tabs show the true total when it is known, and "60+" or "100+" when the list is cut and the total is not; the list then says "60 of 1200 shown". Decide the first groups to reach the next ones. Merging every pair above a score, and simulating a plan, run as background tasks.</p>
+
+<p>The results show the groups that were merged and the <em>suspect pairs</em>: a data steward decides each one (merge, or not the same), or merges every pair above a score.</p>
+
+<h2 id="step-7">7. Distribution</h2>
+<p>Choose the systems that receive the golden records (a Kafka topic, a REST API, a warehouse...) and when they receive them: on every change, on a schedule, or on demand. Nothing leaves EBX until a target is switched on. You can also publish the master as a <strong>data product</strong> in the data catalog.</p>
+<p>The list of connections is read in the background and kept per person: the page says "Reading the connections..." until it arrives, "Connections not read yet" with a <strong>Refresh the connections</strong> button when nothing was ever read, and shows the last list while a newer one is read. The warehouse is only probed when you press <strong>Test the connection</strong>; creating the data product never probes it.</p>
+
+
+<h2 id="step-8">8. Summary and production</h2>
+<p>The summary says whether the project is ready, what is still open (rejected rows, suspect pairs, targets not switched on) and how long the last full run took. From there:</p>
+<ul>
+<li><strong>Launch now</strong> runs the whole chain - landing, staging, master, matching - as an EBX workflow that stops on rejected rows to review.</li>
+<li><strong>Automatic intake</strong> lets the applications push their changes and the factory process them as they arrive.</li>
+<li>The <strong>Cockpit</strong> shows the state of every step and every send; <strong>Record lineage</strong> says, value by value, where a golden record comes from.</li>
+</ul>
+<p>If the summary shows no data product although one exists, your data catalog right may not let you see it: the summary then says so.</p>
+
+<h2 id="screens">The screens</h2>
+<p>Every screen opens from the project list (the home page) or from a button of another screen. The right in brackets is the least right that opens it (see <a href="#rights">Who may do what</a>).</p>
+<h3 id="ProjectExplorer">Project explorer (VIEW)</h3>
+<p>The home page: one card per project you may see, with filters, favourites and, for the right users, <strong>New project</strong> (it opens the wizard) and <strong>Delete</strong>. It follows the colours of the perspective it is shown in.</p>
+<h3 id="ProjectWizard">Project wizard (VIEW to read, DESIGN to act)</h3>
+<p>The eight steps described above. A button you may not use is greyed and its tooltip names the right it needs.</p>
+<h3 id="FactoryCockpit">Cockpit (VIEW)</h3>
+<p>The state of every step of a project, of every send, the recent tasks and the rows held back. When the count of held-back rows per entity could not be read in full, the cockpit says "The breakdown below is partial": the total above stays right and only the breakdown is incomplete - open the review screen for the detail.</p>
+<h3 id="TransferRejectReview">Held-back rows review (VIEW to read, STEWARD to acknowledge)</h3>
+<p>The rows a blocking rule or a failed write kept out of the master, with the cause and the rule that stopped each one. Acknowledge a row once it is dealt with; the wizard and the Cockpit count only what is still open.</p>
+<h3 id="ProposalReview">Proposal review (VIEW to read, STEWARD to decide, DESIGN to apply)</h3>
+<p>Every proposal of the factory (entities, attributes, mappings, quality rules, matching plans, script constraints) in one list: accept or reject one, a selection or all above a score. A proposal is only applied when you apply it.</p>
+<h3 id="MappingMatrix">Mapping matrix (DESIGN)</h3>
+<p>Entities in rows, applications in columns: each cell is the mapping of one attribute from one application, with its status, its rule and its checks. The queue at the bottom lists what is still to decide; the arrows go from one item to the next.</p>
+<h3 id="StagingDesk">Validation desk (DESIGN)</h3>
+<p>The same decisions as the matrix, sorted by what needs a person first (rules to confirm, anomalies, conditions proposed by the language model), with the evidence for each one.</p>
+<h3 id="FeedDesigner">Feed designer (DESIGN)</h3>
+<p>One feed at a time, drawn as a diagram: the columns of the application on the left, the fields of the target on the right, the rules and checks between them. Save writes every change of the page at once; a refusal is worded in your language.</p>
+<h3 id="RecordLineage">Record lineage (VIEW)</h3>
+<p>For a golden record, where each value comes from: which source rows built it and which merge chose each field. A golden built from many records shows the first contributors with "N of M contributors" and a <strong>Next contributors</strong> button. When the version of EBX cannot say how a field was chosen, the screen says "merge lineage unavailable on this version". The same view opens from the Actions menu of a record (<span id="RecordLineageOnRecord">Record lineage on a record</span>).</p>
+<h3 id="FactoryConnection">Connection settings (administrator)</h3>
+<p>How the factory reaches the Connectors and data catalog modules: the service account, the secret references and the checks of the link.</p>
+<h3 id="ProjectDelete">Delete a project (administrator)</h3>
+<p>Lists everything that will go (dataspaces, models, flows, rows) before you confirm; nothing is deleted until you do.</p>
+<h3 id="About">About (VIEW)</h3>
+<p>The installed version, the build and the links to this guide.</p>
+
+<h2 id="tasks">Background tasks</h2>
+<p>Every long action becomes a task of the project. The banner at the top of the wizard shows the tasks that wait or run, with <strong>Stop</strong> (a running task finishes its current stage, then stops) or <strong>Cancel</strong> (a waiting task never starts). Two tasks that write the same part of a project never run at the same time: the second waits its turn.</p>
+<p>The <strong>Recent tasks</strong> list, on the wizard and on the Cockpit, keeps the last tasks of the project with when they ran and how they ended - even after you left the page or the next day. A task that was running when the server restarted reads <em>Interrupted</em>; where it can safely be started again, a <strong>Run again</strong> button does it.</p>
+<p>Besides the loads, these actions are tasks too and no longer hold the page: switching the automatic intake on or off, the check before the build (and its fix), the simulation of a plan, merging every pair above a score, and chaining the loads. The click answers at once with a refusal when there is one (no right, a chain already running); otherwise a task appears in the banner. If the intake switch-on is cut (restart, error, Stop), the intake stays off and the set-up screen says on which applications it was installed: press Switch on again, nothing needs cleaning first.</p>
+<p>A task that <strong>finished with failures</strong> (status <em>Finished with failures</em>) did part of its work: a staging load whose closing writes were refused, a landing whose key could not be set. Its first sentence says what to run again; the same word shows in the notice and in Recent tasks.</p>
+
+
+<p>When a task <strong>you</strong> started ends, a notice appears at the bottom right of the screen - in the wizard, and in the proposal review while a task you launched there is still running: the name of the task, whether it finished or failed, the beginning of its result, a link to the Recent tasks list and a <strong>Close</strong> button. It stays until you close it and is shown once per browser; a task that ended while you were elsewhere is announced the next time you open the wizard, for two hours after it ended.</p>
+<p>A button you click is locked until the page answers, and asking again for exactly what is already waiting or running does not start it twice: the second request joins the first.</p>
+
+<h2 id="schedule">Run on a schedule</h2>
+<p>The wizard launches the chain on demand. To run it every night, an administrator plans it in EBX:</p>
+<ol>
+<li>In <em>Administration &gt; Workflow management &gt; Workflow launchers</em>, create a launcher on the publication <code>MdmFactoryPipeline</code>, with its input <code>projectCode</code> set to the code of the project.</li>
+<li>In <em>Administration &gt; Task scheduler</em>, add a schedule of the built-in task "Launch a workflow" (<code>SchedulerWorkflowLaunchTask</code>) naming that launcher, with the time you want.</li>
+</ol>
+<p>Each run then appears in the Cockpit and in the project's Recent tasks like a run launched by hand. The operator guide shipped with the module (OPERATIONS) gives the details.</p>
+
+<h2 id="delivery">Deliver to another instance</h2>
+<p>A project is designed on one instance (development) and delivered to another (test, production) as an EBX Staging archive: models, datasets, flows, scripts, the matching configuration and the distribution. <strong>Check the delivery domain</strong>, on the summary, lists what the archive will carry and what the target must already have (connections with their own credentials, reference data).</p>
+<p>Generating and importing the archive is an administrator's task: the delivery tool shipped with the module builds the archive, and the target imports it with EBX Staging (<em>Administration &gt; Repository management &gt; Staging</em>), dry run first. Data is not part of an archive: once imported, the loads are run on the target.</p>
+
+<h2 id="rights">Who may do what</h2>
+<table>
+<tr><th>Right</th><th>What it opens</th></tr>
+<tr><td>VIEW</td><td>The project list, the Cockpit, the wizard and the proposal review, read only; record lineage.</td></tr>
+<tr><td>STEWARD</td><td>Also: decide suspect pairs and proposals.</td></tr>
+<tr><td>DESIGN</td><td>Also: every action that designs or runs a project.</td></tr>
+<tr><td>Administrator</td><td>The settings, the access rights, deleting a project, cleaning a step, the delivery check.</td></tr>
+</table>
+<p>A button you may not use is shown greyed, and its tooltip names the right it needs. An administrator gives rights to your roles in the table "Access rights" of the MdmFactory dataset.</p>
+
+<h2 id="problems">When something goes wrong</h2>
+<ul>
+<li><strong>A refusal</strong> ("another task of this project is running", "generate the staging first") says what to do next. A message that comes from deeper in the engine is shown under "Details", in English.</li>
+<li><strong>"Something went wrong (reference MF-...)"</strong> means an unexpected error. Nothing is lost: note the reference and give it to your administrator, who finds the full details in the server log under that reference.</li>
+<li>A task that <strong>failed</strong> keeps its reason in the Recent tasks list (open "Details").</li>
+<li>A list that looks empty may be hidden by your <strong>data catalog right</strong>: the wizard says so when it is the case.</li>
+</ul>
+<p class="note">Administrators: the installation, the settings, the background work and the diagnosis are described in the operator guide shipped with the module.</p>
+</main>
+</body>
+</html>

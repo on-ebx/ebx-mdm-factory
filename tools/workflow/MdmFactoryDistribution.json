@@ -1,0 +1,130 @@
+{
+	"model": {
+		"name": "MdmFactoryDistribution",
+		"startNodeId": 1,
+		"label": {
+			"en_US": "MDM Factory: distribution (on demand / scheduled)",
+			"fr_FR": "MDM Factory : diffusion (à la demande / planifiée)"
+		},
+		"description": {
+			"en_US": "Sends one distribution target (or every ON_DEMAND/SCHEDULED target of a project) through Connectors, with an optional approval step first.",
+			"fr_FR": "Envoie une cible de diffusion (ou toutes les cibles ON_DEMAND/SCHEDULED d'un projet) via Connectors, avec une étape d'approbation optionnelle."
+		},
+		"owner": "Badministrator",
+		"launching": { "quick": false, "synchronous": false },
+		"moduleName": "ebx-mdm-factory",
+		"permissionsOnInstances": {
+			"create": "Badministrator",
+			"administrate": "Badministrator",
+			"view": "Badministrator",
+			"agentAccessForAdmin": "Badministrator",
+			"agentAccessForInbox": "Badministrator",
+			"creatorIsViewer": false
+		},
+		"modelOrientation": 0
+	},
+	"dataContext": {
+		"variables": [
+			{ "name": "projectCode", "direction": "in" },
+			{ "name": "targetId", "direction": "in" },
+			{ "name": "scope", "direction": "in", "defaultValue": "changed" },
+			{ "name": "approval", "direction": "in", "defaultValue": "false" },
+			{ "name": "resultJson", "direction": "out" },
+			{ "name": "failed", "direction": "out" },
+			{ "name": "status", "direction": "out" }
+		]
+	},
+	"nodes": [
+		{
+			"nodeId": 1,
+			"kind": "condition",
+			"label": "Approval required?",
+			"description": "True when approval is 'true' (set from DistributionTarget.approval by the caller that launches this workflow, e.g. the Scheduler REST API's parameters): open the approval task before sending.",
+			"firstInProcess": true,
+			"hiddenInGraphicalView": false,
+			"scriptClass": "ebx-root-1.0@com.orchestranetworks.workflow.beans.ConditionIsValueEqualsTo",
+			"conditionLibrary": true,
+			"beanParams": [
+				{ "name": "value1", "value": "${approval}" },
+				{ "name": "value2", "value": "true" }
+			]
+		},
+		{
+			"nodeId": 2,
+			"kind": "userTask",
+			"label": "Approve the send",
+			"description": "Review the project and target before the distribution send runs.",
+			"hiddenInGraphicalView": false,
+			"userTaskVersion": 2,
+			"agentAccess": "blocked",
+			"serviceDeclarationKey": "ebx-root-1.0@default",
+			"profiles": ["Badministrator"],
+			"offeredToProfiles": ["Badministrator"],
+			"input": {
+				"parameters": [
+					{ "name": "branch", "value": "MdmFactory" },
+					{ "name": "instance", "value": "MdmFactory" },
+					{ "name": "xpath", "value": "/root/DistributionTarget[./id='${targetId}']" },
+					{ "name": "firstCallDisplay", "value": "view" }
+				]
+			},
+			"enableReject": true,
+			"enableConfirmationRequest": true,
+			"enableComment": true,
+			"commentStrategyCode": "requiredIfRejected",
+			"customizedAcceptLabel": { "en_US": "Send now", "fr_FR": "Envoyer maintenant" },
+			"customizedRejectLabel": { "en_US": "Do not send", "fr_FR": "Ne pas envoyer" },
+			"termination": { "completionStrategy": "allWorkItemsCompleted", "rejectionThreshold": 0 }
+		},
+		{
+			"nodeId": 3,
+			"kind": "condition",
+			"label": "Send now?",
+			"description": "True when approval was not required, or when the reviewer chose 'Send now'.",
+			"hiddenInGraphicalView": false,
+			"scriptClass": "ebx-root-1.0@com.orchestranetworks.workflow.beans.ConditionIsLastUserTaskAccepted",
+			"conditionLibrary": true
+		},
+		{
+			"nodeId": 4,
+			"kind": "scriptTask",
+			"label": "Send",
+			"description": "Sends the target (or every ON_DEMAND/SCHEDULED target of the project when targetId is blank) through Connectors (DistributionTaskBean).",
+			"hiddenInGraphicalView": false,
+			"scriptClass": "ebx-mdm-factory@com.on.ebx.factory.workflow.DistributionTaskBean",
+			"scriptMode": "library",
+			"scriptLibrary": true,
+			"beanParams": [
+				{ "name": "projectCode", "value": "${projectCode}" },
+				{ "name": "targetId", "value": "${targetId}" },
+				{ "name": "scope", "value": "${scope}" }
+			],
+			"outputMappingParams": [
+				{ "name": "resultJson", "value": "resultJson" },
+				{ "name": "failed", "value": "failed" },
+				{ "name": "status", "value": "status" }
+			]
+		},
+		{
+			"nodeId": 5,
+			"kind": "scriptTask",
+			"label": "Send stopped",
+			"description": "The reviewer chose not to send.",
+			"hiddenInGraphicalView": false,
+			"scriptClass": "ebx-root-1.0@com.orchestranetworks.workflow.beans.ScriptTaskUpdateWorkflowLabel",
+			"scriptMode": "library",
+			"scriptLibrary": true,
+			"beanParams": [
+				{ "name": "locale", "value": "en_US" },
+				{ "name": "label", "value": "MDM Factory distribution: stopped at approval, nothing sent." }
+			]
+		}
+	],
+	"links": [
+		{ "fromNodeId": 1, "toNodeId": 2, "role": "ifTrue" },
+		{ "fromNodeId": 1, "toNodeId": 4, "role": "ifFalse" },
+		{ "fromNodeId": 2, "toNodeId": 3, "role": "default" },
+		{ "fromNodeId": 3, "toNodeId": 4, "role": "ifTrue" },
+		{ "fromNodeId": 3, "toNodeId": 5, "role": "ifFalse" }
+	]
+}

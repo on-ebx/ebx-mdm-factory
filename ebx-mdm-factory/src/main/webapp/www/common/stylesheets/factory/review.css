@@ -1,0 +1,287 @@
+/* Proposal review service (ProposalReviewUserService). Loaded together with the shared factory/factory.css
+   (tokens, mdmf-panel, mdmf-lead, mdmf-hint, mdmf-field, mdmf-actions, mdmf-chip variants, mdmf-table
+   variants, mdmf-notice variants - all defined there - this file only adds what factory.css does not: the
+   review screen's own wrapper, its Accept/Reject/filter buttons (no other screen has buttons of its own),
+   the confidence bar, the expandable rationale, the decision cell, and the one field-width tweak the
+   project selector needs). Checked against factory.css line by line so no selector here re-declares a value
+   factory.css already sets differently.
+
+   Note (2026-09-22, coordinator review of the record-lineage graphic rebuild): an earlier version of this
+   comment wrote an asterisk directly followed by a slash mid-sentence, in an informal wildcard notation for
+   a class-name family - read by the CSS parser as an accidental end-of-comment, not as a wildcard. Measured
+   before/after in `docs/RECORD-LINEAGE.md` (a handful of rules right after the break were lost, not the
+   whole file, unlike `factory/lineage.css`'s own single-corruption case, which lost every rule). Never
+   write that two-character sequence inside a CSS comment, even to illustrate the bug - spell it out in
+   words instead. */
+
+.mdmf-review{max-width:1320px;margin:0 auto;padding:6px 6px 28px}
+
+.mdmf-field select{max-width:420px;height:40px}
+
+.mdmf-btn{border:1px solid #d0d5dd;background:#fff;color:#344054;border-radius:9px;padding:9px 16px;font-size:12.5px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap}
+.mdmf-btn:hover{border-color:var(--accent-fg);color:var(--accent-fg)}
+.mdmf-btn.active{background:var(--btn);border-color:var(--btn);color:var(--btn-text)}
+.mdmf-btn-primary{background:var(--btn);border-color:var(--btn);color:var(--btn-text)}
+.mdmf-btn-primary:hover{background:var(--btn-hover);color:var(--btn-text)}
+.mdmf-btn-danger{background:#fff;color:var(--bad);border-color:#fecaca}
+.mdmf-btn-danger:hover{border-color:var(--bad)}
+/* the decision cell's Reject: "quiet" - a reversible, not alarming action, never confused with the button-like
+   status chip next to it (2026-09-21, product owner) */
+.mdmf-btn-quiet{background:transparent;border-color:transparent;color:var(--muted)}
+.mdmf-btn-quiet:hover{background:var(--bad-soft);border-color:#fecaca;color:var(--bad)}
+.mdmf-btn-sm{padding:5px 11px;font-size:11.5px}
+.mdmf-btn:disabled{opacity:.5;cursor:not-allowed}
+
+/* coordinator report, 2026-09-21: "Je ne vois pas les Ids des choses a revoir dans l'ecran" - the short
+   MAP-63/STEP-8/... reference next to the nature badge (ReviewPage.renderReferenceBadge). A plain <code>
+   (factory.css's own .mdmf code already sets the monospace font-family) - discreet, muted, selectable/
+   copyable text, never a button or a link. */
+.mdmf-ref{font-size:10.5px;color:var(--muted);margin-left:2px}
+
+.mdmf-conf{display:inline-flex;align-items:center;gap:6px;white-space:nowrap;font-size:12px}
+.mdmf-conf-bar{width:56px;height:6px;border-radius:3px;background:#eef0f4;overflow:hidden;display:inline-block;vertical-align:middle}
+.mdmf-conf-bar i{display:block;height:100%;background:var(--accent)}
+
+.mdmf-confirm-rows{margin:8px 0 0;padding:0 0 0 18px;font-size:12px}
+
+details.mdmf-rationale{margin-top:2px}
+details.mdmf-rationale summary{cursor:pointer;color:var(--accent-fg);font-weight:600;font-size:11.5px;list-style:none}
+details.mdmf-rationale summary::-webkit-details-marker{display:none}
+details.mdmf-rationale summary::before{content:"\25b8 ";font-size:10px}
+details.mdmf-rationale[open] summary::before{content:"\25be "}
+details.mdmf-rationale p{margin:5px 0 0;font-size:11.5px;color:var(--muted);max-width:420px;line-height:1.45}
+
+/* apply lot (2026-09-21): an APPLIED SCRIPT_CONSTRAINT line's plain-language explanation and measured effect -
+   a reviewer who never reads the script source (product owner's own decision) - same width/size discipline as
+   the rationale <details> above, but always visible (never collapsed): these are the whole point of the line. */
+.mdmf-capability-explanation{margin:6px 0 0;font-size:11.5px;color:#344054;max-width:420px;line-height:1.45}
+.mdmf-capability-effect{margin:4px 0 0;font-size:11.5px;color:var(--muted);max-width:420px;line-height:1.45;font-style:italic}
+
+/* fix-apply-ux (2026-09-21), item 4: a synchronous request that may publish a model (tens of seconds to minutes) -
+   shown the instant a relevant button is clicked, before the real postback fires (ProposalReviewUserService.pageJs's
+   own progress()). The indeterminate strip/sliding-bar animation is reused verbatim from
+   MaterialSearchUserService.writeProgress's own CSS (ebx-ps-fasttrack-web, com.on.ebx.material.ui.search, lines
+   ~905-912 there) - never a second implementation. Replaces the plain-text .mdmf-applying-cue notice an earlier
+   round used. A 45s JS safety timer (documented next to it, ProposalReviewUserService.PAGE_JS_PROGRESS_TIMEOUT_MS)
+   clears this and re-enables buttons if the page never actually leaves (e.g. EBX rejects the postback on a field
+   constraint).
+   fix/review-assets (2026-09-21): product report - the strip used to sit in-flow at the very TOP of the page
+   (ReviewPage.renderProgress), invisible on a long table when the clicked button was further down, off-screen.
+   Now a fixed, bottom-centre toast (mockup's own card language: white surface, border, rounded corners, drop
+   shadow - the same visual family as .mdmf-notice/.mdmf-panel) - visible wherever the user actually is, and
+   deliberately narrow/bottom rather than a full-width bar so it never sits on top of the row/button just
+   clicked. z-index above the sticky decision column's own z-index:1 (review.css line ~75) and above the
+   mockup's own sticky header bars (z-index 5/6) - see .mdmf-col-decide above. The label is 14px on a dark,
+   near-black colour (not the previous 12px accent-tinted grey) so it reads clearly against the white toast
+   surface at a normal viewing distance. */
+.mdmf-progress{display:none;position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:60;align-items:center;
+	gap:12px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 18px;box-shadow:0 10px 28px rgba(16,24,40,.20);
+	max-width:min(92vw,520px)}
+.mdmf-progress.on{display:flex}
+.mdmf-progress-track{position:relative;flex:0 0 120px;height:4px;border-radius:2px;background:#dfe3e7;overflow:hidden}
+.mdmf-progress-bar{position:absolute;top:0;left:0;height:100%;width:40%;border-radius:2px;background:var(--accent);animation:mdmfProgressSlide 1.1s ease-in-out infinite}
+@keyframes mdmfProgressSlide{0%{left:-40%}100%{left:100%}}
+.mdmf-progress-label{color:#1d2939;font-size:14px;font-weight:700;line-height:1.4}
+@media(max-width:640px){.mdmf-progress{left:16px;right:16px;bottom:16px;transform:none;max-width:none}}
+
+/* fix-apply-ux (2026-09-21), item 5: the decision cell - product report, live screenshot at a narrower pane
+   width: Accept was clipped, because the earlier single flex row put the status chip and every button side by
+   side with nothing forcing an early wrap. Now TWO stacked rows inside the cell (ReviewPage.renderRow):
+   mdmf-decide-status-row (the chip alone, its own line) then mdmf-decide-actions (a wrapping flex row of
+   buttons) - the chip can never again visually compete with a button for the same line's width. */
+.mdmf-decide{display:flex;flex-direction:column;gap:6px;min-width:190px}
+.mdmf-decide-status-row{display:flex}
+.mdmf-decide-actions{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.mdmf-decide .mdmf-btn-sm{padding:4px 10px;font-size:11px}
+/* the status chip must never look like a button: smaller, its own (non-pill) corner radius, never a hover state */
+.mdmf-decide-status.mdmf-chip{margin-right:2px;font-size:10px;padding:2px 8px;border-radius:6px;cursor:default}
+
+/* the decision column is the one thing a reviewer must still reach while scrolling a wide row - pinned to the
+   right edge of .mdmf-table-wrap's own horizontal scroll (factory.css, unchanged) rather than scrolling away
+   with everything else; th/td need their own background (the row's real background would otherwise show
+   through under the sticky layer while scrolled) and a soft left-edge shadow so the seam reads as intentional. */
+.mdmf-col-decide{position:sticky;right:0;z-index:1;box-shadow:-6px 0 8px -6px rgba(16,24,40,.12)}
+.mdmf-table th.mdmf-col-decide{background:var(--th-bg)}
+.mdmf-table td.mdmf-col-decide{background:#fff}
+
+/* element/proposition are the two columns most likely to carry a long value (a full attribute path, a
+   multi-clause proposition) - let them absorb the squeeze instead of forcing the whole table (and so the
+   decision column) wider than the pane, min-width:0 so a table cell (a flex item once table-layout kicks in
+   under the browser's own auto-layout sizing) is actually allowed to shrink below its content's natural width */
+.mdmf-col-wrap{max-width:280px;min-width:0;word-break:break-word}
+
+/* verified only down to ~900px pane width (coordinator's own bound) - narrower than that has not been checked */
+@media(max-width:640px){.mdmf-decide{min-width:0}.mdmf-col-decide{position:static;box-shadow:none}}
+
+/* fix-apply-ux (2026-09-21), item 3: the checkbox column - first, narrow (a plain 28px box, no header label
+   beyond the "select all shown" checkbox itself - review.col.select is intentionally not a text header, the
+   checkbox speaks for itself, same convention factory.css/the mockup never needed a word for a chip-only
+   column either). Never sticky (only the decision column, item 5, needs to stay reachable while scrolling). */
+.mdmf-col-select{width:28px;text-align:center;padding-left:10px;padding-right:2px}
+.mdmf-col-select input[type=checkbox]{margin:0;cursor:pointer}
+
+/* the selection bar - hidden until PAGE_JS finds at least one .mdmf-row-select checked, then shown with the
+   live count and re-hidden the moment the count drops back to zero (unchecking the last box, or a fresh
+   render after any postback - selection never survives the round trip, so the bar always starts hidden and
+   the count always starts empty). #mdmfSelectApplyBtn is individually hidden/shown inside it (item 3's own
+   instruction: Apply selected only while the selection includes an ACCEPTED-not-applied SCRIPT_CONSTRAINT
+   line), everything else in the bar is one shared row once it is visible at all. */
+/* fix/review-assets (2026-09-21): flex-wrap so a narrow pane wraps the bar's own buttons onto a second line
+   cleanly (the same wrapping discipline .mdmf-decide-actions already uses, item 5) instead of overflowing -
+   checked down to the coordinator's own ~900px bound; narrower than that has not been checked (see report). */
+.mdmf-selection-bar{display:none;align-items:center;flex-wrap:wrap;gap:10px;margin:0 0 12px;padding:8px 12px;border:1px solid var(--line);border-radius:10px;background:var(--accent-soft)}
+.mdmf-selection-bar.on{display:flex}
+#mdmfSelectionCount{font-weight:700;color:var(--accent-fg)}
+/* hidden until PAGE_JS finds at least one checked box that can be applied (data-mdmf-can-apply="1") */
+#mdmfSelectApplyBtn{display:none}
+#mdmfSelectApplyBtn.on{display:inline-block}
+
+/* review-match-plan lot (2026-09-22): the Matching line's expanded body (ReviewPage.renderMatchExpandedRow,
+   review.MatchPlanView) - a second, wide row right under the line's own row, wrapped in a native <details>.
+   Mirrors docs/mockups/review-match-plan.html's own "body"/"block" grid, under the mdmf- namespace this
+   screen already uses (never re-declares a factory.css token). */
+.mdmf-match-expanded-row td{padding:0 10px 16px;background:#fafbfc;border-bottom:1px solid var(--td-line)}
+.mdmf-match-expanded-row details{margin:0}
+/* tree-diagram-labels fix lot (2026-09-22), item C: every Matching line is now COLLAPSED by default
+   (ReviewPage.renderMatchExpandedRow) - product report, the product owner: an expanded Company line pushed the Contact
+   line far enough down the page that he never noticed it. The summary is the ONLY affordance left to reach the
+   tree/evidence/simulation/survivorship content at all, so it can no longer be a quiet inline link - full
+   width, its own subtle background/border, a bigger chevron, so it reads as an obvious button-like row rather
+   than a caption easy to miss. */
+.mdmf-match-expanded-row summary{cursor:pointer;color:var(--accent-fg);font-weight:700;font-size:12px;list-style:none;
+	display:block;width:100%;box-sizing:border-box;padding:10px 12px;background:#f8fafc;border:1px solid var(--line);border-radius:8px}
+.mdmf-match-expanded-row summary:hover{background:var(--accent-soft);border-color:var(--accent-line)}
+.mdmf-match-expanded-row summary::-webkit-details-marker{display:none}
+.mdmf-match-expanded-row summary::before{content:"\25b8 ";font-size:12px}
+.mdmf-match-expanded-row details[open] summary::before{content:"\25be "}
+.mdmf-match-expanded-row details[open] summary{margin-bottom:8px}
+/* the "N / M still to review" position chip, right after the summary's own text - review.MatchPlanTreeDiagram's
+   detail-panel chips (.mdmf-chip-muted, factory.css) reused rather than a new visual language. */
+.mdmf-match-position{margin-left:8px}
+
+/* tree-diagram-labels fix lot (2026-09-22), item B: the top-of-page "N matching proposal(s) to review: ..."
+   line (ReviewPage.renderMatchCounter) - product report, the product owner missed a second Matching proposal pushed far
+   down the page by the first one's own (then still open-by-default) expanded body. Plain .mdmf-hint text with
+   its own anchors styled like real links (factory.css's .mdmf-hint carries no link styling of its own). */
+.mdmf-match-counter a{color:var(--accent-fg);font-weight:700;text-decoration:none}
+.mdmf-match-counter a:hover{text-decoration:underline}
+.mdmf-match-body{display:grid;grid-template-columns:1.25fr .9fr;gap:14px;padding:2px 4px 6px}
+.mdmf-match-block{border:1px solid var(--line);border-radius:12px;padding:12px 14px;background:#fff}
+.mdmf-match-block h4{font-size:12.5px;margin:0 0 8px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.mdmf-match-block-full{grid-column:1 / -1}
+.mdmf-match-block svg text{font-family:inherit}
+.mdmf-mini-bar{display:inline-block;width:60px;height:6px;border-radius:3px;background:#eef0f4;overflow:hidden;vertical-align:middle;margin-right:6px}
+.mdmf-mini-bar i{display:block;height:100%;background:#0e9384}
+@media(max-width:900px){.mdmf-match-body{grid-template-columns:1fr}.mdmf-match-block-full{grid-column:1}}
+
+/* automerge-toggle lot (2026-09-23), task 1: "Merge confirmed matches automatically" - reuses the existing
+   .mdmf-match-block/.mdmf-hint/.mdmf-chip components (nothing new visually, per the task brief) - just lays
+   the checkbox label and the read-only chip out inline instead of stacked, and tightens the block's own
+   padding since it carries a single control rather than a titled sub-panel. */
+.mdmf-auto-merge{padding:10px 14px}
+.mdmf-auto-merge-label{display:flex;align-items:center;gap:7px;margin:0;cursor:pointer}
+.mdmf-auto-merge-label input{margin:0;cursor:pointer}
+.mdmf-auto-merge .mdmf-chip{margin-right:6px}
+/* lot M3: the measured findings under the tree title (matching.KeyFindings) */
+.mdmf-key-findings{margin:6px 0 10px;padding:8px 12px;border-left:3px solid var(--line,#c9d3df);background:rgba(120,140,160,.08)}
+.mdmf-key-findings .mdmf-key-finding{margin:4px 0 0}
+.mdmf-key-finding-safe{color:inherit}
+
+/* binary-decision-tree-screen lot (2026-09-22): the general decision-tree diagram (review.MatchPlanTreeDiagram)
+   plus its own node-detail panel to the right, docs/mockups/review-match-plan-binary-tree.html. The SVG's own
+   width/height are computed server-side (MatchPlanTreeLayout) from the real tree - .mdmf-tree-scroll only ever
+   needs a horizontal scrollbar when that computed width is wider than the pane, never a fixed max-width of its
+   own. Node/leaf colours mirror review.MatchPlanTreeDiagram's own inline SVG fill/stroke - nothing here re-declares
+   them for the SVG shapes, only for the plain-HTML detail column and the selection highlight. */
+/* tree-plain-words lot (2026-09-23): the detail column is sized by the BLOCK's own width (container query), not the
+   viewport - inside the project wizard the block is narrower than on the review page, and 300px next to a
+   wrapped tree left the Weight/Null headers broken mid-word. Below 860px of block width it moves under the tree. */
+.mdmf-match-block-full{container-type:inline-size}
+.mdmf-tree-layout{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:14px;align-items:start}
+@container (max-width:860px){.mdmf-tree-layout{grid-template-columns:1fr}}
+.mdmf-tree-diagram{display:contents}
+.mdmf-tree-scroll{overflow-x:auto;overflow-y:hidden;border:1px solid var(--line);border-radius:10px;background:#fbfbfd;padding:4px}
+.mdmf-tree-detail-col{border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:#fafbfc;min-width:0}
+.mdmf-tree-detail-head{font-size:12.5px;margin:0 0 8px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.mdmf-tree-reachedby{font-style:italic}
+.mdmf-tree-automerge-note{margin:0 0 10px}
+.mdmf-tree-node{cursor:pointer}
+.mdmf-tree-node rect{transition:stroke-width .1s}
+.mdmf-tree-node:hover rect{stroke-width:2.5}
+.mdmf-tree-node-selected rect{stroke-width:2.5;fill:var(--accent-soft)}
+.mdmf-tree-fold{cursor:pointer}
+.mdmf-tree-fold:hover rect{stroke:#98a2b3}
+@media(max-width:760px){.mdmf-tree-layout{grid-template-columns:1fr}}
+
+/* tree-diagram-labels fix lot (2026-09-22), item A: product report, live screenshot - the detail table's own
+   auto column widths (the plain .mdmf-table default) made the 4th header ("Null handling") cut off and a long
+   algorithm label ("close spelling (Jaro-Winkler)") wrap across four lines, spilling the whole table past the
+   300px-wide .mdmf-tree-detail-col. table-layout:fixed with explicit percentages stops the browser from sizing
+   columns off content width at all; word-break/overflow-wrap let a single long word (not just a phrase with
+   spaces) still wrap inside its own narrow column instead of forcing the table wider. */
+.mdmf-tree-detail-table{table-layout:fixed;width:100%}
+.mdmf-tree-detail-table th,.mdmf-tree-detail-table td{word-break:normal;overflow-wrap:anywhere;white-space:normal}
+.mdmf-tree-detail-table th:nth-child(1),.mdmf-tree-detail-table td:nth-child(1){width:34%}
+.mdmf-tree-detail-table th:nth-child(2),.mdmf-tree-detail-table td:nth-child(2){width:36%}
+.mdmf-tree-detail-table th:nth-child(3),.mdmf-tree-detail-table td:nth-child(3){width:15%}
+.mdmf-tree-detail-table th:nth-child(4),.mdmf-tree-detail-table td:nth-child(4){width:15%}
+.mdmf-tree-detail-table th{white-space:nowrap;overflow-wrap:normal}
+
+/* review-match-plan-simulation lot (2026-09-22): block 3's own numeric summary cards and the three families of
+   instructive pairs (review.MatchSimulationBlock) - docs/mockups/review-match-plan-simulation.html's own
+   ".cards"/".card"/".fam" classes, renamed under this screen's mdmf- namespace and built only from tokens
+   factory.css already declares (--good/--warn/--line/--muted/--accent), never a new color. */
+.mdmf-sim-cards{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin:0 0 14px}
+@media(max-width:1100px){.mdmf-sim-cards{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:640px){.mdmf-sim-cards{grid-template-columns:repeat(2,1fr)}}
+.mdmf-sim-card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.mdmf-sim-card-n{font-size:20px;font-weight:800;line-height:1.1;color:var(--ink)}
+.mdmf-sim-card-good .mdmf-sim-card-n{color:var(--good)}
+.mdmf-sim-card-warn .mdmf-sim-card-n{color:var(--warn)}
+.mdmf-sim-card-bad .mdmf-sim-card-n{color:var(--ink)}
+.mdmf-sim-card-l{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;font-weight:700;margin-top:2px}
+.mdmf-sim-card-d{font-size:10.5px;color:#475467;margin-top:4px}
+.mdmf-sim-family{margin-top:14px}
+.mdmf-sim-family h5{margin:0 0 2px;font-size:12.5px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.mdmf-sim-family-num{display:inline-flex;width:18px;height:18px;border-radius:50%;background:var(--accent);color:var(--accent-text);font-size:10.5px;font-weight:800;align-items:center;justify-content:center;flex-shrink:0}
+.mdmf-sim-family-empty{font-style:italic}
+.mdmf-sim-note{margin-top:12px;padding:10px 12px;border-radius:10px;background:var(--accent-soft);border:1px solid var(--accent-line);color:var(--accent-ink)}
+
+/* survivorship lot (2026-09-22): section 4 "Survivance" (review.MatchSurvivorshipBlock) -
+   docs/mockups/review-match-plan-survivorship.html's own ".src"/".sel"/".rule"/".then"/".fill"/".mini"
+   classes, renamed under this screen's mdmf- namespace, built only from tokens factory.css already
+   declares. Reuses .mdmf-mini-bar (defined above) for the per-system fill bars. */
+.mdmf-surv-sources{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:0 0 10px}
+.mdmf-surv-src{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);background:#fff;border-radius:10px;padding:8px 12px}
+.mdmf-surv-src-rank{display:inline-flex;width:22px;height:22px;border-radius:50%;background:var(--accent);color:var(--accent-text);font-size:11px;font-weight:800;align-items:center;justify-content:center;flex-shrink:0}
+.mdmf-surv-src-d{font-size:11px;color:var(--muted)}
+.mdmf-surv-src-note{font-size:11.5px;color:var(--muted)}
+.mdmf-surv-sentence{padding:8px 12px;border-radius:8px;background:#fff;border:1px solid var(--line)}
+.mdmf-surv-rule .rule{font-weight:700}
+.mdmf-surv-rule .then{color:#98a2b3;font-weight:400}
+tr.mdmf-surv-tech td{color:#667085;background:#f8f9fb}
+.mdmf-table .fill{display:inline-flex;align-items:center;gap:5px;white-space:nowrap;margin-right:10px}
+/* lot 1 (2026-09-23, quality-informed survivorship): the "valid x/y" mini-bar next to the fill one above -
+   same .mdmf-mini-bar shape, an amber fill instead of the default teal so the two are told apart at a glance. */
+.mdmf-table .valid{display:inline-flex;align-items:center;gap:5px;white-space:nowrap;margin-right:10px}
+.mdmf-table .valid .mdmf-mini-bar i{background:#dc6803}
+.mdmf-table .mini{display:inline-block;width:44px}
+
+/* reject/repropose lot (2026-09-22): a MATCH line's own reviewComment/matchNote text, right under the status
+   chip (ReviewPage.renderRow) - quiet, never styled like a warning banner: it is context, not an alert. */
+.mdmf-match-comment{margin:2px 0 0;font-size:12px;color:#475467;font-style:italic}
+.mdmf-match-note{margin:2px 0 0;font-size:12px;color:var(--accent-fg)}
+
+/* the two inline panels (Propose another / No matching for this entity) - hidden by an inline style="display:none"
+   set by ReviewPage itself (same degrade-gracefully idea as .mdmf-progress's own inline style, see that class'
+   own Javadoc) and toggled by PAGE_JS; kept visually distinct from the plain action row so a reviewer can tell a
+   panel is a separate, not-yet-submitted step. */
+.mdmf-match-inline{margin-top:6px;padding:8px;border:1px solid var(--line);border-radius:8px;background:#f8fafc;display:flex;flex-direction:column;gap:6px}
+.mdmf-match-comment-input{width:100%;min-height:56px;font:inherit;padding:6px 8px;border:1px solid var(--line);border-radius:6px;resize:vertical;box-sizing:border-box}
+.mdmf-match-inline .mdmf-actions{margin:0;gap:6px}
+
+/* audit F-45: a visible focus on every control of the proposal review (the file had no focus rule at all), and the screen-reader-only
+   text that labels a field whose visible label is elsewhere (a column header, a row). */
+.mdmf-review button:focus-visible,.mdmf-review a:focus-visible,.mdmf-review input:focus-visible,.mdmf-review select:focus-visible,
+.mdmf-review textarea:focus-visible,.mdmf-review summary:focus-visible,.mdmf-review [tabindex]:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+.mdmf-sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}

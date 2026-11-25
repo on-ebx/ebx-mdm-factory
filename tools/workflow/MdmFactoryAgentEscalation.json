@@ -1,0 +1,83 @@
+{
+	"model": {
+		"name": "MdmFactoryAgentEscalation",
+		"startNodeId": 1,
+		"label": {
+			"en_US": "MDM Factory: review an agent's decisions",
+			"fr_FR": "MDM Factory : revoir les décisions d'un agent"
+		},
+		"description": {
+			"en_US": "Opens one task for the owner profile of an agent to review the decisions of one run (docs/AGENTS.md). Launched by the agent runner; the owner profile comes from the data context.",
+			"fr_FR": "Ouvre une tâche pour que le profil propriétaire d'un agent revoie les décisions d'une exécution (docs/AGENTS.md). Lancé par le moteur des agents ; le profil propriétaire vient du contexte de données."
+		},
+		"owner": "Badministrator",
+		"launching": { "quick": false, "synchronous": false },
+		"moduleName": "ebx-mdm-factory",
+		"permissionsOnInstances": {
+			"create": "Badministrator",
+			"administrate": "Badministrator",
+			"view": "Badministrator",
+			"agentAccessForAdmin": "Badministrator",
+			"agentAccessForInbox": "Badministrator",
+			"creatorIsViewer": false
+		},
+		"modelOrientation": 0
+	},
+	"dataContext": {
+		"variables": [
+			{ "name": "agentRun", "direction": "in" },
+			{ "name": "agentCode", "direction": "in" },
+			{ "name": "ownerProfile", "direction": "in" },
+			{ "name": "decision", "direction": "out" },
+			{ "name": "decidedBy", "direction": "out" },
+			{ "name": "comment", "direction": "out" },
+			{ "name": "resultJson", "direction": "out" }
+		]
+	},
+	"nodes": [
+		{
+			"nodeId": 1,
+			"kind": "userTask",
+			"label": "Review the agent's decisions",
+			"description": "The proposal lines are read only. To refuse one line, reject it with the route POST /agents/proposals/{id}/decide?accept=false, then accept the task: the open lines are accepted, and those of an agent allowed to act are applied with your permissions. Rejecting the task rejects every open line.",
+			"hiddenInGraphicalView": false,
+			"userTaskVersion": 2,
+			"agentAccess": "blocked",
+			"serviceDeclarationKey": "ebx-root-1.0@default",
+			"profiles": ["Badministrator"],
+			"offeredToProfiles": ["Badministrator"],
+			"userTaskBean": { "osdClass": "com.on.ebx.factory.workflow.AgentEscalationUserTask", "params": [] },
+			"input": {
+				"parameters": [
+					{ "name": "branch", "value": "MdmFactory" },
+					{ "name": "instance", "value": "MdmFactory" },
+					{ "name": "xpath", "value": "/root/AgentProposal[./run='${agentRun}']" }
+				]
+			},
+			"enableReject": true,
+			"enableConfirmationRequest": false,
+			"enableComment": true,
+			"customizedAcceptLabel": { "en_US": "Approve", "fr_FR": "Approuver" },
+			"customizedRejectLabel": { "en_US": "Reject all", "fr_FR": "Tout refuser" },
+			"termination": { "completionStrategy": "allWorkItemsCompleted", "rejectionThreshold": 0 }
+		},
+		{
+			"nodeId": 2,
+			"kind": "scriptTask",
+			"label": "Decide the proposals",
+			"scriptMode": "specific",
+			"scriptClass": "com.on.ebx.factory.workflow.AgentDecisionTaskBean",
+			"beanParams": [
+				{ "name": "agentRun", "value": "${agentRun}" },
+				{ "name": "decision", "value": "${decision}" },
+				{ "name": "decidedBy", "value": "${decidedBy}" }
+			],
+			"outputMappingParams": [
+				{ "name": "resultJson", "value": "resultJson" }
+			]
+		}
+	],
+	"links": [
+		{ "fromNodeId": 1, "toNodeId": 2, "role": "default" }
+	]
+}

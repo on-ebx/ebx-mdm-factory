@@ -1,0 +1,219 @@
+/* MDM Factory screens (Connexion, Cockpit): tokens, class prefix (mdmf-) and component vocabulary copied
+   verbatim from the approved mockup docs/mockups/mdm-factory.html, itself copied from the sibling
+   ebx-data-catalog module's own palette (marketplace.css / product-wizard.css / tag-review.css /
+   journey.css / record-form.css: same CSS variable names and values, same "ftmk-style" chip/card/button
+   vocabulary). Two classes are new here, not in the static mockup, because the pane content of a real EBX
+   UserService needs them where the mockup used inline styles or a table's native rowspan (which a page
+   built by string concatenation, without knowing row counts ahead of time, avoids): .mdmf-subtitle and
+   .mdmf-table-group. Loaded once per screen the same way the catalog loads catalog/home.css. */
+
+/* audit F-44 (2026-10-07): the brand colours follow the EBX perspective that displays the screen. Each pane writes the
+   perspective's theme as --ebx-* custom properties on :root (ThemeTokens.java; the same names in Connectors and the
+   catalog); every token below reads one of them, with the Factory's own colour as the fallback - a screen shown without
+   a perspective looks exactly as before. The tints are mixed from --accent (color-mix), so a green or a blue theme
+   gets green or blue tints, never violet ones. --accent-fg is the accent used as text or as a thin line on a
+   light background: --ebx-main-ink, the main colour darkened until it reads on white (a yellow theme stays readable). Semantic colours (--good/--warn/--bad/--info and their soft variants)
+   and the neutral greys never follow the theme: they carry a meaning. */
+.mdmf{--ink:#172033;--muted:#667085;--line:#e6eaf0;
+  --accent:var(--ebx-main,#684bc0);--accent-text:var(--ebx-main-text,#fff);
+  --accent-fg:var(--ebx-main-ink,#684bc0);
+  --accent-faint:color-mix(in srgb,var(--accent) 2%,#fff);--accent-soft:color-mix(in srgb,var(--accent) 9%,#fff);
+  --accent-tint:color-mix(in srgb,var(--accent) 17%,#fff);--accent-line:color-mix(in srgb,var(--accent) 24%,#fff);
+  --accent-mid:color-mix(in srgb,var(--accent) 44%,#fff);--accent-deep:color-mix(in srgb,var(--accent) 72%,#000);
+  --accent-ink:color-mix(in srgb,var(--accent) 61%,#000);
+  --focus:var(--ebx-focus,var(--accent));--select:var(--ebx-selection,var(--accent));
+  --btn:var(--ebx-button,var(--accent));--btn-text:var(--ebx-button-text,#fff);--btn-hover:color-mix(in srgb,var(--btn) 78%,#000);
+  --head:var(--ebx-header,#172033);--head-text:var(--ebx-header-text,#fff);
+  --th-bg:var(--ebx-table-header,#f8fafc);--td-line:var(--ebx-table-border,#eef0f4);
+  --row-odd:var(--ebx-table-odd,#fff);--row-even:var(--ebx-table-even,#fff);
+  --good:#087443;--good-soft:#ecfdf3;--warn:#b54708;--warn-soft:#fffaeb;--bad:#b42318;--bad-soft:#fef2f2;--info:#175cd3;--info-soft:#eff8ff;
+  color:var(--ink);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}
+.mdmf h1,.mdmf h2,.mdmf h3{display:block;margin:0;padding:0;border:0;background:none;font-weight:700;color:var(--ink);text-transform:none;letter-spacing:normal}
+.mdmf code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+
+.mdmf-panel{background:#fff;border:1px solid var(--line);border-radius:14px;padding:20px 22px;box-shadow:0 3px 12px rgba(16,24,40,.05);margin-bottom:18px}
+.mdmf-panel h2{font-size:16px;margin:0 0 4px}
+.mdmf-lead{color:var(--muted);font-size:13px;line-height:1.55;margin:6px 0 16px;max-width:780px}
+.mdmf-subtitle{font-size:13px;margin:16px 0 8px}
+.mdmf-subtitle:first-of-type{margin-top:4px}
+
+.mdmf-chip{display:inline-flex;align-items:center;gap:4px;font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:999px;border:1px solid;white-space:nowrap}
+.mdmf-chip-real{background:var(--good-soft);color:var(--good);border-color:#b7e3ca}
+.mdmf-chip-target{background:#fff;color:var(--muted);border-color:#d0d5dd;border-style:dashed}
+.mdmf-chip-warn{background:var(--warn-soft);color:var(--warn);border-color:#fedf89}
+.mdmf-chip-bad{background:var(--bad-soft);color:var(--bad);border-color:#fecaca}
+.mdmf-chip-accent{background:var(--accent-soft);color:var(--accent-fg);border-color:var(--accent-line)}
+/* survivorship lot (2026-09-22): "imposed by the factory" - a solid grey chip, distinct from the dashed
+   mdmf-chip-target (which means "not yet"/"a future target"), since a technical survivorship rule is
+   already in effect, not pending. */
+.mdmf-chip-muted{background:#f2f4f7;color:#475467;border-color:#d0d5dd}
+/* project explorer lot (2026-09-23): the --info/--info-soft tokens already existed (mdmf-notice-info above)
+   but had no chip variant yet - needed for a project's status pill (LANDING/STAGING, "in progress"), same
+   border-color choice as mdmf-notice-info. */
+.mdmf-chip-info{background:var(--info-soft);color:var(--info);border-color:#b2ddff}
+
+/* fix/wizard-live-wave1 (2026-09-24, live bug item 1): a bare 1fr track has an implicit min-width of its
+   content's own min-content, not 0 - a long unbroken value (a long code, a long URL) in either column forced
+   the whole grid, and everything around it, wider than its container. minmax(0,1fr) is the standard fix:
+   the track can still grow to share the row equally, but is now allowed to shrink below its content's
+   natural width so long values wrap/ellipsis inside their own cell instead of pushing the layout wide. */
+.mdmf-grid-2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:0 20px}
+.mdmf-field{margin:0 0 16px}
+.mdmf-field label{display:block;font-size:12px;font-weight:700;color:#344054;margin-bottom:5px}
+.mdmf-field input,.mdmf-field select,.mdmf-field textarea{width:100%;box-sizing:border-box;font:inherit;font-size:13.5px;border:1px solid #d0d5dd;border-radius:9px;padding:9px 11px;color:var(--ink);background:#fff}
+/* fix/field-input-width (2026-09-25): step 1's Code and Label inputs overflowed their grid cells (Label past the
+   card's right edge) - the same EBX default input width that beat .mdmf-field input{width:100%} on the combobox
+   (bug 3 addendum below). Applied here to every .mdmf-field control, not just the combo. */
+.mdmf-field input:not([type=checkbox]):not([type=radio]),.mdmf-field select,.mdmf-field textarea{width:100% !important;min-width:0 !important;max-width:100% !important;box-sizing:border-box !important}
+.mdmf-field input:focus,.mdmf-field select:focus,.mdmf-field textarea:focus{outline:3px solid var(--accent-soft);border-color:var(--focus)}
+.mdmf-hint{font-size:11.5px;color:var(--muted);margin:5px 0 0;line-height:1.45}
+/* self-heal-simulate-activation lot (2026-09-22): a .mdmf-hint that reports a self-repair rather than plain guidance - review.match.simulate.activation.reactivated. Same --warn token .mdmf-chip-warn/.mdmf-notice-warn already use, never a new color. */
+.mdmf-hint-warn{color:var(--warn)}
+
+.mdmf-actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:10px 0 16px}
+
+.mdmf-mcp-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.mdmf-mcp-list li{display:flex;align-items:center;gap:10px;border:1px solid var(--line);border-radius:10px;padding:10px 14px;font-size:13px;flex-wrap:wrap}
+.mdmf-mcp-list b{min-width:140px}
+.mdmf-mcp-list span{color:var(--muted);font-size:12.5px}
+.mdmf-mcp-ok{border-color:#b7e3ca;background:var(--good-soft)}
+.mdmf-mcp-ok span{color:var(--good)}
+.mdmf-mcp-bad{border-color:#fecaca;background:var(--bad-soft)}
+.mdmf-mcp-bad span{color:var(--bad)}
+.mdmf-dot{width:9px;height:9px;border-radius:50%;margin-left:auto}
+.mdmf-dot-good{background:var(--good)}
+.mdmf-dot-bad{background:var(--bad)}
+
+.mdmf-table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:10px;margin-bottom:14px}
+.mdmf-table{width:100%;border-collapse:collapse;font-size:12.5px;background:#fff}
+.mdmf-table>tbody>tr:nth-child(odd){background:var(--row-odd)}
+.mdmf-table>tbody>tr:nth-child(even){background:var(--row-even)}
+.mdmf-table th{text-align:left;font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#98a2b3;padding:9px 10px;background:var(--th-bg);border-bottom:1px solid var(--line);white-space:nowrap}
+.mdmf-table td{padding:8px 10px;border-bottom:1px solid var(--td-line);vertical-align:top;color:#344054}
+.mdmf-table tr:last-child td{border-bottom:0}
+.mdmf-table .num{text-align:right;white-space:nowrap}
+.mdmf-table-group th{background:var(--accent-soft);color:var(--accent-fg);text-transform:none;font-size:11.5px;letter-spacing:normal}
+
+.mdmf-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(118px,1fr));gap:10px;margin:0 0 16px}
+.mdmf-stats div{background:#f8fafc;border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.mdmf-stats b{display:block;font-size:21px;color:var(--ink);line-height:1.2}
+.mdmf-stats span{font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#98a2b3}
+.mdmf-stats .warn{border-color:#fedf89;background:var(--warn-soft)}.mdmf-stats .warn b{color:var(--warn)}
+.mdmf-stats .bad{border-color:#fecaca;background:var(--bad-soft)}.mdmf-stats .bad b{color:var(--bad)}
+.mdmf-stats .good{border-color:#b7e3ca;background:var(--good-soft)}.mdmf-stats .good b{color:var(--good)}
+
+.mdmf-notice{margin:0 0 16px;padding:12px 16px;border-radius:10px;font-size:13px;border:1px solid;line-height:1.55}
+.mdmf-notice-ok{background:var(--good-soft);border-color:#b7e3ca;color:var(--good)}
+.mdmf-notice-warn{background:var(--warn-soft);border-color:#fedf89;color:var(--warn)}
+.mdmf-notice-bad{background:var(--bad-soft);border-color:#fecaca;color:var(--bad)}
+.mdmf-notice-target{background:#f8fafc;border-color:var(--line);color:#475467;border-style:dashed}
+/* delivery lot 2: a delivered-project banner (Cockpit) - the --info/--info-soft tokens already exist (lineage.css
+   badges/chips) but had no .mdmf-notice variant yet; same shape as -ok/-warn/-bad above. */
+.mdmf-notice-info{background:var(--info-soft);border-color:#b2ddff;color:var(--info)}
+/* audit F-39: the engine's raw text under a localized notice (and a failed task's message in Recent tasks), folded. */
+.mdmf-notice-details{margin-top:6px;font-size:12px}
+.mdmf-notice-details summary{cursor:pointer;font-weight:600}
+.mdmf-notice-detail-text{margin-top:4px;white-space:pre-wrap;word-break:break-word;color:#475467}
+
+/* project-deletion lot (2026-09-23): the "Delete project" screen's option blocks and item lines. Reuses
+   .mdmf-chip-* / --good/--bad/--line tokens already declared above - no new colour token needed. */
+.mdmf-delete-block{border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin:0 0 14px}
+.mdmf-delete-option{display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer}
+.mdmf-delete-option input{width:auto;margin:0}
+.mdmf-delete-items{list-style:none;margin:8px 0 0;padding:0;display:flex;flex-direction:column;gap:6px}
+.mdmf-delete-item{border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-size:12.5px;background:#fff}
+.mdmf-delete-item-name{font-weight:700;margin-right:6px}
+.mdmf-delete-item-ineligible{opacity:.6}
+.mdmf-delete-item-real{border-color:#b7e3ca;background:var(--good-soft)}
+.mdmf-delete-item-bad{border-color:#fecaca;background:var(--bad-soft)}
+.mdmf-delete-item-muted{border-color:var(--line);background:#f8fafc}
+.mdmf-delete-item-target{border-color:var(--line);background:#fff}
+
+@media(max-width:760px){
+ .mdmf-panel{padding:16px}
+ .mdmf-grid-2{grid-template-columns:1fr}
+ .mdmf-stats{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:380px){
+ .mdmf-mcp-list b{min-width:0;width:100%}
+}
+/* ---- searchable combobox (factory-wide since 2026-09-24: wizard step 2, Connexion screen): first the catalog-source picker of step 2 (WizardPage.renderCatalogSourceCombo, wizard.js;
+   source-combobox lot, 2026-09-23). The input keeps the .mdmf-field input look of factory.css (only the left
+   padding changes, for the magnifier); the list is an absolutely positioned card under it, one row per catalog
+   source with the name, a platform chip and the connector, the active row tinted with the accent colours.
+   .mdmf-combo-option sets display:flex, so its [hidden] state needs its own display:none rule below - the class
+   would otherwise win over the browser's own [hidden] styling (the exact trap wizard.js's toggle comment
+   describes; measured on the static preview, 2026-09-23: typing filtered nothing until this rule existed). ---- */
+/* fix lot (2026-09-25, bug 3): the combo used to rely only on the block default (its own width:auto filling
+   the parent) to stay inside its card - explicit width:100%+box-sizing so a narrow "Connect a live system"/
+   "Pick a source already in the catalog" card never lets it (or its focus ring) creep past the card's own
+   padding, whatever the parent layout does. max-width:520px stays: it only ever caps a WIDE single-column
+   rendering (outside the two-card grid), never binds inside a card and never causes overflow by itself. */
+.mdmf-combo{position:relative;width:100%;max-width:520px;box-sizing:border-box}
+.mdmf-combo-icon{position:absolute;left:11px;top:50%;transform:translateY(-50%);font-size:13px;color:var(--muted);pointer-events:none;line-height:1}
+/* fix lot (2026-09-25, bug 3 addendum): live measurement (getComputedStyle, EBX pane, 943px viewport, card
+   content 176px) - the <input> itself computed width:400px, overflowing its 176px-wide .mdmf-combo by ~200px.
+   Nothing in this module's own CSS sets 400px; the input's un-styled UA/EBX-kernel default width is winning
+   over .mdmf-field input{width:100%} (factory.css, same specificity, cascade order not something this module
+   controls). This rule's selector (two classes + a type) already outguns that one - width/min-width/box-sizing
+   added directly to it, !important as a deliberate belt-and-braces against a stylesheet this module does not
+   own and cannot predict the load order of. */
+.mdmf-field .mdmf-combo input{padding-left:32px;width:100% !important;min-width:0 !important;box-sizing:border-box !important}
+.mdmf-combo-list{list-style:none;margin:4px 0 0;padding:4px;position:absolute;left:0;right:0;top:100%;z-index:30;max-height:320px;overflow-y:auto;background:#fff;border:1px solid #d0d5dd;border-radius:10px;box-shadow:0 8px 24px rgba(23,32,51,.12)}
+.mdmf-combo-list[hidden]{display:none}
+/* fix lot (2026-09-25, bug 3): measured on a narrow card (~240px, two cards side by side in .mdmf-grid-2) -
+   justify-content:space-between with .mdmf-combo-meta's fixed-width chips left .mdmf-combo-label almost no
+   room ("Pers...", "CRM...", "ERP..." - unreadable). flex-wrap lets the meta chips drop to their own line
+   instead of squeezing the label to near-zero; the label keeps a 160px flex-basis so it wins the first line
+   whenever there is any room at all, and still ellipsizes past that if the name itself is very long. */
+.mdmf-combo-option{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:4px 12px;padding:8px 10px;border-radius:7px;cursor:pointer;font-size:13px;color:var(--ink)}
+.mdmf-combo-option[hidden],.mdmf-combo-empty[hidden]{display:none}
+.mdmf-combo-option.active{background:var(--accent-soft);color:var(--accent-fg)}
+.mdmf-combo-option.picked .mdmf-combo-label::before{content:"\2713";margin-right:6px;color:var(--good);font-weight:700}
+.mdmf-combo-label{font-weight:600;flex:1 1 160px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mdmf-combo-meta{display:flex;align-items:center;gap:8px;flex:0 0 auto;font-size:11.5px;color:var(--muted)}
+.mdmf-combo-meta .mdmf-chip{font-size:10px}
+.mdmf-combo-connector{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px}
+.mdmf-combo-empty{padding:10px;font-size:12.5px;color:var(--muted);font-style:italic}
+
+/* audit F-43: "Recent tasks" (wizard.RecentTasks) - the project's last background tasks, on the wizard and the Cockpit */
+.mdmf-recent-tasks{margin:0 0 16px;border:1px solid var(--line);border-radius:10px;background:#fff;padding:8px 14px;font-size:13px}
+.mdmf-recent-tasks>summary{cursor:pointer;font-weight:700;padding:2px 0}
+.mdmf-recent-tasks>summary:focus-visible{outline:2px solid var(--focus);outline-offset:2px;border-radius:4px}
+.mdmf-recent-table{width:100%;border-collapse:collapse;margin-top:8px}
+.mdmf-recent-table th,.mdmf-recent-table td{text-align:left;vertical-align:top;padding:6px 8px;border-top:1px solid var(--td-line)}
+.mdmf-recent-table th{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--muted)}
+.mdmf-recent-status{font-weight:600}
+.mdmf-recent-done .mdmf-recent-status{color:var(--good)}
+.mdmf-recent-failed .mdmf-recent-status{color:var(--bad)}
+.mdmf-recent-interrupted .mdmf-recent-status,.mdmf-recent-cancelled .mdmf-recent-status{color:var(--warn)}
+.mdmf-recent-actions{white-space:nowrap}
+/* UX lot U3 (2026-10-13): a DONE task that changed nothing reads amber ("Nothing to do"), and the tasks of other steps sit behind "Show all" */
+.mdmf-recent-nothing .mdmf-recent-status,.mdmf-recent-partial .mdmf-recent-status{color:var(--warn)}
+.mdmf-recent-all{margin:8px 0 2px}
+.mdmf-cockpit-recent{margin-top:16px}
+
+/* About screen (AboutPage.java) */
+.mdmf-about-title{font-size:20px;margin:0}
+.mdmf-about-dl{display:grid;grid-template-columns:max-content 1fr;gap:6px 18px;margin:8px 0 14px;font-size:13px}
+.mdmf-about-dl dt{color:var(--muted);font-weight:600}
+.mdmf-about-dl dd{margin:0;word-break:break-all}
+.mdmf-about-links{margin:8px 0;padding-left:18px;font-size:13px;line-height:1.8}
+.mdmf-about-links a{color:var(--accent-fg)}
+.mdmf-btn{background:var(--btn);color:var(--btn-text);border:0;border-radius:8px;padding:7px 14px;font-size:13px;font-weight:600;cursor:pointer}
+.mdmf-btn:hover{background:var(--btn-hover)}
+
+/* Staging load rejects (2026-10-17): the transfer-reject screen. The filter's labels used to sit AFTER their control (each label wrapped its select, EBX's wide default
+   select pushed the next label onto the previous line): every label is now a column, its text above its control, the controls a fixed width, the buttons at the bottom of the row. */
+.mdmf-rejects-filter{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:flex-end;margin:0 0 14px}
+.mdmf-rejects-filter label{display:flex;flex-direction:column;gap:4px;font-size:12px;font-weight:700;color:#344054}
+.mdmf-rejects-filter select,.mdmf-rejects-filter input[type=text],.mdmf-rejects-filter input[type=date]{width:auto !important;min-width:150px;max-width:260px;box-sizing:border-box;font:inherit;font-size:13px;font-weight:400;border:1px solid #d0d5dd;border-radius:9px;padding:7px 9px;color:var(--ink);background:#fff}
+.mdmf-rejects-filter .mdmf-btn{align-self:flex-end}
+.mdmf-rejects td{vertical-align:top}
+/* staging last points (2026-10-17): the groups a later load resolved stay behind a fold, quieter than the open ones */
+.mdmf-rejects-resolved{margin:10px 0 14px}
+.mdmf-rejects-resolved>summary{cursor:pointer;font-weight:700;color:#475467}
+.mdmf-rejects-groups-resolved{opacity:.85}
+.mdmf-reject-detail{margin-top:4px}
+.mdmf-reject-detail summary{cursor:pointer;font-size:12px;color:#475467}
+.mdmf-reject-detail pre{white-space:pre-wrap;word-break:break-word;margin:4px 0 0;font-size:12px;max-height:160px;overflow:auto;background:#f9fafb;border:1px solid #eaecf0;border-radius:6px;padding:6px 8px}

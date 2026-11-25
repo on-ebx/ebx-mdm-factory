@@ -1,0 +1,209 @@
+{
+ "entity": "Client",
+ "root": "N1",
+ "nodes": [
+  {
+   "id": "N1",
+   "function": "ALL_FIELDS",
+   "fields": [
+    {
+     "field": "emailKey",
+     "algorithm": "ebx-addon-mame@exact",
+     "minimumScore": 100,
+     "bothNullValueHandling": "NOT_MATCH",
+     "oneNullValueHandling": "NOT_MATCH"
+    },
+    {
+     "field": "mobileE164",
+     "algorithm": "ebx-addon-mame@exact",
+     "minimumScore": 100,
+     "bothNullValueHandling": "NOT_MATCH",
+     "oneNullValueHandling": "NOT_MATCH"
+    }
+   ],
+   "onTrue": "MATCH",
+   "onFalse": "N2",
+   "rationale": "SAFE independent pair: all 341 comparable same-emailKey pairs also agree on mobileE164. EmailKey is the first exact identifier gate, with its weight needing to dominate the sum of other field weights."
+  },
+  {
+   "id": "N2",
+   "function": "ALL_FIELDS",
+   "fields": [
+    {
+     "field": "mobileE164",
+     "algorithm": "ebx-addon-mame@exact",
+     "minimumScore": 100,
+     "bothNullValueHandling": "NOT_MATCH",
+     "oneNullValueHandling": "NOT_MATCH"
+    },
+    {
+     "field": "personNameKey",
+     "algorithm": "ebx-addon-mame@exact",
+     "minimumScore": 100,
+     "bothNullValueHandling": "NOT_MATCH",
+     "oneNullValueHandling": "NOT_MATCH"
+    }
+   ],
+   "onTrue": "MATCH",
+   "onFalse": "N3",
+   "rationale": "SAFE pair: 565/565 same-mobileE164 pairs agree on personNameKey."
+  },
+  {
+   "id": "N3",
+   "function": "ALL_FIELDS",
+   "fields": [
+    {
+     "field": "mobileE164",
+     "algorithm": "ebx-addon-mame@exact",
+     "minimumScore": 100,
+     "bothNullValueHandling": "NOT_MATCH",
+     "oneNullValueHandling": "NOT_MATCH"
+    }
+   ],
+   "onTrue": "SUSPECTED",
+   "onFalse": "N4",
+   "rationale": "Standalone shared identifying key, filled on all systems; covers every source."
+  },
+  {
+   "id": "N4",
+   "function": "ALL_FIELDS",
+   "fields": [
+    {
+     "field": "emailKey",
+     "algorithm": "ebx-addon-mame@exact",
+     "minimumScore": 100,
+     "bothNullValueHandling": "NOT_MATCH",
+     "oneNullValueHandling": "NOT_MATCH"
+    }
+   ],
+   "onTrue": "SUSPECTED",
+   "onFalse": "N5",
+   "rationale": "Email-key path for LOYALTY/ECOM and 56% of STORES; missing on remaining STORES is covered by mobileE164 paths."
+  },
+  {
+   "id": "N5",
+   "function": "ALL_FIELDS",
+   "fields": [
+    {
+     "field": "addressKeys",
+     "algorithm": "ebx-addon-mame@exactFullText",
+     "minimumScore": 100,
+     "bothNullValueHandling": "NOT_MATCH",
+     "oneNullValueHandling": "NOT_MATCH"
+    }
+   ],
+   "onTrue": "SUSPECTED",
+   "onFalse": "N6",
+   "rationale": "Precise derived address key provides a path for ECOM/LOYALTY; it is not populated in STORES, which remain covered by mobileE164."
+  },
+  {
+   "id": "N6",
+   "function": "ALL_FIELDS",
+   "fields": [
+    {
+     "field": "birthDate",
+     "algorithm": "ebx-addon-mame@exact",
+     "minimumScore": 100,
+     "bothNullValueHandling": "NOT_MATCH",
+     "oneNullValueHandling": "NOT_MATCH"
+    }
+   ],
+   "onTrue": "SUSPECTED",
+   "onFalse": "N7",
+   "rationale": "Birth date is identifying and shared by ECOM/LOYALTY, but unavailable in STORES, whose coverage is provided by mobileE164."
+  },
+  {
+   "id": "N7",
+   "function": "AVERAGE",
+   "minimumScore": 84,
+   "fields": [
+    {
+     "field": "firstName",
+     "algorithm": "ebx-addon-mame@jarowinkler",
+     "minimumScore": 88,
+     "weight": 3,
+     "bothNullValueHandling": "NOT_MATCH",
+     "oneNullValueHandling": "NOT_MATCH"
+    },
+    {
+     "field": "lastName",
+     "algorithm": "ebx-addon-mame@jarowinkler",
+     "minimumScore": 88,
+     "weight": 3,
+     "bothNullValueHandling": "NOT_MATCH",
+     "oneNullValueHandling": "NOT_MATCH"
+    },
+    {
+     "field": "birthDate",
+     "algorithm": "ebx-addon-mame@exact",
+     "minimumScore": 100,
+     "weight": 1,
+     "bothNullValueHandling": "NOT_MATCH",
+     "oneNullValueHandling": "NOT_MATCH"
+    }
+   ],
+   "onTrue": "SUSPECTED",
+   "onFalse": "NOT_MATCHED",
+   "rationale": "Combined fuzzy identity refinement; birthDate is secondary evidence, not a requirement for records where it is absent. Existing exact-key paths ensure candidate reachability."
+  }
+ ],
+ "clusteringFields": [
+  "mobileE164",
+  "emailKey",
+  "firstName",
+  "lastName",
+  "addressKeys",
+  "birthDate"
+ ],
+ "survivorship": {
+  "fields": [
+   {
+    "field": "email",
+    "chain": [
+     {
+      "function": "most trusted source",
+      "trustedSourceList": [
+       "ECOM",
+       "LOYALTY",
+       "STORES"
+      ]
+     }
+    ],
+    "rationale": "All three systems show 100% validity (ECOM 160/160, LOYALTY 140/140, STORES 131/131); no divergence evidence supports a field-specific rule, so use project trusted ordering rather than claiming a validity advantage.",
+    "confidence": "low"
+   },
+   {
+    "field": "mobile",
+    "chain": [
+     {
+      "function": "most trusted source"
+     }
+    ],
+    "rationale": "All systems fill mobile at 100%, but raw shapes differ: ECOM +9(11) versus LOYALTY/STORES 9(10); do not infer a better source or use raw mobile as exact evidence.",
+    "confidence": "low"
+   },
+   {
+    "field": "firstName",
+    "chain": [
+     {
+      "function": "most trusted source"
+     }
+    ],
+    "rationale": "All sources fill this field at 100%; no measured divergence is provided, so retaining the project trust order is a conservative field-level resolution.",
+    "confidence": "low"
+   },
+   {
+    "field": "lastName",
+    "chain": [
+     {
+      "function": "most trusted source"
+     }
+    ],
+    "rationale": "All sources fill this field at 100%; no measured divergence is provided, so retaining the project trust order is a conservative field-level resolution.",
+    "confidence": "low"
+   }
+  ]
+ },
+ "rationale": "Client has SAFE exact combinations and multiple highly shared identifying keys. The tree tries SAFE exact pairs first, then standalone shared keys, with the name fuzzy comparison only after exact-key branches; the stores source's partial email and absent birth/address keys are covered by mobileE164. Child evidence is included through the precise derived addressKeys in both identity-confirmation and independent-evidence routes; raw fullAddress is not used because addressKeys is the measured parent-level child key. No parent-confirmation node applies because Client is not listed as a child. One caution: birthDate is a DATE and exact comparison is used in key tiers; in the final average it is an optional support, but its null handling is NOT_MATCH as required for ordinary decision fields.",
+ "confidence": 74
+}

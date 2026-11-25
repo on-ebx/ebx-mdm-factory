@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MDM Factory - guide utilisateur</title>
+<style>
+/* audit F-44: the accent follows the perspective the wizard was shown in (the help link carries its colours, see the script below);
+   the Factory violet is the fallback when the page is opened on its own. */
+:root{--ink:#172033;--muted:#667085;--line:#e6eaf0;--accent:var(--ebx-main,#684bc0);--accent-fg:var(--ebx-main-ink,#684bc0);--focus:var(--ebx-focus,var(--accent));
+  --soft:color-mix(in srgb,var(--accent) 5%,#fff);--warn:#b54708;--warn-soft:#fffaeb}
+*{box-sizing:border-box}
+body{margin:0;background:#fff;color:var(--ink);font:15px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
+main{max-width:860px;margin:0 auto;padding:32px 20px 64px}
+h1{font-size:28px;margin:0 0 6px}
+h2{font-size:20px;margin:40px 0 8px;padding-top:12px;border-top:1px solid var(--line)}
+h3{font-size:16px;margin:22px 0 4px}
+p,li{max-width:72ch}
+a{color:var(--accent-fg)}
+a:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+.lead{color:var(--muted);font-size:16px}
+nav ol{columns:2;padding-left:20px}
+.note{background:var(--soft);border-left:3px solid var(--accent-fg);padding:10px 14px;border-radius:6px}
+table{border-collapse:collapse;width:100%;margin:8px 0}
+th,td{text-align:left;vertical-align:top;border-bottom:1px solid var(--ebx-table-border,var(--line));padding:6px 8px}
+th{background:var(--ebx-table-header,transparent)}
+@media (max-width:640px){nav ol{columns:1}}
+</style>
+<script>
+/* audit F-44: the wizard's help link carries the perspective's colours as ebx-<token>=<colour> (ThemeTokens.query);
+   each value is checked again here - a colour or nothing - before it becomes a --ebx-* custom property. */
+(function(){var p;try{p=new URLSearchParams(window.location.search);}catch(e){return;}
+var ok=/^(#[0-9a-f]{3}|#[0-9a-f]{6}|rgb\(\d{1,3},\d{1,3},\d{1,3}\)|[a-z]{3,20})$/i;
+["main","main-text","main-ink","focus","header","header-text","second-header","button","button-text","table-header","table-odd","table-even","table-border","selection"].forEach(function(n){
+var v=p.get("ebx-"+n);if(v&&ok.test(v)){document.documentElement.style.setProperty("--ebx-"+n,v);}});})();
+</script>
+</head>
+<body>
+<main>
+<h1>MDM Factory - guide utilisateur</h1>
+<p class="lead">La MDM Factory construit un référentiel de données maîtres dans ON EBX à partir des applications qui détiennent vos données : elle les fait entrer dans EBX, propose une fiche de référence par personne, société ou produit, et garde la trace de l'origine de chaque valeur. Ce guide suit l'assistant étape par étape.</p>
+
+<nav aria-label="Sommaire">
+<ol>
+<li><a href="#step-1">Projet</a></li>
+<li><a href="#step-2">Sources</a></li>
+<li><a href="#step-3">Landing</a></li>
+<li><a href="#step-4">Staging</a></li>
+<li><a href="#step-5">Master</a></li>
+<li><a href="#step-6">Rapprochement</a></li>
+<li><a href="#step-7">Diffusion</a></li>
+<li><a href="#step-8">Récapitulatif et production</a></li>
+<li><a href="#screens">Les écrans</a></li>
+<li><a href="#tasks">Tâches en arrière-plan</a></li>
+<li><a href="#schedule">Exécution planifiée</a></li>
+<li><a href="#delivery">Livrer vers une autre instance</a></li>
+<li><a href="#rights">Qui peut faire quoi</a></li>
+<li><a href="#problems">Quand quelque chose ne va pas</a></li>
+</ol>
+</nav>
+
+<h2>Fonctionnement de l'assistant</h2>
+<p>L'assistant compte huit étapes, affichées dans le rail en haut. Une étape s'ouvre quand celles dont elle dépend sont faites ; une étape grisée indique, au survol, ce qu'elle attend. Rien n'est généré à partir d'une proposition que personne n'a acceptée : la factory propose, vous décidez.</p>
+<p>Les actions longues (lire une application, construire une zone, charger des données, interroger le modèle de langage, lancer le rapprochement) tournent en arrière-plan. Vous pouvez quitter la page : le travail continue, et le <a href="#tasks">bandeau des tâches et la liste des tâches récentes</a> indiquent comment il s'est terminé.</p>
+<p>Le lien <strong>Aide</strong>, à côté du nom de l'étape, ouvre ce guide à la section de l'étape affichée.</p>
+
+<h2 id="step-1">1. Projet</h2>
+<p>Donnez au projet un code et un nom, indiquez son responsable et où vivront ses données maîtres. Le code nomme les espaces de données que la factory crée (<em>code</em>_Landing, _Staging, _Master) : choisissez-le une fois pour toutes.</p>
+<p>Les cartes de <strong>style d'implémentation</strong> comparent les manières habituelles de faire du MDM. La Consolidation - une fiche de référence construite à partir de toutes les applications, qui gardent leur propre copie - est celle que la factory construit aujourd'hui ; les autres cartes servent à comparer et ne sont pas encore sélectionnables.</p>
+<p><strong>Ce qui peut être transmis au modèle de langage</strong> : la factory peut demander des propositions à un modèle de langage. Choisissez s'il voit seulement la structure (noms et types), ou aussi un petit échantillon de valeurs. Votre administrateur fixe le maximum que l'instance autorise.</p>
+
+<h2 id="step-2">2. Sources</h2>
+<p>Ajoutez chaque application qui détient les données à maîtriser (un ERP, un CRM...). Choisissez sa connexion : la factory lit ce qu'elle contient - tables, colonnes, profil des valeurs - au travers du catalogue de données. Si une application n'a pas encore d'entrée au catalogue, le panneau d'intégration vous guide pour la créer et la scanner ; vous n'avez jamais besoin d'ouvrir Connectors ni le catalogue vous-même.</p>
+<p>Une application sans structure lisible (un fichier, une API sans schéma) peut être décrite par un fichier d'exemple ; la factory en déduit les tables et vous demande de confirmer chacune.</p>
+<p>Le <strong>rang de confiance</strong> d'une application indique au rapprochement quelle source l'emporte quand deux sources divergent.</p>
+
+<h2 id="step-3">3. Landing</h2>
+<p>La zone de landing est une copie fidèle des données de chaque application dans EBX. Un clic la planifie, trouve la clé de chaque table, construit les tables de landing, écrit les flux et charge les données.</p>
+<p>Une table s'arrête pour vous quand aucune clé n'est assez sûre, et chaque fois que la clé vient du modèle de langage : une clé proposée par le modèle n'est jamais appliquée seule, quelle que soit sa confiance. <strong>Choisir la clé</strong> s'ouvre alors sur sa proposition, déjà cochée : un clic suffit pour la confirmer. Sinon l'assistant montre un échantillon et les clés candidates, et <strong>Étudier la clé</strong> peut demander l'avis du modèle de langage. Une fois la table construite, sa clé se change avec <strong>Changer la clé...</strong>, qui vide la table et reconstruit son flux.</p>
+
+<h2 id="step-4">4. Staging</h2>
+<p>La zone de staging est votre modèle cible : une entité par objet métier (Personne, Société, Adresse...) avec les attributs que vous décidez de garder, et un mapping des colonnes de chaque application vers ces attributs.</p>
+<p><strong>Proposer le staging</strong> lit le landing et propose entités, attributs et mappings ; si un modèle de langage est configuré, il unifie ensuite les applications en entités communes. Acceptez ou rejetez chaque proposition - une par une, par entité, ou au-dessus d'un seuil de confiance. La <strong>matrice de mapping</strong> et le <strong>designer de flux</strong> montrent les mêmes mappings sous forme de grille et de dessin ; on y accède depuis cette étape.</p>
+<p>Des règles de qualité et des contraintes par script (contrôle d'un numéro de téléphone, d'un numéro de TVA...) sont aussi proposées ici. Une règle de sévérité <em>Rejet</em> arrête une ligne avant le master ; un avertissement la signale seulement.</p>
+<p>Quand chaque attribut accepté a son mapping, générez puis chargez le staging. Les lignes qui échouent à une règle bloquante sont retenues et listées pour revue.</p>
+
+<h2 id="step-5">5. Master</h2>
+<p>La zone master contient une table par objet métier accepté. La factory la génère, puis la remplit à partir du staging de chaque application, et enregistre pour chaque fiche master les lignes sources qui l'ont construite (les références croisées que montre le <a href="#step-8">lineage d'une fiche</a>).</p>
+
+<h2 id="step-6">6. Rapprochement</h2>
+<p>Pour chaque objet métier, la factory propose un plan de rapprochement : quels champs comparer, à partir de quand deux valeurs sont assez proches, et quelles paires sont des doublons sûrs ou des paires qu'une personne doit examiner. <strong>Simuler</strong> essaie un plan sur de vraies fiches sans rien modifier. <strong>Configurer</strong> l'écrit dans Match and Merge ; <strong>Lancer (tous les enregistrements)</strong> l'exécute sur toute la table, <strong>Lancer (dernier lot chargé)</strong> seulement sur les fiches chargées en dernier.</p>
+<p>La liste des paires à décider s'affiche dix groupes à la fois : les boutons en bas la parcourent (par exemple « 21-25 / 25 »), et une ligne dit combien de groupes existent au-delà de ceux gardés pour l'écran (« 138 groupes de plus non affichés ici »). Les onglets <em>Fusionnés</em> et <em>Différents</em> montrent le vrai total quand il est connu, et « 60+ » ou « 100+ » quand la liste est coupée et que le total ne l'est pas ; la liste dit alors « 60 sur 1200 affichés ». Décidez les premiers groupes pour atteindre les suivants. Fusionner toutes les paires au-dessus d'un score et simuler un plan s'exécutent en tâches de fond.</p>
+
+<p>Les résultats montrent les groupes fusionnés et les <em>paires suspectes</em> : un data steward décide de chacune (fusionner, ou pas la même), ou fusionne toutes les paires au-dessus d'un score.</p>
+
+<h2 id="step-7">7. Diffusion</h2>
+<p>Choisissez les systèmes qui reçoivent les fiches de référence (un topic Kafka, une API REST, un entrepôt...) et quand ils les reçoivent : à chaque modification, selon un planning, ou à la demande. Rien ne sort d'EBX tant qu'une cible n'est pas activée. Vous pouvez aussi publier le master comme <strong>data product</strong> dans le catalogue de données.</p>
+<p>La liste des connexions est lue en arrière-plan et gardée par personne : la page dit « Lecture des connexions auprès de Connectors… » jusqu'à son arrivée, « Connexions non encore lues » avec un bouton <strong>Rafraîchir les connexions</strong> quand rien n'a jamais été lu, et montre la dernière liste pendant qu'une plus récente est lue. L'entrepôt n'est sondé que si vous appuyez sur <strong>Tester la connexion</strong> ; créer le data product ne le sonde jamais.</p>
+
+
+<h2 id="step-8">8. Récapitulatif et production</h2>
+<p>Le récapitulatif dit si le projet est prêt, ce qui reste ouvert (lignes rejetées, paires suspectes, cibles non activées) et la durée de la dernière exécution complète. De là :</p>
+<ul>
+<li><strong>Lancer maintenant</strong> exécute toute la chaîne - landing, staging, master, rapprochement - sous forme de workflow EBX, qui s'arrête sur les lignes rejetées à revoir.</li>
+<li>La <strong>réception automatique</strong> laisse les applications pousser leurs modifications, que la factory traite à leur arrivée.</li>
+<li>Le <strong>Cockpit</strong> montre l'état de chaque étape et de chaque envoi ; le <strong>lineage d'une fiche</strong> dit, valeur par valeur, d'où vient une fiche de référence.</li>
+</ul>
+<p>Si le récapitulatif n'affiche aucun data product alors qu'il en existe un, votre droit sur le catalogue de données ne vous permet peut-être pas de le voir : le récapitulatif le signale alors.</p>
+
+<h2 id="screens">Les écrans</h2>
+<p>Chaque écran s'ouvre depuis la liste des projets (la page d'accueil) ou depuis un bouton d'un autre écran. Le droit entre parenthèses est le plus petit droit qui l'ouvre (voir <a href="#rights">Qui peut faire quoi</a>).</p>
+<h3 id="ProjectExplorer">Explorateur de projets (VIEW)</h3>
+<p>La page d'accueil : une carte par projet que vous pouvez voir, avec des filtres, des favoris et, pour les utilisateurs autorisés, <strong>Nouveau projet</strong> (il ouvre l'assistant) et <strong>Supprimer</strong>. Il suit les couleurs de la perspective où il est affiché.</p>
+<h3 id="ProjectWizard">Assistant de projet (VIEW pour lire, DESIGN pour agir)</h3>
+<p>Les huit étapes décrites plus haut. Un bouton que vous ne pouvez pas utiliser est grisé et son infobulle nomme le droit qu'il demande.</p>
+<h3 id="FactoryCockpit">Cockpit (VIEW)</h3>
+<p>L'état de chaque étape d'un projet, de chaque envoi, les tâches récentes et les lignes mises de côté. Quand le décompte des lignes mises de côté par entité n'a pas pu être lu en entier, le cockpit indique « La répartition ci-dessous est partielle » : le total au-dessus reste juste, seule la répartition est incomplète - ouvrez l'écran de revue pour le détail.</p>
+<h3 id="TransferRejectReview">Revue des lignes mises de côté (VIEW pour lire, STEWARD pour acquitter)</h3>
+<p>Les lignes qu'une règle bloquante ou une écriture en échec a gardées hors du master, avec la cause et la règle qui a arrêté chacune. Acquittez une ligne quand elle est traitée ; l'assistant et le Cockpit ne comptent que ce qui reste ouvert.</p>
+<h3 id="ProposalReview">Revue des propositions (VIEW pour lire, STEWARD pour décider, DESIGN pour appliquer)</h3>
+<p>Toutes les propositions de la factory (entités, attributs, mappings, règles de qualité, plans de rapprochement, contraintes de script) dans une seule liste : accepter ou rejeter une proposition, une sélection ou tout ce qui dépasse un score. Une proposition n'est appliquée que lorsque vous l'appliquez.</p>
+<h3 id="MappingMatrix">Matrice de mapping (DESIGN)</h3>
+<p>Les entités en lignes, les applications en colonnes : chaque cellule est le mapping d'un attribut d'une application, avec son statut, sa règle et ses contrôles. La file en bas liste ce qui reste à décider ; les flèches passent d'un élément au suivant.</p>
+<h3 id="StagingDesk">Bureau de validation (DESIGN)</h3>
+<p>Les mêmes décisions que la matrice, triées par ce qui demande d'abord une personne (règles à confirmer, anomalies, conditions proposées par le modèle de langage), avec la preuve de chacune.</p>
+<h3 id="FeedDesigner">Concepteur de flux (DESIGN)</h3>
+<p>Un flux à la fois, dessiné en schéma : les colonnes de l'application à gauche, les champs de la cible à droite, les règles et contrôles entre les deux. Enregistrer écrit d'un coup tous les changements de la page ; un refus est formulé dans votre langue.</p>
+<h3 id="RecordLineage">Lignage d'une fiche (VIEW)</h3>
+<p>Pour une fiche de référence, d'où vient chaque valeur : quelles lignes sources l'ont construite et quelle fusion a choisi chaque champ. Une fiche construite à partir de nombreuses fiches montre les premiers contributeurs avec « N sur M contributeurs » et un bouton <strong>Contributeurs suivants</strong>. Quand la version d'EBX ne peut pas dire comment un champ a été choisi, l'écran indique « lignage de fusion indisponible sur cette version ». La même vue s'ouvre depuis le menu Actions d'une fiche (<span id="RecordLineageOnRecord">Lignage depuis une fiche</span>).</p>
+<h3 id="FactoryConnection">Paramètres de connexion (administrateur)</h3>
+<p>Comment la factory joint les modules Connectors et catalogue de données : le compte de service, les références de secrets et les contrôles du lien.</p>
+<h3 id="ProjectDelete">Supprimer un projet (administrateur)</h3>
+<p>Liste tout ce qui va disparaître (espaces de données, modèles, flux, lignes) avant que vous confirmiez ; rien n'est supprimé avant.</p>
+<h3 id="About">À propos (VIEW)</h3>
+<p>La version installée, le build et les liens vers ce guide.</p>
+
+<h2 id="tasks">Tâches en arrière-plan</h2>
+<p>Chaque action longue devient une tâche du projet. Le bandeau en haut de l'assistant montre les tâches en attente ou en cours, avec <strong>Arrêter</strong> (une tâche en cours termine son étape, puis s'arrête) ou <strong>Annuler</strong> (une tâche en attente ne démarre jamais). Deux tâches qui écrivent la même partie d'un projet ne tournent jamais en même temps : la seconde attend son tour.</p>
+<p>La liste des <strong>tâches récentes</strong>, dans l'assistant et dans le Cockpit, garde les dernières tâches du projet avec leurs heures et leur issue - même après avoir quitté la page, ou le lendemain. Une tâche en cours au moment d'un redémarrage du serveur apparaît <em>Interrompue</em> ; quand elle peut être relancée sans risque, un bouton <strong>Relancer</strong> le fait.</p>
+<p>En plus des chargements, ces actions sont aussi des tâches et ne bloquent plus la page : activer ou désactiver l'intake automatique, le contrôle avant la construction (et sa correction), la simulation d'un plan, la fusion de toutes les paires au-dessus d'un score, et l'enchaînement des chargements. Le clic répond tout de suite par un refus quand il y en a un (pas de droit, une chaîne déjà en cours) ; sinon une tâche apparaît dans le bandeau. Si l'activation de l'intake est coupée (redémarrage, erreur, Arrêter), l'intake reste éteint et l'écran de mise en place dit sur quelles applications il a été installé : appuyez de nouveau sur Activer, rien n'est à nettoyer avant.</p>
+<p>Une tâche <strong>terminée avec des échecs</strong> (statut <em>Terminée avec des échecs</em>) a fait une partie de son travail : un chargement du staging dont les écritures de fin ont été refusées, un landing dont la clé n'a pas pu être posée. Sa première phrase dit quoi relancer ; le même mot apparaît dans la notification et dans les tâches récentes.</p>
+
+
+<p>Quand une tâche que <strong>vous</strong> avez lancée se termine, un avis apparaît en bas à droite de l'écran - dans l'assistant, et dans la revue des propositions tant qu'une tâche lancée depuis cet écran tourne : le nom de la tâche, si elle s'est terminée ou a échoué, le début de son résultat, un lien vers la liste des tâches récentes et un bouton <strong>Fermer</strong>. Il reste jusqu'à ce que vous le fermiez et n'est montré qu'une fois par navigateur ; une tâche terminée pendant que vous étiez ailleurs est annoncée à votre prochaine ouverture de l'assistant, dans les deux heures qui suivent sa fin.</p>
+<p>Un bouton sur lequel vous cliquez est verrouillé jusqu'à la réponse de la page, et redemander exactement ce qui attend ou tourne déjà ne le lance pas deux fois : la seconde demande rejoint la première.</p>
+
+<h2 id="schedule">Exécution planifiée</h2>
+<p>L'assistant lance la chaîne à la demande. Pour l'exécuter chaque nuit, un administrateur la planifie dans EBX :</p>
+<ol>
+<li>Dans <em>Administration &gt; Gestion des workflows &gt; Lanceurs de workflows</em>, créer un lanceur sur la publication <code>MdmFactoryPipeline</code>, avec son entrée <code>projectCode</code> égale au code du projet.</li>
+<li>Dans <em>Administration &gt; Planificateur de tâches</em>, ajouter une planification de la tâche standard « Lancer un workflow » (<code>SchedulerWorkflowLaunchTask</code>) qui nomme ce lanceur, à l'heure voulue.</li>
+</ol>
+<p>Chaque exécution apparaît alors dans le Cockpit et dans les tâches récentes du projet comme une exécution lancée à la main. Le guide d'exploitation livré avec le module (OPERATIONS) donne le détail.</p>
+
+<h2 id="delivery">Livrer vers une autre instance</h2>
+<p>Un projet se conçoit sur une instance (développement) et se livre vers une autre (recette, production) sous forme d'archive EBX Staging : modèles, datasets, flux, scripts, configuration du rapprochement et diffusion. <strong>Vérifier le domaine de livraison</strong>, dans le récapitulatif, liste ce que l'archive contiendra et ce que la cible doit déjà avoir (connexions avec leurs propres identifiants, données de référence).</p>
+<p>Générer et importer l'archive est une tâche d'administrateur : l'outil de livraison fourni avec le module construit l'archive, et la cible l'importe avec EBX Staging (<em>Administration &gt; Gestion du référentiel &gt; Staging</em>), d'abord à blanc. Les données ne font pas partie d'une archive : une fois l'import fait, les chargements se lancent sur la cible.</p>
+
+<h2 id="rights">Qui peut faire quoi</h2>
+<table>
+<tr><th>Droit</th><th>Ce qu'il ouvre</th></tr>
+<tr><td>VIEW</td><td>La liste des projets, le Cockpit, l'assistant et la revue des propositions en lecture seule ; le lineage des fiches.</td></tr>
+<tr><td>STEWARD</td><td>En plus : décider des paires suspectes et des propositions.</td></tr>
+<tr><td>DESIGN</td><td>En plus : toute action qui conçoit ou exécute un projet.</td></tr>
+<tr><td>Administrateur</td><td>Les paramètres, les droits d'accès, la suppression d'un projet, le nettoyage d'une étape, la vérification de livraison.</td></tr>
+</table>
+<p>Un bouton que vous ne pouvez pas utiliser est grisé, et son info-bulle nomme le droit nécessaire. Un administrateur donne les droits à vos rôles dans la table « Access rights » du dataset MdmFactory.</p>
+
+<h2 id="problems">Quand quelque chose ne va pas</h2>
+<ul>
+<li><strong>Un refus</strong> (« une autre tâche de ce projet est en cours », « générez d'abord le staging ») dit quoi faire ensuite. Un message qui vient du cœur du moteur est affiché sous « Détail technique », en anglais.</li>
+<li><strong>« Un problème est survenu (référence MF-...) »</strong> signale une erreur inattendue. Rien n'est perdu : notez la référence et donnez-la à votre administrateur, qui retrouve tout le détail dans le journal du serveur sous cette référence.</li>
+<li>Une tâche <strong>en échec</strong> garde sa raison dans la liste des tâches récentes (ouvrir « Détail technique »).</li>
+<li>Une liste qui paraît vide peut être masquée par votre <strong>droit sur le catalogue de données</strong> : l'assistant le signale quand c'est le cas.</li>
+</ul>
+<p class="note">Administrateurs : l'installation, les paramètres, le travail en arrière-plan et le diagnostic sont décrits dans le guide d'exploitation livré avec le module.</p>
+</main>
+</body>
+</html>

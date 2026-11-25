@@ -1,0 +1,434 @@
+{
+ "entity": "Personne",
+ "root": "R1",
+ "nodes": [
+  {
+   "id": "R1",
+   "function": "ALL_FIELDS",
+   "fields": [
+    {
+     "field": "emailKey",
+     "algorithm": "ebx-addon-mame@exact",
+     "minimumScore": 100,
+     "bothNullValueHandling": "NOT_MATCH",
+     "oneNullValueHandling": "NOT_MATCH"
+    }
+   ],
+   "onTrue": "R2",
+   "onFalse": "R3"
+  },
+  {
+   "id": "R2",
+   "function": "ALL_FIELDS",
+   "fields": [
+    {
+     "field": "mobileE164",
+     "algorithm": "ebx-addon-mame@exact",
+     "minimumScore": 100,
+     "bothNullValueHandling": "NOT_MATCH",
+     "oneNullValueHandling": "NOT_MATCH"
+    },
+    {
+     "field": "personNameKey",
+     "algorithm": "ebx-addon-mame@exact",
+     "minimumScore": 100,
+     "bothNullValueHandling": "NOT_MATCH",
+     "oneNullValueHandling": "NOT_MATCH"
+    }
+   ],
+   "onTrue": "MATCH",
+   "onFalse": "R4"
+  },
+  {
+   "id": "R4",
+   "function": "ALL_FIELDS",
+   "fields": [
+    {
+     "field": "emailKey",
+     "algorithm": "ebx-addon-mame@exact",
+     "minimumScore": 100,
+     "bothNullValueHandling": "NOT_MATCH",
+     "oneNullValueHandling": "NOT_MATCH"
+    },
+    {
+     "field": "mobileE164",
+     "algorithm": "ebx-addon-mame@exact",
+     "minimumScore": 100,
+     "bothNullValueHandling": "NOT_MATCH",
+     "oneNullValueHandling": "NOT_MATCH"
+    }
+   ],
+   "onTrue": "MATCH",
+   "onFalse": "R5"
+  },
+  {
+   "id": "R5",
+   "function": "ALL_FIELDS",
+   "fields": [
+    {
+     "field": "emailKey",
+     "algorithm": "ebx-addon-mame@exact",
+     "minimumScore": 100,
+     "bothNullValueHandling": "NOT_MATCH",
+     "oneNullValueHandling": "NOT_MATCH"
+    },
+    {
+     "field": "birthDate",
+     "algorithm": "ebx-addon-mame@exact",
+     "minimumScore": 100,
+     "bothNullValueHandling": "NOT_MATCH",
+     "oneNullValueHandling": "NOT_MATCH"
+    }
+   ],
+   "onTrue": "SUSPECTED",
+   "onFalse": "R6"
+  },
+  {
+   "id": "R6",
+   "function": "ALL_FIELDS",
+   "fields": [
+    {
+     "field": "emailKey",
+     "algorithm": "ebx-addon-mame@exact",
+     "minimumScore": 100,
+     "bothNullValueHandling": "NOT_MATCH",
+     "oneNullValueHandling": "NOT_MATCH"
+    }
+   ],
+   "onTrue": "R7",
+   "onFalse": "SUSPECTED"
+  },
+  {
+   "id": "R7",
+   "function": "ALL_FIELDS",
+   "fields": [
+    {
+     "field": "fullPostalAddress",
+     "via": "Adresse",
+     "algorithm": "ebx-addon-mame@exactFullText",
+     "minimumScore": 100,
+     "bothNullValueHandling": "NOT_MATCH",
+     "oneNullValueHandling": "NOT_MATCH"
+    }
+   ],
+   "onTrue": "SUSPECTED",
+   "onFalse": "NOT_MATCHED"
+  },
+  {
+   "id": "R3",
+   "function": "ALL_FIELDS",
+   "fields": [
+    {
+     "field": "mobileE164",
+     "algorithm": "ebx-addon-mame@exact",
+     "minimumScore": 100,
+     "bothNullValueHandling": "NOT_MATCH",
+     "oneNullValueHandling": "NOT_MATCH"
+    }
+   ],
+   "onTrue": "R8",
+   "onFalse": "R9"
+  },
+  {
+   "id": "R8",
+   "function": "ALL_FIELDS",
+   "fields": [
+    {
+     "field": "mobileE164",
+     "algorithm": "ebx-addon-mame@exact",
+     "minimumScore": 100,
+     "bothNullValueHandling": "NOT_MATCH",
+     "oneNullValueHandling": "NOT_MATCH"
+    },
+    {
+     "field": "personNameKey",
+     "algorithm": "ebx-addon-mame@exact",
+     "minimumScore": 100,
+     "bothNullValueHandling": "NOT_MATCH",
+     "oneNullValueHandling": "NOT_MATCH"
+    }
+   ],
+   "onTrue": "MATCH",
+   "onFalse": "R10"
+  },
+  {
+   "id": "R10",
+   "function": "ALL_FIELDS",
+   "fields": [
+    {
+     "field": "mobileE164",
+     "algorithm": "ebx-addon-mame@exact",
+     "minimumScore": 100,
+     "bothNullValueHandling": "NOT_MATCH",
+     "oneNullValueHandling": "NOT_MATCH"
+    },
+    {
+     "field": "birthDate",
+     "algorithm": "ebx-addon-mame@exact",
+     "minimumScore": 100,
+     "bothNullValueHandling": "NOT_MATCH",
+     "oneNullValueHandling": "NOT_MATCH"
+    }
+   ],
+   "onTrue": "SUSPECTED",
+   "onFalse": "R11"
+  },
+  {
+   "id": "R11",
+   "function": "AVERAGE",
+   "minimumScore": 85,
+   "fields": [
+    {
+     "field": "firstName",
+     "algorithm": "ebx-addon-mame@jarowinkler",
+     "minimumScore": 86,
+     "weight": 4,
+     "bothNullValueHandling": "NOT_MATCH",
+     "oneNullValueHandling": "NOT_MATCH"
+    },
+    {
+     "field": "lastName",
+     "algorithm": "ebx-addon-mame@jarowinkler",
+     "minimumScore": 86,
+     "weight": 3,
+     "bothNullValueHandling": "NOT_MATCH",
+     "oneNullValueHandling": "NOT_MATCH"
+    },
+    {
+     "field": "personNameKey",
+     "algorithm": "ebx-addon-mame@exact",
+     "minimumScore": 100,
+     "weight": 1,
+     "bothNullValueHandling": "NOT_MATCH",
+     "oneNullValueHandling": "NOT_MATCH"
+    }
+   ],
+   "onTrue": "R12",
+   "onFalse": "R13"
+  },
+  {
+   "id": "R12",
+   "function": "ALL_FIELDS",
+   "fields": [
+    {
+     "field": "addressKeys",
+     "algorithm": "ebx-addon-mame@exactFullText",
+     "minimumScore": 50,
+     "bothNullValueHandling": "NOT_MATCH",
+     "oneNullValueHandling": "NOT_MATCH"
+    }
+   ],
+   "onTrue": "SUSPECTED",
+   "onFalse": "R14"
+  },
+  {
+   "id": "R14",
+   "function": "ALL_FIELDS",
+   "fields": [
+    {
+     "field": "fullPostalAddress",
+     "via": "Adresse",
+     "algorithm": "ebx-addon-mame@exactFullText",
+     "minimumScore": 100,
+     "bothNullValueHandling": "NOT_MATCH",
+     "oneNullValueHandling": "NOT_MATCH"
+    }
+   ],
+   "onTrue": "SUSPECTED",
+   "onFalse": "R13"
+  },
+  {
+   "id": "R13",
+   "function": "ALL_FIELDS",
+   "fields": [
+    {
+     "field": "mobileE164",
+     "algorithm": "ebx-addon-mame@exact",
+     "minimumScore": 100,
+     "bothNullValueHandling": "NOT_MATCH",
+     "oneNullValueHandling": "NOT_MATCH"
+    }
+   ],
+   "onTrue": "R15",
+   "onFalse": "NOT_MATCHED"
+  },
+  {
+   "id": "R15",
+   "function": "ALL_FIELDS",
+   "fields": [
+    {
+     "field": "fullPostalAddress",
+     "via": "Adresse",
+     "algorithm": "ebx-addon-mame@exactFullText",
+     "minimumScore": 100,
+     "bothNullValueHandling": "NOT_MATCH",
+     "oneNullValueHandling": "NOT_MATCH"
+    }
+   ],
+   "onTrue": "SUSPECTED",
+   "onFalse": "NOT_MATCHED"
+  },
+  {
+   "id": "R9",
+   "function": "ALL_FIELDS",
+   "fields": [
+    {
+     "field": "personNameKey",
+     "algorithm": "ebx-addon-mame@exact",
+     "minimumScore": 100,
+     "bothNullValueHandling": "NOT_MATCH",
+     "oneNullValueHandling": "NOT_MATCH"
+    }
+   ],
+   "onTrue": "R16",
+   "onFalse": "NOT_MATCHED"
+  },
+  {
+   "id": "R16",
+   "function": "ALL_FIELDS",
+   "fields": [
+    {
+     "field": "mobileE164",
+     "algorithm": "ebx-addon-mame@exact",
+     "minimumScore": 100,
+     "bothNullValueHandling": "NOT_MATCH",
+     "oneNullValueHandling": "NOT_MATCH"
+    }
+   ],
+   "onTrue": "MATCH",
+   "onFalse": "R17"
+  },
+  {
+   "id": "R17",
+   "function": "ALL_FIELDS",
+   "fields": [
+    {
+     "field": "birthDate",
+     "algorithm": "ebx-addon-mame@exact",
+     "minimumScore": 100,
+     "bothNullValueHandling": "NOT_MATCH",
+     "oneNullValueHandling": "NOT_MATCH"
+    }
+   ],
+   "onTrue": "SUSPECTED",
+   "onFalse": "R18"
+  },
+  {
+   "id": "R18",
+   "function": "ALL_FIELDS",
+   "fields": [
+    {
+     "field": "mobileE164",
+     "algorithm": "ebx-addon-mame@exact",
+     "minimumScore": 100,
+     "bothNullValueHandling": "NOT_MATCH",
+     "oneNullValueHandling": "NOT_MATCH"
+    }
+   ],
+   "onTrue": "R19",
+   "onFalse": "NOT_MATCHED"
+  },
+  {
+   "id": "R19",
+   "function": "AVERAGE",
+   "minimumScore": 85,
+   "fields": [
+    {
+     "field": "firstName",
+     "algorithm": "ebx-addon-mame@jarowinkler",
+     "minimumScore": 86,
+     "weight": 4,
+     "bothNullValueHandling": "NOT_MATCH",
+     "oneNullValueHandling": "NOT_MATCH"
+    },
+    {
+     "field": "lastName",
+     "algorithm": "ebx-addon-mame@jarowinkler",
+     "minimumScore": 86,
+     "weight": 3,
+     "bothNullValueHandling": "NOT_MATCH",
+     "oneNullValueHandling": "NOT_MATCH"
+    },
+    {
+     "field": "personNameKey",
+     "algorithm": "ebx-addon-mame@exact",
+     "minimumScore": 100,
+     "weight": 1,
+     "bothNullValueHandling": "NOT_MATCH",
+     "oneNullValueHandling": "NOT_MATCH"
+    }
+   ],
+   "onTrue": "R20",
+   "onFalse": "R21"
+  },
+  {
+   "id": "R20",
+   "function": "ALL_FIELDS",
+   "fields": [
+    {
+     "field": "addressKeys",
+     "algorithm": "ebx-addon-mame@exactFullText",
+     "minimumScore": 50,
+     "bothNullValueHandling": "NOT_MATCH",
+     "oneNullValueHandling": "NOT_MATCH"
+    }
+   ],
+   "onTrue": "SUSPECTED",
+   "onFalse": "R22"
+  },
+  {
+   "id": "R22",
+   "function": "ALL_FIELDS",
+   "fields": [
+    {
+     "field": "fullPostalAddress",
+     "via": "Adresse",
+     "algorithm": "ebx-addon-mame@exactFullText",
+     "minimumScore": 100,
+     "bothNullValueHandling": "NOT_MATCH",
+     "oneNullValueHandling": "NOT_MATCH"
+    }
+   ],
+   "onTrue": "SUSPECTED",
+   "onFalse": "R21"
+  },
+  {
+   "id": "R21",
+   "function": "ALL_FIELDS",
+   "fields": [
+    {
+     "field": "mobileE164",
+     "algorithm": "ebx-addon-mame@exact",
+     "minimumScore": 100,
+     "bothNullValueHandling": "NOT_MATCH",
+     "oneNullValueHandling": "NOT_MATCH"
+    }
+   ],
+   "onTrue": "R23",
+   "onFalse": "NOT_MATCHED"
+  },
+  {
+   "id": "R23",
+   "function": "ALL_FIELDS",
+   "fields": [
+    {
+     "field": "fullPostalAddress",
+     "via": "Adresse",
+     "algorithm": "ebx-addon-mame@exactFullText",
+     "minimumScore": 100,
+     "bothNullValueHandling": "NOT_MATCH",
+     "oneNullValueHandling": "NOT_MATCH"
+    }
+   ],
+   "onTrue": "SUSPECTED",
+   "onFalse": "NOT_MATCHED"
+  }
+ ],
+ "clusteringFields": [
+  "emailKey",
+  "mobileE164",
+  "personNameKey"
+ ],
+ "rationale": "Candidate paths begin with exact keys and span systems: emailKey is filled by all ECOM/LOYALTY and 56% STORES, mobileE164/personNameKey are filled on every system. MATCH uses only SAFE exact key pairs. emailKey, mobileE164 and birthDate may independently identify and all fuzzy-name branches additionally require a key condition. The two name-fuzzy branches still require mobileE164 on their paths; child evidence is included both as filter and independent evidence via fullPostalAddress and addressKeys, but review-only. The child's profile lacks one folded precise address key; fullPostalAddress is a precise full address, while the derived addressKeys is only filled for LOYALTY. No contradiction field is evident; birthDate is sparse across STORES and only review-confirming. Survivorship omitted because email has 0 genuine divergence among 139 shared groups and no measured systematic disagreement/fill advantage is given for other fields.",
+ "confidence": 64
+}

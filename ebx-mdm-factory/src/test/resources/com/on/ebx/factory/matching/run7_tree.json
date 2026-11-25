@@ -1,0 +1,592 @@
+{
+"root": "C0",
+"nodes": [
+{
+"id": "C0",
+"function": "ALL_FIELDS",
+"fields": [
+{
+"field": "nomCompletKey",
+"algorithm": "ebx-addon-mame@exact",
+"minimumScore": 100,
+"bothNull": "NOT_MATCH",
+"oneNull": "NOT_MATCH"
+}
+],
+"onTrue": "N1",
+"onFalse": "C1"
+},
+{
+"id": "C1",
+"function": "ALL_FIELDS",
+"fields": [
+{
+"field": "telephoneE164",
+"algorithm": "ebx-addon-mame@exact",
+"minimumScore": 100,
+"bothNull": "NOT_MATCH",
+"oneNull": "NOT_MATCH"
+}
+],
+"onTrue": "N2",
+"onFalse": "C2"
+},
+{
+"id": "C2",
+"function": "ALL_FIELDS",
+"fields": [
+{
+"field": "emailKey",
+"algorithm": "ebx-addon-mame@exact",
+"minimumScore": 100,
+"bothNull": "NOT_MATCH",
+"oneNull": "NOT_MATCH"
+}
+],
+"onTrue": "N3",
+"onFalse": "N25"
+},
+{
+"id": "N1",
+"function": "ALL_FIELDS",
+"fields": [
+{
+"field": "nomCompletKey",
+"algorithm": "ebx-addon-mame@exact",
+"minimumScore": 100,
+"bothNull": "NOT_MATCH",
+"oneNull": "NOT_MATCH"
+},
+{
+"field": "telephoneE164",
+"algorithm": "ebx-addon-mame@exact",
+"minimumScore": 100,
+"bothNull": "NOT_MATCH",
+"oneNull": "NOT_MATCH"
+}
+],
+"onTrue": "MATCH",
+"onFalse": "N4"
+},
+{
+"id": "N2",
+"function": "ALL_FIELDS",
+"fields": [
+{
+"field": "telephoneE164",
+"algorithm": "ebx-addon-mame@exact",
+"minimumScore": 100,
+"bothNull": "NOT_MATCH",
+"oneNull": "NOT_MATCH"
+},
+{
+"field": "emailKey",
+"algorithm": "ebx-addon-mame@exact",
+"minimumScore": 100,
+"bothNull": "NOT_MATCH",
+"oneNull": "NOT_MATCH"
+}
+],
+"onTrue": "MATCH",
+"onFalse": "N11"
+},
+{
+"id": "N3",
+"function": "ALL_FIELDS",
+"fields": [
+{
+"field": "emailKey",
+"algorithm": "ebx-addon-mame@exact",
+"minimumScore": 100,
+"bothNull": "NOT_MATCH",
+"oneNull": "NOT_MATCH"
+},
+{
+"field": "nomCompletKey",
+"algorithm": "ebx-addon-mame@exact",
+"minimumScore": 100,
+"bothNull": "NOT_MATCH",
+"oneNull": "NOT_MATCH"
+}
+],
+"onTrue": "MATCH",
+"onFalse": "N18"
+},
+{
+"id": "N4",
+"function": "ALL_FIELDS",
+"fields": [
+{
+"field": "emailKey",
+"algorithm": "ebx-addon-mame@exact",
+"minimumScore": 100,
+"bothNull": "NOT_MATCH",
+"oneNull": "NOT_MATCH"
+}
+],
+"onTrue": "SUSPECTED",
+"onFalse": "N5"
+},
+{
+"id": "N5",
+"function": "ALL_FIELDS",
+"fields": [
+{
+"field": "telephoneE164",
+"algorithm": "ebx-addon-mame@exact",
+"minimumScore": 100,
+"bothNull": "NOT_MATCH",
+"oneNull": "NOT_MATCH"
+}
+],
+"onTrue": "SUSPECTED",
+"onFalse": "N6"
+},
+{
+"id": "N6",
+"function": "ALL_FIELDS",
+"fields": [
+{
+"field": "addressKeys",
+"algorithm": "ebx-addon-mame@exactFullText",
+"minimumScore": 50,
+"bothNull": "NOT_MATCH",
+"oneNull": "NOT_MATCH"
+}
+],
+"onTrue": "SUSPECTED",
+"onFalse": "N7"
+},
+{
+"id": "N7",
+"function": "AVERAGE",
+"minimumScore": 85,
+"fields": [
+{
+"field": "nom",
+"algorithm": "ebx-addon-mame@jarowinkler",
+"weight": 3,
+"bothNull": "NOT_MATCH",
+"oneNull": "NOT_MATCH"
+},
+{
+"field": "prenom",
+"algorithm": "ebx-addon-mame@jarowinkler",
+"weight": 2,
+"bothNull": "NOT_MATCH",
+"oneNull": "NOT_MATCH"
+}
+],
+"onTrue": "N8",
+"onFalse": "N10"
+},
+{
+"id": "N8",
+"function": "ALL_FIELDS",
+"fields": [
+{
+"field": "street",
+"via": "Adresse",
+"algorithm": "ebx-addon-mame@exactFullText",
+"dataType": "STRING",
+"minimumScore": 100,
+"bothNull": "NOT_MATCH",
+"oneNull": "NOT_MATCH"
+}
+],
+"onTrue": "SUSPECTED",
+"onFalse": "N9"
+},
+{
+"id": "N9",
+"function": "ALL_FIELDS",
+"fields": [
+{
+"field": "postalCode",
+"via": "Adresse",
+"algorithm": "ebx-addon-mame@exact",
+"dataType": "STRING",
+"minimumScore": 100,
+"bothNull": "NOT_MATCH",
+"oneNull": "NOT_MATCH"
+}
+],
+"onTrue": "SUSPECTED",
+"onFalse": "NOT_MATCHED"
+},
+{
+"id": "N10",
+"function": "ALL_FIELDS",
+"fields": [
+{
+"field": "street",
+"via": "Adresse",
+"algorithm": "ebx-addon-mame@exactFullText",
+"dataType": "STRING",
+"minimumScore": 100,
+"bothNull": "NOT_MATCH",
+"oneNull": "NOT_MATCH"
+}
+],
+"onTrue": "SUSPECTED",
+"onFalse": "NOT_MATCHED"
+},
+{
+"id": "N16",
+"function": "ALL_FIELDS",
+"fields": [
+{
+"field": "postalCode",
+"via": "Adresse",
+"algorithm": "ebx-addon-mame@exact",
+"dataType": "STRING",
+"minimumScore": 100,
+"bothNull": "NOT_MATCH",
+"oneNull": "NOT_MATCH"
+}
+],
+"onTrue": "SUSPECTED",
+"onFalse": "NOT_MATCHED"
+},
+{
+"id": "N15",
+"function": "ALL_FIELDS",
+"fields": [
+{
+"field": "street",
+"via": "Adresse",
+"algorithm": "ebx-addon-mame@exactFullText",
+"dataType": "STRING",
+"minimumScore": 100,
+"bothNull": "NOT_MATCH",
+"oneNull": "NOT_MATCH"
+}
+],
+"onTrue": "SUSPECTED",
+"onFalse": "N16"
+},
+{
+"id": "N17",
+"function": "ALL_FIELDS",
+"fields": [
+{
+"field": "street",
+"via": "Adresse",
+"algorithm": "ebx-addon-mame@exactFullText",
+"dataType": "STRING",
+"minimumScore": 100,
+"bothNull": "NOT_MATCH",
+"oneNull": "NOT_MATCH"
+}
+],
+"onTrue": "SUSPECTED",
+"onFalse": "NOT_MATCHED"
+},
+{
+"id": "N14",
+"function": "AVERAGE",
+"minimumScore": 85,
+"fields": [
+{
+"field": "nom",
+"algorithm": "ebx-addon-mame@jarowinkler",
+"weight": 3,
+"bothNull": "NOT_MATCH",
+"oneNull": "NOT_MATCH"
+},
+{
+"field": "prenom",
+"algorithm": "ebx-addon-mame@jarowinkler",
+"weight": 2,
+"bothNull": "NOT_MATCH",
+"oneNull": "NOT_MATCH"
+}
+],
+"onTrue": "N15",
+"onFalse": "N17"
+},
+{
+"id": "N13",
+"function": "ALL_FIELDS",
+"fields": [
+{
+"field": "addressKeys",
+"algorithm": "ebx-addon-mame@exactFullText",
+"minimumScore": 50,
+"bothNull": "NOT_MATCH",
+"oneNull": "NOT_MATCH"
+}
+],
+"onTrue": "SUSPECTED",
+"onFalse": "N14"
+},
+{
+"id": "N12",
+"function": "ALL_FIELDS",
+"fields": [
+{
+"field": "telephoneE164",
+"algorithm": "ebx-addon-mame@exact",
+"minimumScore": 100,
+"bothNull": "NOT_MATCH",
+"oneNull": "NOT_MATCH"
+}
+],
+"onTrue": "SUSPECTED",
+"onFalse": "N13"
+},
+{
+"id": "N11",
+"function": "ALL_FIELDS",
+"fields": [
+{
+"field": "emailKey",
+"algorithm": "ebx-addon-mame@exact",
+"minimumScore": 100,
+"bothNull": "NOT_MATCH",
+"oneNull": "NOT_MATCH"
+}
+],
+"onTrue": "SUSPECTED",
+"onFalse": "N12"
+},
+{
+"id": "N23",
+"function": "ALL_FIELDS",
+"fields": [
+{
+"field": "postalCode",
+"via": "Adresse",
+"algorithm": "ebx-addon-mame@exact",
+"dataType": "STRING",
+"minimumScore": 100,
+"bothNull": "NOT_MATCH",
+"oneNull": "NOT_MATCH"
+}
+],
+"onTrue": "SUSPECTED",
+"onFalse": "NOT_MATCHED"
+},
+{
+"id": "N22",
+"function": "ALL_FIELDS",
+"fields": [
+{
+"field": "street",
+"via": "Adresse",
+"algorithm": "ebx-addon-mame@exactFullText",
+"dataType": "STRING",
+"minimumScore": 100,
+"bothNull": "NOT_MATCH",
+"oneNull": "NOT_MATCH"
+}
+],
+"onTrue": "SUSPECTED",
+"onFalse": "N23"
+},
+{
+"id": "N24",
+"function": "ALL_FIELDS",
+"fields": [
+{
+"field": "street",
+"via": "Adresse",
+"algorithm": "ebx-addon-mame@exactFullText",
+"dataType": "STRING",
+"minimumScore": 100,
+"bothNull": "NOT_MATCH",
+"oneNull": "NOT_MATCH"
+}
+],
+"onTrue": "SUSPECTED",
+"onFalse": "NOT_MATCHED"
+},
+{
+"id": "N21",
+"function": "AVERAGE",
+"minimumScore": 85,
+"fields": [
+{
+"field": "nom",
+"algorithm": "ebx-addon-mame@jarowinkler",
+"weight": 3,
+"bothNull": "NOT_MATCH",
+"oneNull": "NOT_MATCH"
+},
+{
+"field": "prenom",
+"algorithm": "ebx-addon-mame@jarowinkler",
+"weight": 2,
+"bothNull": "NOT_MATCH",
+"oneNull": "NOT_MATCH"
+}
+],
+"onTrue": "N22",
+"onFalse": "N24"
+},
+{
+"id": "N20",
+"function": "ALL_FIELDS",
+"fields": [
+{
+"field": "addressKeys",
+"algorithm": "ebx-addon-mame@exactFullText",
+"minimumScore": 50,
+"bothNull": "NOT_MATCH",
+"oneNull": "NOT_MATCH"
+}
+],
+"onTrue": "SUSPECTED",
+"onFalse": "N21"
+},
+{
+"id": "N19",
+"function": "ALL_FIELDS",
+"fields": [
+{
+"field": "telephoneE164",
+"algorithm": "ebx-addon-mame@exact",
+"minimumScore": 100,
+"bothNull": "NOT_MATCH",
+"oneNull": "NOT_MATCH"
+}
+],
+"onTrue": "SUSPECTED",
+"onFalse": "N20"
+},
+{
+"id": "N18",
+"function": "ALL_FIELDS",
+"fields": [
+{
+"field": "emailKey",
+"algorithm": "ebx-addon-mame@exact",
+"minimumScore": 100,
+"bothNull": "NOT_MATCH",
+"oneNull": "NOT_MATCH"
+}
+],
+"onTrue": "SUSPECTED",
+"onFalse": "N19"
+},
+{
+"id": "N30",
+"function": "ALL_FIELDS",
+"fields": [
+{
+"field": "postalCode",
+"via": "Adresse",
+"algorithm": "ebx-addon-mame@exact",
+"dataType": "STRING",
+"minimumScore": 100,
+"bothNull": "NOT_MATCH",
+"oneNull": "NOT_MATCH"
+}
+],
+"onTrue": "SUSPECTED",
+"onFalse": "NOT_MATCHED"
+},
+{
+"id": "N29",
+"function": "ALL_FIELDS",
+"fields": [
+{
+"field": "street",
+"via": "Adresse",
+"algorithm": "ebx-addon-mame@exactFullText",
+"dataType": "STRING",
+"minimumScore": 100,
+"bothNull": "NOT_MATCH",
+"oneNull": "NOT_MATCH"
+}
+],
+"onTrue": "SUSPECTED",
+"onFalse": "N30"
+},
+{
+"id": "N31",
+"function": "ALL_FIELDS",
+"fields": [
+{
+"field": "street",
+"via": "Adresse",
+"algorithm": "ebx-addon-mame@exactFullText",
+"dataType": "STRING",
+"minimumScore": 100,
+"bothNull": "NOT_MATCH",
+"oneNull": "NOT_MATCH"
+}
+],
+"onTrue": "SUSPECTED",
+"onFalse": "NOT_MATCHED"
+},
+{
+"id": "N28",
+"function": "AVERAGE",
+"minimumScore": 85,
+"fields": [
+{
+"field": "nom",
+"algorithm": "ebx-addon-mame@jarowinkler",
+"weight": 3,
+"bothNull": "NOT_MATCH",
+"oneNull": "NOT_MATCH"
+},
+{
+"field": "prenom",
+"algorithm": "ebx-addon-mame@jarowinkler",
+"weight": 2,
+"bothNull": "NOT_MATCH",
+"oneNull": "NOT_MATCH"
+}
+],
+"onTrue": "N29",
+"onFalse": "N31"
+},
+{
+"id": "N27",
+"function": "ALL_FIELDS",
+"fields": [
+{
+"field": "addressKeys",
+"algorithm": "ebx-addon-mame@exactFullText",
+"minimumScore": 50,
+"bothNull": "NOT_MATCH",
+"oneNull": "NOT_MATCH"
+}
+],
+"onTrue": "SUSPECTED",
+"onFalse": "N28"
+},
+{
+"id": "N26",
+"function": "ALL_FIELDS",
+"fields": [
+{
+"field": "telephoneE164",
+"algorithm": "ebx-addon-mame@exact",
+"minimumScore": 100,
+"bothNull": "NOT_MATCH",
+"oneNull": "NOT_MATCH"
+}
+],
+"onTrue": "SUSPECTED",
+"onFalse": "N27"
+},
+{
+"id": "N25",
+"function": "ALL_FIELDS",
+"fields": [
+{
+"field": "emailKey",
+"algorithm": "ebx-addon-mame@exact",
+"minimumScore": 100,
+"bothNull": "NOT_MATCH",
+"oneNull": "NOT_MATCH"
+}
+],
+"onTrue": "SUSPECTED",
+"onFalse": "N26"
+}
+]
+}

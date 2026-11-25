@@ -1,0 +1,54 @@
+{
+	"model": {
+		"name": "MdmFactoryMatchingRun",
+		"startNodeId": 1,
+		"label": {
+			"en_US": "MDM Factory: run matching",
+			"fr_FR": "MDM Factory : lancer le rapprochement"
+		},
+		"description": {
+			"en_US": "Launches a real Match and Merge run for an MDM Factory project's master zone, in-process (MatchingRunTaskBean calls MatchingConfigurator.run directly, no REST loopback). Single-step so the run can also be launched via the Workflow REST API, the Task Scheduler, or a trigger, in addition to the module's own manual Cockpit action.",
+			"fr_FR": "Lance un vrai rapprochement Match and Merge pour la zone maitre d'un projet MDM Factory, en direct (MatchingRunTaskBean appelle MatchingConfigurator.run sans rebouclage REST). Une seule etape, pour pouvoir aussi lancer ce rapprochement par l'API REST des workflows, le Task Scheduler ou un declencheur, en plus de l'action manuelle du Cockpit."
+		},
+		"owner": "Badministrator",
+		"launching": { "quick": false, "synchronous": false },
+		"moduleName": "ebx-mdm-factory",
+		"permissionsOnInstances": {
+			"create": "Badministrator",
+			"administrate": "Badministrator",
+			"view": "Badministrator",
+			"agentAccessForAdmin": "Badministrator",
+			"creatorIsViewer": false
+		},
+		"modelOrientation": 0
+	},
+	"dataContext": {
+		"variables": [
+			{ "name": "projectCode", "direction": "in" },
+			{ "name": "scope", "direction": "in", "defaultValue": "incremental" },
+			{ "name": "maxWaitMs", "direction": "in" },
+			{ "name": "resultJson", "direction": "out" }
+		]
+	},
+	"nodes": [
+		{
+			"nodeId": 1,
+			"kind": "scriptTask",
+			"label": "Run matching",
+			"firstInProcess": true,
+			"hiddenInGraphicalView": false,
+			"scriptClass": "ebx-mdm-factory@com.on.ebx.factory.workflow.MatchingRunTaskBean",
+			"scriptMode": "library",
+			"scriptLibrary": true,
+			"beanParams": [
+				{ "name": "projectCode", "value": "${projectCode}" },
+				{ "name": "scope", "value": "${scope}" },
+				{ "name": "maxWaitMs", "value": "${maxWaitMs}" }
+			],
+			"outputMappingParams": [
+				{ "name": "resultJson", "value": "resultJson" }
+			]
+		}
+	],
+	"links": []
+}

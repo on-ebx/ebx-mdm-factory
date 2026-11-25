@@ -1,0 +1,389 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!--DistributionOutbox: data model of the ebx-mdm-factory module (com.on.ebx.factory), packaged separately
+    from MdmFactory.xsd (tools/build_xsd.py only builds that one file) so it can be instantiated as a
+    dataset INSIDE a project's own master dataspace - see docs/DISTRIBUTION.md sec 5.2 "round 3". A
+    master-table trigger is a TABLE TRIGGER script and cannot open `execute transaction` at all (measured
+    live, PipelineStep 395: "This type of script cannot create transactions"), so it can only write through
+    its own ambient `_ebx.transaction`, which is scoped to `_ebx.dataspace` - the record's OWN dataspace.
+    The outbox therefore has to live in that same dataspace, as a second dataset next to `Master`, reached
+    with `db.findDataset(_ebx.dataspace, 'DistributionOutbox')` and written to directly with
+    `_ebx.transaction`, no cross-dataspace transaction of any kind. `target` is a plain string (not a
+    foreign key to MdmFactory's own DistributionTarget table): the outbox is written from inside the master
+    dataspace and has no reachable path to a table of a different dataspace, so a string copy of the
+    target's id is all a table trigger can record - ebx.DistributionDispatcher resolves it back to a real
+    DistributionTarget row when it drains this outbox. ebx.DistributionOutboxInstaller creates the dataset
+    (doCreateRoot, idempotent) the first time a project's triggers are installed. Volume-operations lot 8b
+    added a second table, Control (one row per project): the trigger's own short-circuit read, maintained by
+    ebx.DistributionControlRow from the same Java write paths lot 8a wired to ArmedTargetCache - see that
+    table's own annotation and DistributionTriggerBody's Javadoc.-->
+<xs:schema xmlns:osd="urn:ebx-schemas:common_1.0" xmlns:fmt="urn:ebx-schemas:format_1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:import namespace="urn:ebx-schemas:common_1.0" schemaLocation="http://schema.orchestranetworks.com/common_1.0.xsd"/>
+    <xs:annotation>
+        <xs:appinfo>
+            <osd:validation>
+                <validationMessageThreshold>1000</validationMessageThreshold>
+            </osd:validation>
+            <osd:inheritance>
+                <dataSetInheritance>none</dataSetInheritance>
+            </osd:inheritance>
+        </xs:appinfo>
+    </xs:annotation>
+    <xs:element name="root" osd:access="--">
+        <xs:complexType>
+            <xs:sequence>
+
+                <xs:element name="Event" minOccurs="0" maxOccurs="unbounded">
+                    <xs:annotation>
+                        <xs:documentation xml:lang="en-US">
+                            <osd:label>Distribution outbox</osd:label>
+                            <osd:description>One row per REALTIME send still to make, written by a master-table trigger through its own ambient transaction (no cross-dataspace write is possible from a table trigger); drained by ebx.DistributionDispatcher, which resolves 'target' back to the real DistributionTarget row of MdmFactory and, on a terminal outcome, records the send in MdmFactory's own DistributionEvent history. See docs/DISTRIBUTION.md.</osd:description>
+                        </xs:documentation>
+                        <xs:documentation xml:lang="fr-FR">
+                            <osd:label>Boîte d'envoi de diffusion</osd:label>
+                            <osd:description>Une ligne par envoi REALTIME restant à faire, écrite par un déclencheur de table MDM via sa propre transaction ambiante (aucune écriture inter-dataspace n'est possible depuis un déclencheur de table) ; vidée par ebx.DistributionDispatcher, qui résout « target » vers la vraie ligne DistributionTarget de MdmFactory et, sur un résultat définitif, enregistre l'envoi dans l'historique DistributionEvent de MdmFactory. Voir docs/DISTRIBUTION.md.</osd:description>
+                        </xs:documentation>
+                        <xs:appinfo>
+                            <osd:table>
+                                <primaryKeys>/id </primaryKeys>
+                                <defaultLabel>${./tablePath} ${./recordKey} (${./change})</defaultLabel>
+                                <defaultView>
+                                    <defaultViewForGroups>expanded</defaultViewForGroups>
+                                </defaultView>
+                            </osd:table>
+                        </xs:appinfo>
+                    </xs:annotation>
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="id" minOccurs="1" maxOccurs="1">
+                                <xs:annotation>
+                                    <xs:documentation xml:lang="en-US">
+                                        <osd:label>Id</osd:label>
+                                    </xs:documentation>
+                                    <xs:documentation xml:lang="fr-FR">
+                                        <osd:label>Id</osd:label>
+                                    </xs:documentation>
+                                    <xs:appinfo>
+                                        <osd:autoIncrement/>
+                                    </xs:appinfo>
+                                </xs:annotation>
+                                <xs:simpleType>
+                                    <xs:restriction base="xs:int"/>
+                                </xs:simpleType>
+                            </xs:element>
+                            <xs:element name="target" type="xs:string" minOccurs="1" maxOccurs="1">
+                                <xs:annotation>
+                                    <xs:documentation xml:lang="en-US">
+                                        <osd:label>Target</osd:label>
+                                        <osd:description>DistributionTarget.id of MdmFactory, as a plain string - never a foreign key (this dataset is in a different dataspace than MdmFactory, and a table trigger has no cross-dataspace reach at all).</osd:description>
+                                    </xs:documentation>
+                                    <xs:documentation xml:lang="fr-FR">
+                                        <osd:label>Cible</osd:label>
+                                        <osd:description>DistributionTarget.id de MdmFactory, en simple chaîne - jamais une clé étrangère (ce dataset est dans un dataspace différent de MdmFactory, et un déclencheur de table n'a aucune portée inter-dataspace).</osd:description>
+                                    </xs:documentation>
+                                </xs:annotation>
+                                <xs:simpleType>
+                                    <xs:restriction base="xs:string">
+                                        <xs:maxLength value="40"/>
+                                    </xs:restriction>
+                                </xs:simpleType>
+                            </xs:element>
+                            <xs:element name="tablePath" minOccurs="1" maxOccurs="1">
+                                <xs:annotation>
+                                    <xs:documentation xml:lang="en-US">
+                                        <osd:label>Master table</osd:label>
+                                    </xs:documentation>
+                                    <xs:documentation xml:lang="fr-FR">
+                                        <osd:label>Table MDM</osd:label>
+                                    </xs:documentation>
+                                </xs:annotation>
+                                <xs:simpleType>
+                                    <xs:restriction base="xs:string">
+                                        <xs:maxLength value="255"/>
+                                    </xs:restriction>
+                                </xs:simpleType>
+                            </xs:element>
+                            <xs:element name="recordKey" minOccurs="1" maxOccurs="1">
+                                <xs:annotation>
+                                    <xs:documentation xml:lang="en-US">
+                                        <osd:label>Record key</osd:label>
+                                        <osd:description>Formatted primary key of the master record; never split by hand (CLAUDE.md sec 9).</osd:description>
+                                    </xs:documentation>
+                                    <xs:documentation xml:lang="fr-FR">
+                                        <osd:label>Clé de l'enregistrement</osd:label>
+                                        <osd:description>Clé primaire formatée de l'enregistrement MDM ; ne jamais découper à la main (CLAUDE.md sec 9).</osd:description>
+                                    </xs:documentation>
+                                </xs:annotation>
+                                <xs:simpleType>
+                                    <xs:restriction base="xs:string">
+                                        <xs:maxLength value="255"/>
+                                    </xs:restriction>
+                                </xs:simpleType>
+                            </xs:element>
+                            <xs:element name="change" minOccurs="1" maxOccurs="1">
+                                <xs:annotation>
+                                    <xs:documentation xml:lang="en-US">
+                                        <osd:label>Change</osd:label>
+                                    </xs:documentation>
+                                    <xs:documentation xml:lang="fr-FR">
+                                        <osd:label>Changement</osd:label>
+                                    </xs:documentation>
+                                </xs:annotation>
+                                <xs:simpleType>
+                                    <xs:restriction base="xs:string">
+                                        <xs:enumeration value="CREATE">
+                                            <xs:annotation>
+                                                <xs:documentation xml:lang="en-US">Create</xs:documentation>
+                                                <xs:documentation xml:lang="fr-FR">Création</xs:documentation>
+                                            </xs:annotation>
+                                        </xs:enumeration>
+                                        <xs:enumeration value="MODIFY">
+                                            <xs:annotation>
+                                                <xs:documentation xml:lang="en-US">Modify</xs:documentation>
+                                                <xs:documentation xml:lang="fr-FR">Modification</xs:documentation>
+                                            </xs:annotation>
+                                        </xs:enumeration>
+                                        <xs:enumeration value="DELETE">
+                                            <xs:annotation>
+                                                <xs:documentation xml:lang="en-US">Delete</xs:documentation>
+                                                <xs:documentation xml:lang="fr-FR">Suppression</xs:documentation>
+                                            </xs:annotation>
+                                        </xs:enumeration>
+                                        <xs:enumeration value="RETIRE">
+                                            <xs:annotation>
+                                                <xs:documentation xml:lang="en-US">Retire (merged or unmerge-deleted)</xs:documentation>
+                                                <xs:documentation xml:lang="fr-FR">Retrait (fusionné ou supprimé par annulation)</xs:documentation>
+                                            </xs:annotation>
+                                        </xs:enumeration>
+                                        <xs:maxLength value="40"/>
+                                    </xs:restriction>
+                                </xs:simpleType>
+                            </xs:element>
+                            <xs:element name="survivorKey" minOccurs="0" maxOccurs="1">
+                                <xs:annotation>
+                                    <xs:documentation xml:lang="en-US">
+                                        <osd:label>Survivor record</osd:label>
+                                        <osd:description>change=RETIRE only: the golden record this one was merged into. Empty for an unmerge-deleted golden (no survivor) or for any other change.</osd:description>
+                                    </xs:documentation>
+                                    <xs:documentation xml:lang="fr-FR">
+                                        <osd:label>Enregistrement survivant</osd:label>
+                                        <osd:description>change=RETIRE uniquement : le golden record dans lequel celui-ci a été fusionné. Vide pour un golden supprimé par annulation de fusion (aucun survivant) ou pour tout autre changement.</osd:description>
+                                    </xs:documentation>
+                                </xs:annotation>
+                                <xs:simpleType>
+                                    <xs:restriction base="xs:string">
+                                        <xs:maxLength value="255"/>
+                                    </xs:restriction>
+                                </xs:simpleType>
+                            </xs:element>
+                            <xs:element name="status" minOccurs="1" maxOccurs="1" default="PENDING">
+                                <xs:annotation>
+                                    <xs:documentation xml:lang="en-US">
+                                        <osd:label>Status</osd:label>
+                                    </xs:documentation>
+                                    <xs:documentation xml:lang="fr-FR">
+                                        <osd:label>Statut</osd:label>
+                                    </xs:documentation>
+                                </xs:annotation>
+                                <xs:simpleType>
+                                    <xs:restriction base="xs:string">
+                                        <xs:enumeration value="PENDING">
+                                            <xs:annotation>
+                                                <xs:documentation xml:lang="en-US">Pending</xs:documentation>
+                                                <xs:documentation xml:lang="fr-FR">En attente</xs:documentation>
+                                            </xs:annotation>
+                                        </xs:enumeration>
+                                        <xs:enumeration value="SENT">
+                                            <xs:annotation>
+                                                <xs:documentation xml:lang="en-US">Sent</xs:documentation>
+                                                <xs:documentation xml:lang="fr-FR">Envoyé</xs:documentation>
+                                            </xs:annotation>
+                                        </xs:enumeration>
+                                        <xs:enumeration value="FAILED">
+                                            <xs:annotation>
+                                                <xs:documentation xml:lang="en-US">Failed</xs:documentation>
+                                                <xs:documentation xml:lang="fr-FR">En échec</xs:documentation>
+                                            </xs:annotation>
+                                        </xs:enumeration>
+                                        <xs:enumeration value="SKIPPED">
+                                            <xs:annotation>
+                                                <xs:documentation xml:lang="en-US">Skipped (target paused or disabled)</xs:documentation>
+                                                <xs:documentation xml:lang="fr-FR">Ignoré (cible en pause ou désactivée)</xs:documentation>
+                                            </xs:annotation>
+                                        </xs:enumeration>
+                                        <xs:maxLength value="40"/>
+                                    </xs:restriction>
+                                </xs:simpleType>
+                            </xs:element>
+                            <xs:element name="reason" minOccurs="0" maxOccurs="1">
+                                <xs:annotation>
+                                    <xs:documentation xml:lang="en-US">
+                                        <osd:label>Reason</osd:label>
+                                        <osd:description>Set only by the merge-log watch (distribution.MergeLogWatch / ebx.MergeLogWatcher): MERGE (this record lost a match/merge) or UNMERGE (a merge was undone). Empty for every event a master-table trigger wrote directly.</osd:description>
+                                    </xs:documentation>
+                                    <xs:documentation xml:lang="fr-FR">
+                                        <osd:label>Motif</osd:label>
+                                        <osd:description>Positionné uniquement par la veille du journal de fusion (distribution.MergeLogWatch / ebx.MergeLogWatcher) : MERGE (cet enregistrement a perdu un rapprochement/une fusion) ou UNMERGE (une fusion a été annulée). Vide pour tout événement écrit directement par un déclencheur de table MDM.</osd:description>
+                                    </xs:documentation>
+                                </xs:annotation>
+                                <xs:simpleType>
+                                    <xs:restriction base="xs:string">
+                                        <xs:enumeration value="MERGE">
+                                            <xs:annotation>
+                                                <xs:documentation xml:lang="en-US">Merge</xs:documentation>
+                                                <xs:documentation xml:lang="fr-FR">Fusion</xs:documentation>
+                                            </xs:annotation>
+                                        </xs:enumeration>
+                                        <xs:enumeration value="UNMERGE">
+                                            <xs:annotation>
+                                                <xs:documentation xml:lang="en-US">Unmerge</xs:documentation>
+                                                <xs:documentation xml:lang="fr-FR">Annulation de fusion</xs:documentation>
+                                            </xs:annotation>
+                                        </xs:enumeration>
+                                        <xs:maxLength value="40"/>
+                                    </xs:restriction>
+                                </xs:simpleType>
+                            </xs:element>
+                            <xs:element name="mergeId" minOccurs="0" maxOccurs="1">
+                                <xs:annotation>
+                                    <xs:documentation xml:lang="en-US">
+                                        <osd:label>Merge id</osd:label>
+                                        <osd:description>Set only by the merge-log watch: the add-on's MergingProcess.id this event came from.</osd:description>
+                                    </xs:documentation>
+                                    <xs:documentation xml:lang="fr-FR">
+                                        <osd:label>Id de fusion</osd:label>
+                                        <osd:description>Positionné uniquement par la veille du journal de fusion : le MergingProcess.id de l'add-on à l'origine de cet événement.</osd:description>
+                                    </xs:documentation>
+                                </xs:annotation>
+                                <xs:simpleType>
+                                    <xs:restriction base="xs:string">
+                                        <xs:maxLength value="40"/>
+                                    </xs:restriction>
+                                </xs:simpleType>
+                            </xs:element>
+                            <xs:element name="attempts" type="xs:int" minOccurs="0" maxOccurs="1" default="0">
+                                <xs:annotation>
+                                    <xs:documentation xml:lang="en-US">
+                                        <osd:label>Attempts</osd:label>
+                                    </xs:documentation>
+                                    <xs:documentation xml:lang="fr-FR">
+                                        <osd:label>Tentatives</osd:label>
+                                    </xs:documentation>
+                                </xs:annotation>
+                            </xs:element>
+                            <xs:element name="createdAt" type="xs:dateTime" minOccurs="0" maxOccurs="1">
+                                <xs:annotation>
+                                    <xs:documentation xml:lang="en-US">
+                                        <osd:label>Created</osd:label>
+                                    </xs:documentation>
+                                    <xs:documentation xml:lang="fr-FR">
+                                        <osd:label>Créé le</osd:label>
+                                    </xs:documentation>
+                                </xs:annotation>
+                            </xs:element>
+                            <xs:element name="nextAttemptAt" type="xs:dateTime" minOccurs="0" maxOccurs="1">
+                                <xs:annotation>
+                                    <xs:documentation xml:lang="en-US">
+                                        <osd:label>Next attempt</osd:label>
+                                        <osd:description>Set on a failed attempt still under the retry budget; the dispatcher skips the row until this time.</osd:description>
+                                    </xs:documentation>
+                                    <xs:documentation xml:lang="fr-FR">
+                                        <osd:label>Prochaine tentative</osd:label>
+                                        <osd:description>Positionné après une tentative échouée encore dans le budget de nouvelles tentatives ; le distributeur ignore la ligne jusqu'à cette date.</osd:description>
+                                    </xs:documentation>
+                                </xs:annotation>
+                            </xs:element>
+                            <xs:element name="sentAt" type="xs:dateTime" minOccurs="0" maxOccurs="1">
+                                <xs:annotation>
+                                    <xs:documentation xml:lang="en-US">
+                                        <osd:label>Sent</osd:label>
+                                    </xs:documentation>
+                                    <xs:documentation xml:lang="fr-FR">
+                                        <osd:label>Envoyé le</osd:label>
+                                    </xs:documentation>
+                                </xs:annotation>
+                            </xs:element>
+                            <xs:element name="message" minOccurs="0" maxOccurs="1">
+                                <xs:annotation>
+                                    <xs:documentation xml:lang="en-US">
+                                        <osd:label>Message</osd:label>
+                                    </xs:documentation>
+                                    <xs:documentation xml:lang="fr-FR">
+                                        <osd:label>Message</osd:label>
+                                    </xs:documentation>
+                                </xs:annotation>
+                                <xs:simpleType>
+                                    <xs:restriction base="osd:text">
+                                        <xs:maxLength value="2000"/>
+                                    </xs:restriction>
+                                </xs:simpleType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+
+                <xs:element name="Control" minOccurs="0" maxOccurs="unbounded">
+                    <xs:annotation>
+                        <xs:documentation xml:lang="en-US">
+                            <osd:label>Distribution control</osd:label>
+                            <osd:description>Volume-operations lot 8b: one row per project, maintained by Java (never by the trigger itself) every time a REALTIME target's ARMED-ness could have changed - the count of currently ARMED REALTIME targets. ebx.DistributionTriggerBody's generated trigger reads this row FIRST, by primary key (no SQL query), and returns at once when it is missing or armedRealtimeTargets is 0 - see ebx.DistributionControlRow's own Javadoc for the exact invariant ("a target never becomes ARMED before this row already counts it") that makes a missing/zero row a safe "nothing to do", not a fail-open bug. See docs/DISTRIBUTION.md.</osd:description>
+                        </xs:documentation>
+                        <xs:documentation xml:lang="fr-FR">
+                            <osd:label>Contrôle de diffusion</osd:label>
+                            <osd:description>Volume-operations lot 8b : une ligne par projet, maintenue par le Java (jamais par le déclencheur lui-même) à chaque fois que l'état ARMED d'une cible REALTIME a pu changer - le nombre de cibles REALTIME actuellement ARMED. Le déclencheur généré par ebx.DistributionTriggerBody lit cette ligne EN PREMIER, par clé primaire (pas de requête SQL), et retourne immédiatement si elle est absente ou si armedRealtimeTargets vaut 0 - voir le Javadoc de ebx.DistributionControlRow pour l'invariant exact ("une cible ne devient jamais ARMED avant que cette ligne ne la compte déjà") qui rend une ligne absente/à zéro un "rien à faire" sûr, pas un bug fail-open. Voir docs/DISTRIBUTION.md.</osd:description>
+                        </xs:documentation>
+                        <xs:appinfo>
+                            <osd:table>
+                                <primaryKeys>/project </primaryKeys>
+                                <defaultLabel>${./project} (${./armedRealtimeTargets})</defaultLabel>
+                            </osd:table>
+                        </xs:appinfo>
+                    </xs:annotation>
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="project" minOccurs="1" maxOccurs="1">
+                                <xs:annotation>
+                                    <xs:documentation xml:lang="en-US">
+                                        <osd:label>Project</osd:label>
+                                        <osd:description>Project.code - a plain string, never a foreign key (this dataset is in the project's own master dataspace; MdmFactory's Project table is in a different dataspace - same reasoning as Event.target).</osd:description>
+                                    </xs:documentation>
+                                    <xs:documentation xml:lang="fr-FR">
+                                        <osd:label>Projet</osd:label>
+                                        <osd:description>Project.code - simple chaîne, jamais une clé étrangère (ce dataset est dans le dataspace MDM propre au projet ; la table Project de MdmFactory est dans un dataspace différent - même raisonnement que Event.target).</osd:description>
+                                    </xs:documentation>
+                                </xs:annotation>
+                                <xs:simpleType>
+                                    <xs:restriction base="xs:string">
+                                        <xs:maxLength value="40"/>
+                                    </xs:restriction>
+                                </xs:simpleType>
+                            </xs:element>
+                            <xs:element name="armedRealtimeTargets" type="xs:int" minOccurs="0" maxOccurs="1" default="0">
+                                <xs:annotation>
+                                    <xs:documentation xml:lang="en-US">
+                                        <osd:label>Armed realtime targets</osd:label>
+                                        <osd:description>Count of this project's DistributionTarget rows with mode=REALTIME and state=ARMED, as of updatedAt. 0 (or the row missing entirely) means the trigger's own SQL fallback query never needs to run.</osd:description>
+                                    </xs:documentation>
+                                    <xs:documentation xml:lang="fr-FR">
+                                        <osd:label>Cibles temps réel armées</osd:label>
+                                        <osd:description>Nombre de lignes DistributionTarget de ce projet avec mode=REALTIME et state=ARMED, à la date updatedAt. 0 (ou la ligne totalement absente) signifie que le repli SQL du déclencheur n'a jamais besoin de s'exécuter.</osd:description>
+                                    </xs:documentation>
+                                </xs:annotation>
+                            </xs:element>
+                            <xs:element name="updatedAt" type="xs:dateTime" minOccurs="0" maxOccurs="1">
+                                <xs:annotation>
+                                    <xs:documentation xml:lang="en-US">
+                                        <osd:label>Updated</osd:label>
+                                    </xs:documentation>
+                                    <xs:documentation xml:lang="fr-FR">
+                                        <osd:label>Mis à jour le</osd:label>
+                                    </xs:documentation>
+                                </xs:annotation>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>

@@ -1,0 +1,11 @@
+{"format": "accelerator-workflow-types/1",
+ "types": [
+  {"key": "creationWithReview", "label": {"en-US": "Creation request with review", "fr-FR": "Demande de création avec validation"},
+   "parameters": {"reviewers": "ordered list of profiles", "mode": "sequential|parallel", "requester": "profile", "acceptLabel": "text", "rejectLabel": "text"},
+   "shape": "ScriptTaskCreateBranchI18n (child of the domain dataspace) -> creation task (ebx-root-1.0@creation, output created -> recordXPath) -> ConditionIsLastUserTaskAccepted -> one review task per reviewer (@default, firstCallDisplay=record) each followed by a condition -> ScriptTaskMergeBranch | correction task (previousUserTaskIdReferenceForAllocation = creation) -> condition -> back to the first review | ScriptTaskCloseBranch. Parallel reviewers = one subWorkflow node with N invocations.",
+   "measured": "docs/ACCELERATORS.md section 14 (AccelProbeSupplierCreation, 2026-10-12)"},
+  {"key": "changeRequest", "label": {"en-US": "Change request", "fr-FR": "Demande de modification"},
+   "parameters": {"sensitiveFields": "paths", "reviewers": "profiles"}, "shape": "not generated in lot C1 (listed for the proposal pass only)"},
+  {"key": "blockUnblock", "label": {"en-US": "Block / unblock / archive", "fr-FR": "Blocage / déblocage / archivage"}, "parameters": {"reasonMandatory": "boolean"}, "shape": "not generated in lot C1"},
+  {"key": "periodicReview", "label": {"en-US": "Periodic review", "fr-FR": "Revue périodique"}, "parameters": {"dueField": "path", "daysBefore": "int", "reviewers": "profiles"}, "shape": "not generated in lot C1"}
+ ]}

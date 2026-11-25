@@ -1,0 +1,201 @@
+/* Record lineage service (RecordLineageUserService). Loaded together with the shared factory/factory.css
+   (tokens, mdmf-panel, mdmf-lead, mdmf-hint, mdmf-field, mdmf-actions, mdmf-chip variants, mdmf-table
+   variants, mdmf-notice variants - all defined there) and
+   factory/review.css (.mdmf-btn - this screen reuses the review screen's own buttons rather than
+   redeclaring them; no button style of its own).
+
+   Note: an earlier version of this exact comment closed itself early, mid-sentence, because it wrote a
+   literal star-slash inside the class list above ("...-chip*-table*..." read as a token boundary, not as
+   an accidental end-of-comment) - every rule below silently never applied anywhere this stylesheet was
+   loaded until that was fixed (2026-09-21, discovered while sanity-checking the graphic screen below in a
+   browser: `document.styleSheets` reported 0 rules for this file). Avoid an asterisk immediately followed
+   by a slash anywhere in a CSS comment.
+
+   Two generations of styles live here on purpose:
+   - mdmf-journey/mdmf-jrow/mdmf-jnode/mdmf-contribution (below) style the ORIGINAL v1 server-rendered
+     tables (RecordLineagePage#renderJourney/#renderFieldTable) - kept as the noscript fallback for a
+     browser with JavaScript disabled (task brief: "works without JavaScript ... the v1 server-rendered
+     content is an acceptable fallback - keep it").
+   - mdmf-lineage-graphic and everything under it (task brief, night of 2026-09-21: rebuilt from the
+     validated mockup docs/mockups/record-lineage.html) style the REAL screen: an SVG "parcours"/"frise"
+     drawn by lineage-graphic.js, and an HTML "champ par champ" table (a deliberate adaptation from the
+     mockup's own SVG for that one section - see lineage-graphic.js's own comment on buildFieldsTable for
+     why: an HTML table survives horizontal scroll and a sticky first column, which an absolutely
+     positioned SVG connector line would not). One colour per source system, from start to end - the
+     colour itself always comes from SourceColorPalette/RecordLineageGraphic server-side, never hardcoded
+     here; this file only styles the SHAPES the JS already coloured. */
+
+.mdmf-lineage{max-width:1320px;margin:0 auto;padding:6px 6px 28px}
+
+/* the EBX record id chip next to a record's own name wherever this screen shows one - RecordLineagePage#
+   idChip (task brief, 2026-09-22, coordinator review of the live "BPCE"/"HSBC BANK" screens: "small and
+   muted, monospace, never as the main title"). Reuses .mdmf code's own monospace stack (factory.css)
+   rather than declaring a second one; the inline SVG (lineage-graphic.js) styles its own id chips with
+   the same font stack/colour directly on each text element, since presentation attributes there cannot
+   reference a CSS class the way HTML markup can. */
+.mdmf-id{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px;font-weight:400;color:var(--muted);white-space:nowrap;margin-left:2px}
+
+.mdmf-journey{display:flex;flex-direction:column;gap:10px;margin:6px 0 14px}
+.mdmf-jrow{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.mdmf-jnode{background:#fff;border:1px solid #d0d5dd;border-radius:10px;padding:9px 12px;min-width:150px;flex:1 1 150px}
+.mdmf-jnode span{display:block;font-size:9px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--accent-fg)}
+.mdmf-jnode b{display:block;font-size:12.5px;margin-top:2px;overflow-wrap:anywhere}
+.mdmf-jnode small{display:block;font-size:10.5px;color:#98a2b3;margin-top:2px;overflow-wrap:anywhere}
+.mdmf-jnode-golden{border:2px solid var(--accent-fg);background:var(--accent-soft)}
+/* a source the caller's session may not see (ebx.RecordLineageReader's own permission redaction) - dashed,
+   muted, same visual family as factory.css's own .mdmf-chip-target ("not yet" / "not available") */
+.mdmf-jnode-restricted{border-style:dashed;color:var(--muted)}
+.mdmf-jarrow{color:#9ccbdc;font-size:20px;flex:0 0 auto;align-self:center}
+@media(max-width:640px){.mdmf-jarrow{transform:rotate(90deg)}}
+
+/* the field-by-field table: one .mdmf-contribution block per contributing source inside the "Contributions"
+   cell, and a warm highlight on the whole row when the sources disagree (task brief: "highlight" a
+   differing field) - never on a merely UNKNOWN (restricted) row, which gets its own dashed chip instead. */
+.mdmf-contribution{margin:0 0 6px}
+.mdmf-contribution:last-child{margin-bottom:0}
+.mdmf-contribution small{display:block;color:var(--muted);font-size:10.5px;margin-top:2px;line-height:1.4}
+.mdmf-table tr.mdmf-field-differs td{background:var(--warn-soft)}
+
+@media(max-width:760px){
+ .mdmf-lineage .mdmf-grid-2{grid-template-columns:1fr}
+}
+
+/* ------------------------------------------------------------------------------------------- graphic screen */
+
+.mdmf-lineage-graphic{display:flex;flex-direction:column;gap:0}
+.mdmf-lineage-graphic .mdmf-panel:last-of-type{margin-bottom:0}
+
+.mdmf-legend{display:flex;flex-wrap:wrap;gap:14px;font-size:11.5px;color:#475467;margin:2px 0 10px}
+.mdmf-legend-item{display:inline-flex;align-items:center;white-space:nowrap}
+.mdmf-legend-dot{display:inline-block;width:10px;height:10px;border-radius:50%;flex:0 0 auto}
+
+.mdmf-parcours-scroll,.mdmf-fields-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:10px}
+.mdmf-parcours-canvas svg,.mdmf-frise-canvas svg{display:block;max-width:none}
+.mdmf-frise-canvas{overflow-x:auto;border:1px solid var(--line);border-radius:10px}
+/* an always-VISIBLE scrollbar (coordinator review, 2026-09-22: "a horizontally scrollable strip ... visible
+   scrollbar") - macOS's default "overlay" scrollbar style hides the track entirely until the user actually
+   scrolls, which reads as "the content is just cut off" in a static screenshot; a thin, always-drawn
+   webkit scrollbar removes that ambiguity. `scrollbar-width` covers Firefox's own opt-in thin style. */
+.mdmf-frise-canvas,.mdmf-fields-scroll,.mdmf-parcours-scroll{scrollbar-width:thin}
+.mdmf-frise-canvas::-webkit-scrollbar,.mdmf-fields-scroll::-webkit-scrollbar,.mdmf-parcours-scroll::-webkit-scrollbar{height:8px}
+.mdmf-frise-canvas::-webkit-scrollbar-thumb,.mdmf-fields-scroll::-webkit-scrollbar-thumb,.mdmf-parcours-scroll::-webkit-scrollbar-thumb{background:#c7cddb;border-radius:4px}
+.mdmf-frise-canvas::-webkit-scrollbar-track,.mdmf-fields-scroll::-webkit-scrollbar-track,.mdmf-parcours-scroll::-webkit-scrollbar-track{background:transparent}
+.mdmf-parcours-canvas g[role="button"]:hover rect,.mdmf-frise-canvas g[role="button"]:hover text{opacity:.85}
+.mdmf-parcours-canvas g[role="button"]:focus-visible,.mdmf-frise-canvas g[role="button"]:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+
+.mdmf-more-sources{margin-top:10px}
+.mdmf-more-sources[hidden]{display:none}
+
+/* champ par champ - an HTML table, one column per source plus a sticky golden column (see lineage.css's
+   own header comment / lineage-graphic.js's buildFieldsTable comment for why an HTML table replaces the
+   mockup's own SVG here). ".mdmf-fields-inner" is the POSITIONED ancestor drawFieldConnectors measures
+   offsetLeft/offsetTop against (coordinator review, 2026-09-22) - it must stay position:relative, and the
+   connector overlay it holds must stay BELOW the sticky golden column in stacking order (z-index) so a
+   connector segment that would be drawn under a horizontally-scrolled-over sticky cell is correctly hidden
+   by that cell's own opaque background, rather than drawn on top of it. */
+.mdmf-fields-inner{position:relative}
+.mdmf-connector-overlay{position:absolute;top:0;left:0;pointer-events:none;z-index:1}
+.mdmf-fields-table{border-collapse:separate;border-spacing:0;width:100%;font-size:12.5px}
+.mdmf-fields-table th,.mdmf-fields-table td{padding:9px 22px 9px 12px;border-bottom:1px solid var(--line);vertical-align:top;white-space:nowrap;min-width:150px}
+.mdmf-fields-table th{text-align:left;font-size:11px;font-weight:700;background:var(--th-bg);position:sticky;top:0;z-index:3}
+.mdmf-fields-golden-col{position:sticky;left:0;background:var(--accent-soft);z-index:2;border-right:2px solid var(--accent-fg)}
+.mdmf-fields-table th.mdmf-fields-golden-col{z-index:4}
+/* the connector STRIP row (coordinator review, 2026-09-22, second pass): dedicated, empty-by-default room
+   under each field's own value row so a retained<->golden connector never again has to run through a
+   cell's own text (drawFieldConnectors' own Javadoc has the geometry). The value row's own bottom border
+   moves DOWN onto the strip, so the visible divider sits after the (possibly empty) strip, not between the
+   value content and its own arrow. */
+.mdmf-fields-table tr.mdmf-field-row td{border-bottom:none}
+.mdmf-fields-table tr.mdmf-connector-row td{padding:0;height:12px;border-bottom:1px solid var(--line)}
+/* golden cell content (coordinator review, 2026-09-22): the field name in small caps violet, the value bold - "as the mockup" - and, when a survivorship rule is known, a short hint under the value. */
+.mdmf-golden-field-name{font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--accent-fg)}
+.mdmf-golden-field-value{font-weight:700;color:var(--ink);white-space:normal;margin-top:1px}
+.mdmf-golden-field-rule{font-size:10px;color:var(--muted);white-space:normal;margin-top:2px}
+.mdmf-cell-retained{border:2px solid;border-radius:8px}
+/* EQUIVALENT/TRANSFORMED (coordinator review, 2026-09-22, fixing a reported false disagreement - see
+   RecordLineage's own comment on `equivalentToGolden`): a case/accent/whitespace-only difference, or a
+   single source's own value with nothing to compare it against, is NOT a disagreement - same plain white
+   box as EQ, deliberately never the DIFF box's own strikethrough treatment. */
+.mdmf-cell-diff,.mdmf-cell-eq,.mdmf-cell-equivalent,.mdmf-cell-transformed{background:#fff;border:1px solid var(--line);border-radius:8px}
+.mdmf-cell-empty{color:#b3bac6;font-style:italic;border:1px dashed var(--line);border-radius:8px}
+.mdmf-cell-lock{color:var(--muted);font-style:italic;background:#fafbfc;border:1px dashed var(--line);border-radius:8px}
+.mdmf-cell-value{font-weight:700;color:var(--ink);white-space:normal}
+.mdmf-cell-raw{color:var(--muted);font-size:10.5px;margin-top:2px;white-space:normal}
+/* badges sit at the cell's own top-right corner (coordinator review, 2026-09-22: "badges at the top right
+   of the box, not under the value") - each "td" gets position:relative inline (lineage-graphic.js) so this
+   absolute positioning is relative to the CELL, not the table. */
+.mdmf-cell-badge{position:absolute;top:4px;right:6px}
+.mdmf-cell-badge-retained{font-size:8px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--ink);background:rgba(255,255,255,.7);padding:1px 4px;border-radius:4px}
+.mdmf-cell-badge-eq,.mdmf-cell-badge-diff,.mdmf-cell-badge-approx{display:inline-flex;align-items:center;justify-content:center;font-weight:700;border-radius:50%;width:16px;height:16px;font-size:10.5px}
+.mdmf-cell-badge-eq{background:var(--good-soft);color:var(--good)}
+.mdmf-cell-badge-diff{background:var(--warn-soft);color:var(--warn)}
+/* "approx" (EQUIVALENT's own "~" badge) is a NEUTRAL blue, not the warm/orange DIFF colour (task brief,
+   2026-09-22: "not the orange warn colour") - a real disagreement still reads differently at a glance. */
+.mdmf-cell-badge-approx{background:var(--info-soft);color:var(--info)}
+/* TRANSFORMED's own small text badge (single-source rule) - same pill shape as "retained", neutral blue like
+   "approx" rather than the violet used for retained/golden, so the two concepts (retained vs. transformed
+   with nothing else to compare against) never look alike. */
+.mdmf-cell-badge-transformed{font-size:8px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--info);background:var(--info-soft);padding:1px 4px;border-radius:4px}
+.mdmf-fields-table tbody tr.mdmf-field-row:hover td{background:#fafbff}
+.mdmf-fields-table tbody tr.mdmf-field-row.mdmf-row-highlight td{background:var(--accent-soft)}
+
+.mdmf-detail-panel{font-size:12.5px;color:var(--muted);min-height:20px}
+
+@media(max-width:760px){
+ .mdmf-fields-table th,.mdmf-fields-table td{min-width:130px}
+}
+
+/* --------------------------------------------------------------------------------- compare with suspects */
+/* task brief, 2026-09-22, "decide on a suspect" lot: a native details/summary disclosure
+   (RecordLineagePage#renderComparisonPanel) - opens on a click on its own summary with no script needed at
+   all, so the comparison table below never depends on lineage-graphic.js having run. Avoid an asterisk
+   immediately followed by a slash anywhere in this comment block (see the header comment above, and
+   CLAUDE.md, for why that specific two-character sequence has bitten this file before). */
+.mdmf-compare summary{cursor:pointer;list-style:none}
+.mdmf-compare summary::-webkit-details-marker{display:none}
+.mdmf-compare-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:10px;margin:8px 0}
+/* Fix, 2026-09-22 (the product owner's screenshot: the "Other fields" table's value/suspect columns start well to
+   the left of the main table's own): the main comparison rows and the "Other fields (N)" rows are two
+   SEPARATE table elements (RecordLineagePage#renderComparisonPanel), and used to size their own columns
+   from their own cell content (default table-layout: auto) - a short field name in one table and a long
+   one in the other gave the two tables two different natural widths, so nothing lined up. table-layout:
+   fixed makes the colgroup below (RecordLineagePage#renderCompareColgroup, the SAME widths for both tables,
+   computed from the SAME suspect count) the only thing that decides column width - cell content wraps
+   instead of growing a column, so the browser genuinely cannot size the two tables apart from each other
+   any more. See the wall of "avoid an asterisk immediately followed by a slash" warning just above for why
+   this comment stays on one paragraph rather than illustrating the two-character sequence itself. */
+.mdmf-compare-table{border-collapse:separate;border-spacing:0;width:100%;font-size:12.5px;table-layout:fixed}
+.mdmf-compare-table th,.mdmf-compare-table td{padding:8px 16px 8px 10px;border-bottom:1px solid var(--line);vertical-align:top;white-space:normal;overflow-wrap:break-word}
+.mdmf-compare-table th{text-align:left;font-size:11px;font-weight:700;background:var(--th-bg);position:sticky;top:0}
+.mdmf-compare-anchor-col{position:sticky;left:0;background:var(--accent-soft);border-right:2px solid var(--accent-fg)}
+.mdmf-compare-table th.mdmf-compare-anchor-col{z-index:2}
+.mdmf-chip-cmp{display:inline-flex;align-items:center;justify-content:center;font-weight:700;border-radius:4px;padding:0 5px;font-size:10.5px;margin-left:4px}
+.mdmf-chip-cmp-eq{background:var(--good-soft);color:var(--good)}
+.mdmf-chip-cmp-equivalent{background:var(--info-soft);color:var(--info)}
+.mdmf-chip-cmp-diff{background:var(--warn-soft);color:var(--warn)}
+.mdmf-chip-cmp-empty,.mdmf-chip-cmp-unknown{background:#f2f4f7;color:var(--muted)}
+.mdmf-compare-other{margin-top:8px}
+.mdmf-compare-decision{border-top:1px solid var(--line);padding:8px 0}
+.mdmf-compare-confirm{display:inline-flex;align-items:center;gap:8px;flex-wrap:wrap}
+
+/* -------------------------------------------------------------------------------------- cross-references */
+/* the product owner's request, 2026-09-23 - RecordLineagePage#renderCrossReferencesPanel. A single table (unlike the
+   compare panel above, there is no second table to keep aligned with), so unlike .mdmf-compare-table there is
+   no need to force two tables to the same widths - the original fixed colgroup here was a guess at
+   proportions, and a wrong one under ~800px: "SOURCE SYSTEM"/"SOURCE ID" overlapped (the base .mdmf-table th
+   rule in factory.css is white-space:nowrap, so a header that didn't fit its fixed-width column just spilled
+   into the next one) and a source id wrapped one character per line (overflow-wrap:break-word forced to break
+   ANYWHERE because table-layout:fixed left the column too narrow for even one full token) - measured live
+   2026-09-23 at 757px, `docs/RECORD-LINEAGE.md` "Cross-references (2026-09-23)". Dropping table-layout:fixed
+   (RecordLineagePage no longer emits a <colgroup> for this table either) lets the browser size each column
+   from its own header/content, which is enough on its own once headers can wrap. */
+.mdmf-xref-table th{white-space:normal}
+.mdmf-xref-table td{overflow-wrap:break-word;word-break:break-word}
+/* The two columns that carry an actual key (source id, master record) stay on one line above ~600px - a
+   record key reads worse split across lines than the odd horizontal scroll (.mdmf-table-wrap already scrolls)
+   - but on a narrow/phone pane there is no room to protect: let them wrap like every other cell rather than
+   force the table wider than the viewport. */
+.mdmf-xref-table td:nth-child(2),.mdmf-xref-table td:nth-child(3){white-space:nowrap}
+@media (max-width:600px){
+	.mdmf-xref-table td:nth-child(2),.mdmf-xref-table td:nth-child(3){white-space:normal}
+}

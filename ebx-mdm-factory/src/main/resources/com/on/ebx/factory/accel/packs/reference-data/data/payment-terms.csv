@@ -1,0 +1,12 @@
+code,label_en,label_fr,days,rule
+IMMEDIATE,Payment on receipt,Paiement à réception,0,NONE
+NET15,Net 15 days,15 jours nets,15,NONE
+NET30,Net 30 days,30 jours nets,30,NONE
+NET30EOM,30 days end of month,30 jours fin de mois,30,END_OF_MONTH
+NET45,Net 45 days,45 jours nets,45,NONE
+NET45EOM,45 days end of month,45 jours fin de mois,45,END_OF_MONTH
+NET60,Net 60 days,60 jours nets,60,NONE
+NET60EOM,60 days end of month,60 jours fin de mois,60,END_OF_MONTH
+NET90,Net 90 days,90 jours nets,90,NONE
+PREPAID,Prepayment,Paiement d'avance,0,PREPAID
+COD,Cash on delivery,Paiement à la livraison,0,NONE

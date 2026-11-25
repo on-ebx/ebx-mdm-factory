@@ -1,0 +1,12 @@
+code,label_en,label_fr,transportMode,version
+EXW,Ex Works,Départ usine,ANY,2020
+FCA,Free Carrier,Franco transporteur,ANY,2020
+CPT,Carriage Paid To,Port payé jusqu'à,ANY,2020
+CIP,Carriage and Insurance Paid To,"Port payé, assurance comprise, jusqu'à",ANY,2020
+DAP,Delivered At Place,Rendu au lieu de destination,ANY,2020
+DPU,Delivered at Place Unloaded,Rendu au lieu de destination déchargé,ANY,2020
+DDP,Delivered Duty Paid,Rendu droits acquittés,ANY,2020
+FAS,Free Alongside Ship,Franco le long du navire,SEA,2020
+FOB,Free On Board,Franco à bord,SEA,2020
+CFR,Cost and Freight,Coût et fret,SEA,2020
+CIF,"Cost, Insurance and Freight","Coût, assurance et fret",SEA,2020

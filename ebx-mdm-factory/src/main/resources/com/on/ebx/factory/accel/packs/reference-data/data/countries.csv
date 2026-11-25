@@ -1,0 +1,252 @@
+Numeric code,Alpha-2 Code,Alpha-3 code,Name,Name FR,ITU,MARC,WMO,DS,Dial,FIFA,FIPS,GAUL,IOC
+20,AD,AND,Andorra,Andorre,AND,an, ,AND,376,AND,AN,7,AND
+784,AE,ARE,United Arab Emirates,Emirats Arabes Unis,UAE,ts,ER, ,971,UAE,AE,255,UAE
+4,AF,AFG,Afghanistan,Afghanistan,AFG,af,AF,AFG,93,AFG,AF,1,AFG
+28,AG,ATG,Antigua and Barbuda,Antigua-et-Barbuda,ATG,aq,AT, ,1-268,ATG,AC,11,ANT
+660,AI,AIA,Anguilla,Anguilla,AIA,am, , ,1-264,AIA,AV,9,AIA
+8,AL,ALB,Albania,Albanie,ALB,aa,AB,AL,355,ALB,AL,3,ALB
+51,AM,ARM,Armenia,Arménie,ARM,ai,AY,AM,374,ARM,AM,13,ARM
+530,AN,ANT,Netherlands Antilles,Antilles Néerlandaises,,,,,,,,,
+24,AO,AGO,Angola,Angola,AGL,ao,AN, ,244,ANG,AO,8,ANG
+10,AQ,ATA,Antarctica,Antarctique, ,ay,AA, ,672,ROS,AY,10, 
+32,AR,ARG,Argentina,Argentine,ARG,ag,AG,RA,54,ARG,AR,12,ARG
+16,AS,ASM,American Samoa,Samoa orientales,SMA,as, ,USA,1-684,ASA,AQ,5,ASA
+40,AT,AUT,Austria,Autriche,AUT,au,OS,A,43,AUT,AU,18,AUT
+36,AU,AUS,Australia,Australie,AUS,at,AU,AUS,61,AUS,AS,17,AUS
+533,AW,ABW,Aruba,Aruba,ABW,aw,NU, ,297,ARU,AA,14,ARU
+248,AX,ALA,Åland Islands,Îles Åland, , , ,FIN,358,ALD, ,1242, 
+31,AZ,AZE,Azerbaijan,Azerbaïdjan,AZE,aj,AJ,AZ,994,AZE,AJ,19,AZE
+70,BA,BIH,Bosnia and Herzegovina,Bosnie-Herzégovine,BIH,bn,BG,BIH,387,BIH,BK,34,BIH
+52,BB,BRB,Barbados,Barbade,BRB,bb,BR,BDS,1-246,BRB,BB,24,BAR
+50,BD,BGD,Bangladesh,Bangladesh,BGD,bg,BW,BD,880,BAN,BG,23,BAN
+56,BE,BEL,Belgium,Belgique,BEL,be,BX,B,32,BEL,BE,27,BEL
+854,BF,BFA,Burkina Faso,Burkina Faso,BFA,uv,HV,BF,226,BFA,UV,42,BUR
+100,BG,BGR,Bulgaria,Bulgarie,BUL,bu,BU,BG,359,BUL,BU,41,BUL
+48,BH,BHR,Bahrain,Bahreïn,BHR,ba,BN,BRN,973,BHR,BA,21,BRN
+108,BI,BDI,Burundi,Burundi,BDI,bd,BI,RU,257,BDI,BY,43,BDI
+204,BJ,BEN,Benin,Bénin,BEN,dm,BJ,DY,229,BEN,BN,29,BEN
+652,BL,BLM,Saint Barthélemy,Saint Barthélemy, ,sc, , ,590, ,TB,, 
+60,BM,BMU,Bermuda,Bermudes,BER,bm,BE, ,1-441,BER,BD,30,BER
+96,BN,BRN,Brunei Darussalam,Bruneï,BRU,bx,BD,BRU,673,BRU,BX,40,BRU
+68,BO,BOL,Bolivia (Plurinational State of),Bolivie,BOL,bo,BO,BOL,591,BOL,BL,33,BOL
+535,BQ,BES,"Bonaire, Sint Eustatius and Saba","Bonaire, Sint Eustatius and Saba",ATN,ca,NU,NA,599,ANT,NL,176,AHO
+76,BR,BRA,Brazil,Brésil,B,bl,BZ,BR,55,BRA,BR,37,BRA
+44,BS,BHS,Bahamas,Bahamas,BAH,bf,BA,BS,1-242,BAH,BF,20,BAH
+64,BT,BTN,Bhutan,Bhoutan,BTN,bt, , ,975,BHU,BT,31,BHU
+74,BV,BVT,Bouvet Island,Bouvet (Île), ,bv,BV, ,47,,BV,36, 
+72,BW,BWA,Botswana,Botswana,BOT,bs,BC,BW,267,BOT,BC,35,BOT
+112,BY,BLR,Belarus,Biélorussie,BLR,bw,BY,BY,375,BLR,BO,26,BLR
+84,BZ,BLZ,Belize,Bélize,BLZ,bh,BH,BZ,501,BLZ,BH,28,BIZ
+124,CA,CAN,Canada,Canada,CAN,xxc,CN,CDN,1,CAN,CA,46,CAN
+166,CC,CCK,Cocos (Keeling) Islands,Cocos / Keeling (Îles),ICO,xb,KK,AUS,61,CCK,CK,56, 
+180,CD,COD,Congo (Democratic Republic of the),République Démocratique du Congo,COD,cg,ZR,ZRE,243,COD,CG,68,COD
+140,CF,CAF,Central African Republic,République Centrafricaine,CAF,cx,CE,RCA,236,CTA,CT,49,CAF
+178,CG,COG,Congo,Congo,COG,cf,CG,RCB,242,CGO,CF,59,CGO
+756,CH,CHE,Switzerland,Suisse,SUI,sz,SW,CH,41,SUI,SZ,237,SUI
+384,CI,CIV,Côte d'Ivoire,Côte D'Ivoire,CTI,iv,IV,CI,225,CIV,IV,66,CIV
+184,CK,COK,Cook Islands,Cook (Îles),CKH,cw,KU,NZ,682,COK,CW,60,COK
+152,CL,CHL,Chile,Chili,CHL,cl,CH,RCH,56,CHI,CI,51,CHI
+120,CM,CMR,Cameroon,Cameroun,CME,cm,CM,CAM,237,CMR,CM,45,CMR
+156,CN,CHN,China,Chine,CHN,cc,CI, ,86,CHN,CH,53,CHN
+170,CO,COL,Colombia,Colombie,CLM,ck,CO,CO,57,COL,CO,57,COL
+188,CR,CRI,Costa Rica,Costa Rica,CTR,cr,CS,CR,506,CRC,CS,61,CRC
+192,CU,CUB,Cuba,Cuba,CUB,cu,CU,C,53,CUB,CU,63,CUB
+132,CV,CPV,Cabo Verde,Cap Vert,CPV,cv,CV, ,238,CPV,CV,47,CPV
+531,CW,CUW,Curaçao,Curaçao,,co,,,599,,UC,,
+162,CX,CXR,Christmas Island,Christmas (Île),CHR,xa,KI,AUS,61,CXR,KT,54, 
+196,CY,CYP,Cyprus,Chypre,CYP,cy,CY,CY,357,CYP,CY,64,CYP
+203,CZ,CZE,Czech Republic,République Tchèque,CZE,xr,CZ,CZ,420,CZE,EZ,65,CZE
+276,DE,DEU,Germany,Allemagne,D,gw,DL,D,49,GER,GM,93,GER
+262,DJ,DJI,Djibouti,Djibouti,DJI,ft,DJ, ,253,DJI,DJ,70,DJI
+208,DK,DNK,Denmark,Danemark,DNK,dk,DN,DK,45,DEN,DA,69,DEN
+212,DM,DMA,Dominica,Dominique,DMA,dq,DO,WD,1-767,DMA,DO,71,DMA
+214,DO,DOM,Dominican Republic,République Dominicaine,DOM,dr,DR,DOM,1-8091-8291-849,DOM,DR,72,DOM
+12,DZ,DZA,Algeria,Algérie,ALG,ae,AL,DZ,213,ALG,AG,4,ALG
+218,EC,ECU,Ecuador,Equateur,EQA,ec,EQ,EC,593,ECU,EC,73,ECU
+233,EE,EST,Estonia,Estonie,EST,er,EO,EST,372,EST,EN,78,EST
+818,EG,EGY,Egypt,Egypte,EGY,ua,EG,ET,20,EGY,EG,40765,EGY
+732,EH,ESH,Western Sahara,Sahara Occidental,AOE,ss, , ,212,SAH,WI,268, 
+232,ER,ERI,Eritrea,Erythrée,ERI,ea, , ,291,ERI,ER,77,ERI
+724,ES,ESP,Spain,Espagne,E,sp,SP,E,34,ESP,SP,229,ESP
+231,ET,ETH,Ethiopia,Ethiopie,ETH,et,ET,ETH,251,ETH,ET,79,ETH
+246,FI,FIN,Finland,Finlande,FIN,fi,FI,FIN,358,FIN,FI,84,FIN
+242,FJ,FJI,Fiji,Fiji,FJI,fj,FJ,FJI,679,FIJ,FJ,83,FIJ
+238,FK,FLK,Falkland Islands (Malvinas),Falkland / Malouines (Îles),FLK,fk,FK, ,500,FLK,FK,81,FLK
+583,FM,FSM,Micronesia (Federated States of),Micronésie (Etats fédérés de),FSM,fm, , ,691,FSM,FM,163,FSM
+234,FO,FRO,Faroe Islands,Féroé (Îles),FRO,fa,FA,FO,298,FRO,FO,82,FAR
+250,FR,FRA,France,France,F,fr,FR,F,33,FRA,FR,85,FRA
+249,FX,FXX,"France, Metropolitan","France, Métropolitaine",,,,,,,,,
+266,GA,GAB,Gabon,Gabon,GAB,go,GO,G,241,GAB,GB,89,GAB
+826,GB,GBR,United Kingdom,Royaume-Uni,G,xxk,UK,GB,44,"ENG,NIR,SCO,WAL",UK,256,GBR
+308,GD,GRD,Grenada,Grenade,GRD,gd,GD,WG,1-473,GRN,GJ,99,GRN
+268,GE,GEO,Georgia,Géorgie,GEO,gs,GG,GE,995,GEO,GG,92,GEO
+254,GF,GUF,French Guiana,Guyane française,GUF,fg,FG,F,594,GUF,FG,86,FGU
+831,GG,GGY,Guernsey,Guernsey, ,uik, ,GBG,44,GBG,GK,104, 
+288,GH,GHA,Ghana,Ghana,GHA,gh,GH,GH,233,GHA,GH,94,GHA
+292,GI,GIB,Gibraltar,Gibraltar,GIB,gi,GI,GBZ,350,GBZ,GI,95,GIB
+304,GL,GRL,Greenland,Groënland,GRL,gl,GL,DK,299,GRL,GL,98,GRL
+270,GM,GMB,Gambia,Gambie,GMB,gm,GB,WAG,220,GAM,GA,90,GAM
+324,GN,GIN,Guinea,Guinée,GUI,gv,GN,RG,224,GUI,GV,106,GUI
+312,GP,GLP,Guadeloupe,Guadeloupe,GDL,gp,MF,F,590,GLP,GP,100,GUD
+226,GQ,GNQ,Equatorial Guinea,Guinée Equatoriale,GNE,eg,GQ, ,240,EQG,EK,76,GEQ
+300,GR,GRC,Greece,Grèce,GRC,gr,GR,GR,30,GRE,GR,97,GRE
+239,GS,SGS,South Georgia and the South Sandwich Islands,Géorgie du Sud et îles Sandwich du Sud, ,xs, , ,500,,SX,228, 
+320,GT,GTM,Guatemala,Guatemala,GTM,gt,GU,GCA,502,GUA,GT,103,GUA
+316,GU,GUM,Guam,Guam,GUM,gu,GM,USA,1-671,GUM,GQ,101,GUM
+624,GW,GNB,Guinea-Bissau,Guinée-Bissau,GNB,pg,GW, ,245,GNB,PU,105,GBS
+328,GY,GUY,Guyana,Guyana,GUY,gy,GY,GUY,592,GUY,GY,107,GUY
+344,HK,HKG,Hong Kong,Hong Kong,HKG, ,HK,HK,852,HKG,HK,33364,HKG
+334,HM,HMD,Heard Island and McDonald Islands,Territoire des Îles Heard et McDonald, ,hm, ,AUS,672,,HM,109, 
+340,HN,HND,Honduras,Honduras,HND,ho,HO, ,504,HON,HO,111,HON
+191,HR,HRV,Croatia,Croatie,HRV,ci,RH,HR,385,CRO,HR,62,CRO
+332,HT,HTI,Haiti,Haïti,HTI,ht,HA,RH,509,HAI,HA,108,HAI
+348,HU,HUN,Hungary,Hongrie,HNG,hu,HU,H,36,HUN,HU,113,HUN
+360,ID,IDN,Indonesia,Indonésie,INS,io,ID,RI,62,IDN,ID,116,INA
+372,IE,IRL,Ireland,Irlande,IRL,ie,IE,IRL,353,IRL,EI,119,IRL
+376,IL,ISR,Israel,Israël,ISR,is,IS,IL,972,ISR,IS,121,ISR
+833,IM,IMN,Isle of Man,Île de Man, ,uik, ,GBM,44,GBM,IM,120, 
+356,IN,IND,India,Inde,IND,ii,IN,IND,91,IND,IN,115,IND
+86,IO,IOT,British Indian Ocean Territory,Territoire britannique de l'Océan Indien,BIO,bi, , ,246,,IO,38, 
+368,IQ,IRQ,Iraq,Irak,IRQ,iq,IQ,IRQ,964,IRQ,IZ,118,IRQ
+364,IR,IRN,Iran (Islamic Republic of),Iran (République islamique d') ,IRN,ir,IR,IR,98,IRN,IR,117,IRI
+352,IS,ISL,Iceland,Islande,ISL,ic,IL,IS,354,ISL,IC,114,ISL
+380,IT,ITA,Italy,Italie,I,it,IY,I,39,ITA,IT,122,ITA
+832,JE,JEY,Jersey,Jersey, ,uik, ,GBJ,44,GBJ,JE,128, 
+388,JM,JAM,Jamaica,Jamaïque,JMC,jm,JM,JA,1-876,JAM,JM,123,JAM
+400,JO,JOR,Jordan,Jordanie,JOR,jo,JD,HKJ,962,JOR,JO,130,JOR
+392,JP,JPN,Japan,Japon,J,ja,JP,J,81,JPN,JA,126,JPN
+404,KE,KEN,Kenya,Kenya,KEN,ke,KN,EAK,254,KEN,KE,133,KEN
+417,KG,KGZ,Kyrgyzstan,Kyrgyzstan,KGZ,kg,KG,KS,996,KGZ,KG,138,KGZ
+116,KH,KHM,Cambodia,Cambodge,CBG,cb,KP,K,855,CAM,CB,44,CAM
+296,KI,KIR,Kiribati,Kiribati,KIR,gb,KB, ,686,KIR,KR,135,KIR
+174,KM,COM,Comoros,Comores,COM,cq,IC, ,269,COM,CN,58,COM
+659,KN,KNA,Saint Kitts and Nevis,Saint Kitts et Nevis,KNA,xd,AT, ,1-869,SKN,SC,208,SKN
+408,KP,PRK,Korea (Democratic People's Republic of),Corée (République populaire démocratique du),KRE,kn,KR, ,850,PRK,KN,67,PRK
+410,KR,KOR,Korea (Republic of),Corée (République démocratique du),KOR,ko,KO,ROK,82,KOR,KS,202,KOR
+414,KW,KWT,Kuwait,Koweït,KWT,ku,KW,KWT,965,KUW,KU,137,KUW
+136,KY,CYM,Cayman Islands,Caïmans (Îles),CYM,cj,GC, ,1-345,CAY,CJ,48,CAY
+398,KZ,KAZ,Kazakhstan,Kazakstan,KAZ,kz,KZ,KZ,7,KAZ,KZ,132,KAZ
+418,LA,LAO,Lao People's Democratic Republic,Laos (République populaire démocratique du),LAO,ls,LA,LAO,856,LAO,LA,139,LAO
+422,LB,LBN,Lebanon,Liban,LBN,le,LB,RL,961,LIB,LE,141,LIB
+662,LC,LCA,Saint Lucia,Sainte Lucie,LCA,xk,LC,WL,1-758,LCA,ST,209,LCA
+438,LI,LIE,Liechtenstein,Liechtenstein,LIE,lh, ,FL,423,LIE,LS,146,LIE
+144,LK,LKA,Sri Lanka,Sri Lanka,CLN,ce,SB,CL,94,SRI,CE,231,SRI
+430,LR,LBR,Liberia,Libéria,LBR,lb,LI,LB,231,LBR,LI,144,LBR
+426,LS,LSO,Lesotho,Lesotho,LSO,lo,LS,LS,266,LES,LT,142,LES
+440,LT,LTU,Lithuania,Lithuanie,LTU,li,LT,LT,370,LTU,LH,147,LTU
+442,LU,LUX,Luxembourg,Luxembourg,LUX,lu,BX,L,352,LUX,LU,148,LUX
+428,LV,LVA,Latvia,Lettonie,LVA,lv,LV,LV,371,LVA,LG,140,LAT
+434,LY,LBY,Libya,Libye (Jamahiriya Arabe Libyenne),LBY,ly,LY,LAR,218,LBY,LY,145,LBA
+504,MA,MAR,Morocco,Maroc,MRC,mr,MC,MA,212,MAR,MO,169,MAR
+492,MC,MCO,Monaco,Monaco,MCO,mc, ,MC,377,MON,MN,166,MON
+498,MD,MDA,Moldova (Republic of),Moldavie,MDA,mv,RM,MD,373,MDA,MD,165,MDA
+499,ME,MNE,Montenegro,Montenegro,MNE,mo, ,MNE,382,MNE,MJ,2647,MGO
+663,MF,MAF,Saint Martin (French part),Saint Martin (French part), ,st, , ,590, ,RN,, 
+450,MG,MDG,Madagascar,Madagascar,MDG,mg,MG,RM,261,MAD,MA,150,MAD
+584,MH,MHL,Marshall Islands,Marshall (Îles),MHL,xe,MH, ,692,MHL,RM,157,MSH
+807,MK,MKD,Macedonia (the former Yugoslav Republic of),Macédoine (ancienne République yougoslave de),MKD,xn,MJ,MK,389,MKD,MK,241,MKD
+466,ML,MLI,Mali,Mali,MLI,ml,MI,RMM,223,MLI,ML,155,MLI
+104,MM,MMR,Myanmar,Myanmar,MYA,br,BM,BUR,95,MYA,BM,171,MYA
+496,MN,MNG,Mongolia,Mongolie,MNG,mp,MO,MGL,976,MNG,MG,167,MGL
+446,MO,MAC,Macao,Macau,MAC, ,MU, ,853,MAC,MC,149,MAC
+580,MP,MNP,Northern Mariana Islands,Mariannes (Îles),MRA,nw,MY,USA,1-670,NMI,CQ,185,NMA
+474,MQ,MTQ,Martinique,Martinique,MRT,mq,MR,F,596,MTQ,MB,158,MRT
+478,MR,MRT,Mauritania,Mauritanie,MTN,mu,MT,RIM,222,MTN,MR,159,MTN
+500,MS,MSR,Montserrat,Montserrat,MSR,mj, , ,1-664,MSR,MH,168,MNT
+470,MT,MLT,Malta,Malte,MLT,mm,ML,M,356,MLT,MT,156,MLT
+480,MU,MUS,Mauritius,Maurice,MAU,mf,MA,MS,230,MRI,MP,160,MRI
+462,MV,MDV,Maldives,Maldives,MLD,xc,MV, ,960,MDV,MV,154,MDV
+454,MW,MWI,Malawi,Malawi,MWI,mw,MW,MW,265,MWI,MI,152,MAW
+484,MX,MEX,Mexico,Mexique,MEX,mx,MX,MEX,52,MEX,MX,162,MEX
+458,MY,MYS,Malaysia,Malaysie,MLA,my,MS,MAL,60,MAS,MY,153,MAS
+508,MZ,MOZ,Mozambique,Mozambique,MOZ,mz,MZ,MOC,258,MOZ,MZ,170,MOZ
+516,NA,NAM,Namibia,Namibie,NMB,sx,NM,NAM,264,NAM,WA,172,NAM
+540,NC,NCL,New Caledonia,Nouvelle-Calédonie,NCL,nl,NC,F,687,NCL,NC,178,NCD
+562,NE,NER,Niger,Niger,NGR,ng,NR,RN,227,NIG,NG,181,NIG
+574,NF,NFK,Norfolk Island,Norfolk (Île),NFK,nx,NF,AUS,672,NFK,NF,184,NFI
+566,NG,NGA,Nigeria,Nigéria,NIG,nr,NI,NGR,234,NGA,NI,182,NGR
+558,NI,NIC,Nicaragua,Nicaragua,NCG,nq,NK,NIC,505,NCA,NU,180,NCA
+528,NL,NLD,Netherlands,Pays-Bas,HOL,ne,NL,NL,31,NED,NL,177,NED
+578,NO,NOR,Norway,Norvège,NOR,no,NO,N,47,NOR,NO,186,NOR
+524,NP,NPL,Nepal,Népal,NPL,np,NP,NEP,977,NEP,NP,175,NEP
+520,NR,NRU,Nauru,Nauru,NRU,nu,NW,NAU,674,NRU,NR,173,NRU
+570,NU,NIU,Niue,Niue,NIU,xh, ,NZ,683,NIU,NE,183,NIU
+554,NZ,NZL,New Zealand,Nouvelle-Zélande,NZL,nz,NZ,NZ,64,NZL,NZ,179,NZL
+512,OM,OMN,Oman,Oman,OMA,mk,OM, ,968,OMA,MU,187,OMA
+591,PA,PAN,Panama,Panama,PNR,pn,PM,PA,507,PAN,PM,191,PAN
+604,PE,PER,Peru,Pérou,PRU,pe,PR,PE,51,PER,PE,195,PER
+258,PF,PYF,French Polynesia,Polynésie française,OCE,fp,PF,F,689,TAH,FP,87,FPO
+598,PG,PNG,Papua New Guinea,Papouasie Nouvelle-Guinée,PNG,pp,NG,PNG,675,PNG,PP,192,PNG
+608,PH,PHL,Philippines,Philippines,PHL,ph,PH,RP,63,PHI,RP,196,PHI
+586,PK,PAK,Pakistan,Pakistan,PAK,pk,PK,PK,92,PAK,PK,188,PAK
+616,PL,POL,Poland,Pologne,POL,pl,PL,PL,48,POL,PL,198,POL
+666,PM,SPM,Saint Pierre and Miquelon,St. Pierre et Miquelon,SPM,xl,FP,F,508,SPM,SB,210,SPM
+612,PN,PCN,Pitcairn,Pitcaïrn,PTC,pc,PT, ,870,PCN,PC,197, 
+630,PR,PRI,Puerto Rico,Porto Rico,PTR,pr,PU,USA,1,PUR,RQ,200,PUR
+275,PS,PSE,"Palestine, State of",Territoire Palestinien, ,"gz,wj", , ,970,PLE,"GZ,WE",91267,PLE
+620,PT,PRT,Portugal,Portugal,POR,po,PO,P,351,POR,PO,199,POR
+585,PW,PLW,Palau,Palau,PLW,pw, , ,680,PLW,PS,189,PLW
+600,PY,PRY,Paraguay,Paraguay,PRG,py,PY,PY,595,PAR,PA,194,PAR
+634,QA,QAT,Qatar,Quatar,QAT,qa,QT,Q,974,QAT,QA,201,QAT
+638,RE,REU,Réunion,Réunion,REU,re,RE,F,262,REU,RE,206,REU
+642,RO,ROU,Romania,Romania,ROU,rm,RO,RO,40,ROU,RO,203,ROU
+688,RS,SRB,Serbia,Serbie,SRB,rb,YG,SRB,381 p,SRB,"RI,KV",2648,SRB
+643,RU,RUS,Russian Federation,Russie (Fédération de),RUS,ru,RS,RUS,7,RUS,RS,204,RUS
+646,RW,RWA,Rwanda,Rwanda,RRW,rw,RW,RWA,250,RWA,RW,205,RWA
+682,SA,SAU,Saudi Arabia,Arabie Séoudite,ARS,su,SD,SA,966,KSA,SA,215,KSA
+90,SB,SLB,Solomon Islands,Salomon (Îles),SLM,bp,SO, ,677,SOL,BP,225,SOL
+690,SC,SYC,Seychelles,Seychelles,SEY,se,SC,SY,248,SEY,SE,220,SEY
+729,SD,SDN,Sudan,Soudan,SDN,sj,SU,SUD,249,SUD,SU,40764,SUD
+752,SE,SWE,Sweden,Suède,S,sw,SN,S,46,SWE,SW,236,SWE
+702,SG,SGP,Singapore,Singapour,SNG,si,SR,SGP,65,SIN,SN,222,SIN
+654,SH,SHN,"Saint Helena, Ascension and Tristan da Cunha",Ste Hélène,SHN,xj,HE, ,290 n,SHN,SH,207,HEL
+705,SI,SVN,Slovenia,Slovénie,SVN,xv,LJ,SLO,386,SVN,SI,224,SLO
+744,SJ,SJM,Svalbard and Jan Mayen,Svalbard et Jan Mayen (Îles),NOR, ,SZ, ,47,,"SV,JN",234, 
+703,SK,SVK,Slovakia,Slovaquie,SVK,xo,SQ,SK,421,SVK,LO,223,SVK
+694,SL,SLE,Sierra Leone,Sierra Léone,SRL,sl,SL,WAL,232,SLE,SL,221,SLE
+674,SM,SMR,San Marino,San Marin,SMR,sm, ,RSM,378,SMR,SM,213,SMR
+686,SN,SEN,Senegal,Sénégal,SEN,sg,SG,SN,221,SEN,SG,217,SEN
+706,SO,SOM,Somalia,Somalie,SOM,so,SI,SO,252,SOM,SO,226,SOM
+740,SR,SUR,Suriname,Surinam,SUR,sr,SM,SME,597,SUR,NS,233,SUR
+728,SS,SSD,South Sudan,South Sudan,SSD,sd,,,211,,OD,,
+678,ST,STP,Sao Tome and Principe,Sao Tomé et Principe,STP,sf,TP, ,239,STP,TP,214,STP
+222,SV,SLV,El Salvador,Salvador,SLV,es,ES,ES,503,SLV,ES,75,ESA
+534,SX,SXM,Sint Maarten (Dutch part),Sint Maarten (Dutch part),,sn,,,1-721,,NN,,
+760,SY,SYR,Syrian Arab Republic,Syrie (République arabe syrienne),SYR,sy,SY,SYR,963,SYR,SY,238,SYR
+748,SZ,SWZ,Swaziland,Swaziland,SWZ,sq,SV,SD,268,SWZ,WZ,235,SWZ
+796,TC,TCA,Turks and Caicos Islands,Turks et Caicos (Îles),TCA,tc,TI, ,1-649,TCA,TK,251,TKS
+148,TD,TCD,Chad,Tchad,TCD,cd,CD,TCH,235,CHA,CD,50,CHA
+260,TF,ATF,French Southern Territories,Territoires Antarctiques français, ,fs, ,F,262,,FS,88, 
+768,TG,TGO,Togo,Togo,TGO,tg,TG,TG,228,TOG,TO,243,TOG
+764,TH,THA,Thailand,Thaïlande,THA,th,TH,T,66,THA,TH,240,THA
+762,TJ,TJK,Tajikistan,Tadjikistan,TJK,ta,TA,TJ,992,TJK,TI,239,TJK
+772,TK,TKL,Tokelau,Tokelau,TKL,tl,TK,NZ,690,TKL,TL,244, 
+626,TL,TLS,Timor-Leste,Timor-Leste,TLS,em,TM, ,670,TLS,TT,242,TLS
+795,TM,TKM,Turkmenistan,Turkménistan,TKM,tk,TR,TM,993,TKM,TX,250,TKM
+788,TN,TUN,Tunisia,Tunisie,TUN,ti,TS,TN,216,TUN,TS,248,TUN
+776,TO,TON,Tonga,Tonga,TON,to,TO, ,676,TGA,TN,245,TGA
+792,TR,TUR,Turkey,Turquie,TUR,tu,TU,TR,90,TUR,TU,249,TUR
+780,TT,TTO,Trinidad and Tobago,Trinidad et Tobago,TRD,tr,TD,TT,1-868,TRI,TD,246,TRI
+798,TV,TUV,Tuvalu,Tuvalu,TUV,tv,TV, ,688,TUV,TV,252,TUV
+158,TW,TWN,"Taiwan, Province of China",Taïwan, ,ch, ,RC,886,TPE,TW,925,TPE
+834,TZ,TZA,"Tanzania, United Republic of",Tanzanie,TZA,tz,TN,EAT,255,TAN,TZ,257,TAN
+804,UA,UKR,Ukraine,Ukraine,UKR,un,UR,UA,380,UKR,UP,254,UKR
+800,UG,UGA,Uganda,Ouganda,UGA,ug,UG,EAU,256,UGA,UG,253,UGA
+581,UM,UMI,United States Minor Outlying Islands,Territoires non incorporés des États-Unis , ,"ji,xf,wk,uc,up", ,USA, ,,"FQ,HQ,DQ,JQ,KQ,MQ,BQ,LQ,WQ",, 
+840,US,USA,United States of America,Etats-Unis d'Amérique,USA,xxu,US,USA,1,USA,US,259,USA
+858,UY,URY,Uruguay,Uruguay,URG,uy,UY,ROU,598,URU,UY,260,URU
+860,UZ,UZB,Uzbekistan,Ouzbékistan,UZB,uz,UZ,UZ,998,UZB,UZ,261,UZB
+336,VA,VAT,Holy See,Vatican,CVA,vc, ,V,39-06,VAT,VT,110, 
+670,VC,VCT,Saint Vincent and the Grenadines,Saint Vincent et Grenadines,VCT,xm,VG,WV,1-784,VIN,VC,211,VIN
+862,VE,VEN,Venezuela (Bolivarian Republic of),Vénézuela,VEN,ve,VN,YV,58,VEN,VE,263,VEN
+92,VG,VGB,Virgin Islands (British),Vierges (Îles) - RU,VRG,vb,VI,BVI,1-284,VGB,VI,39,IVB
+850,VI,VIR,Virgin Islands (U.S.),Vierges (Îles) - EU,VIR,vi,VI,USA,1-340,VIR,VQ,258,ISV
+704,VN,VNM,Viet Nam,Vietnam,VTN,vm,VS,VN,84,VIE,VM,264,VIE
+548,VU,VUT,Vanuatu,Vanuatu,VUT,nn,NV, ,678,VAN,NH,262,VAN
+876,WF,WLF,Wallis and Futuna,Wallis et Futuna (Îles),WAL,wf,FW,F,681,WLF,WF,266,WAF
+882,WS,WSM,Samoa,Samoa,SMO,ws,ZM,WS,685,SAM,WS,212,SAM
+887,YE,YEM,Yemen,Yemen,YEM,ye,YE,YAR,967,YEM,YM,269,YEM
+175,YT,MYT,Mayotte,Mayotte,MYT,ot, , ,262,MYT,MF,161,MAY
+710,ZA,ZAF,South Africa,Afrique du Sud,AFS,sa,ZA,ZA,27,RSA,SF,227,RSA
+894,ZM,ZMB,Zambia,Zambie,ZMB,za,ZB,Z,260,ZAM,ZA,270,ZAM
+716,ZW,ZWE,Zimbabwe,Zimbabwe,ZWE,rh,ZW,ZW,263,ZIM,ZI,271,ZIM

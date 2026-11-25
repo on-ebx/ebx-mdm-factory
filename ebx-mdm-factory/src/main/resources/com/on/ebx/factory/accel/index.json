@@ -1,0 +1,6 @@
+{"format": "accelerator-index/1",
+ "note": "The class path cannot list directories reliably: every pack, block and pack layout shipped under accel/ is named here. PackCatalogTest fails when a folder on disk is missing from this list.",
+ "packs": ["company", "reference-data"],
+ "blocks": ["audit", "contacts"],
+ "layouts": {"company": ["Company"]}
+}

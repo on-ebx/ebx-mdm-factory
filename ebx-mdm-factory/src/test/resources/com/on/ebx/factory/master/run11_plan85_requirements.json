@@ -1,0 +1,191 @@
+{
+ "decisionTree": {
+  "root": "N1",
+  "nodes": [
+   {
+    "id": "N1",
+    "function": "ALL_FIELDS",
+    "fields": [
+     {
+      "field": "mobileE164",
+      "algorithm": "ebx-addon-mame@exact",
+      "minimumScore": 100,
+      "bothNull": "NOT_MATCH",
+      "oneNull": "NOT_MATCH"
+     },
+     {
+      "field": "personNameKey",
+      "algorithm": "ebx-addon-mame@exact",
+      "minimumScore": 100,
+      "bothNull": "NOT_MATCH",
+      "oneNull": "NOT_MATCH"
+     }
+    ],
+    "onTrue": "MATCH",
+    "onFalse": "N2"
+   },
+   {
+    "id": "N2",
+    "function": "ALL_FIELDS",
+    "fields": [
+     {
+      "field": "emailKey",
+      "algorithm": "ebx-addon-mame@exact",
+      "minimumScore": 100,
+      "bothNull": "NOT_MATCH",
+      "oneNull": "NOT_MATCH"
+     }
+    ],
+    "onTrue": "SUSPECTED",
+    "onFalse": "N3"
+   },
+   {
+    "id": "N3",
+    "function": "ALL_FIELDS",
+    "fields": [
+     {
+      "field": "mobileE164",
+      "algorithm": "ebx-addon-mame@exact",
+      "minimumScore": 100,
+      "bothNull": "NOT_MATCH",
+      "oneNull": "NOT_MATCH"
+     }
+    ],
+    "onTrue": "SUSPECTED",
+    "onFalse": "N4"
+   },
+   {
+    "id": "N4",
+    "function": "ALL_FIELDS",
+    "fields": [
+     {
+      "field": "personNameKey",
+      "algorithm": "ebx-addon-mame@exact",
+      "minimumScore": 100,
+      "bothNull": "NOT_MATCH",
+      "oneNull": "NOT_MATCH"
+     }
+    ],
+    "onTrue": "N5",
+    "onFalse": "N8"
+   },
+   {
+    "id": "N5",
+    "function": "ALL_FIELDS",
+    "fields": [
+     {
+      "field": "addressKeys",
+      "algorithm": "ebx-addon-mame@exactFullText",
+      "minimumScore": 50,
+      "bothNull": "NOT_MATCH",
+      "oneNull": "NOT_MATCH"
+     }
+    ],
+    "onTrue": "SUSPECTED",
+    "onFalse": "N6"
+   },
+   {
+    "id": "N6",
+    "function": "ALL_FIELDS",
+    "fields": [
+     {
+      "field": "personNameKey",
+      "algorithm": "ebx-addon-mame@exact",
+      "minimumScore": 100,
+      "bothNull": "NOT_MATCH",
+      "oneNull": "NOT_MATCH"
+     }
+    ],
+    "onTrue": "N7",
+    "onFalse": "NOT_MATCHED"
+   },
+   {
+    "id": "N7",
+    "function": "ALL_FIELDS",
+    "fields": [
+     {
+      "field": "street",
+      "via": "Adresse",
+      "algorithm": "ebx-addon-mame@exact",
+      "dataType": "STRING",
+      "minimumScore": 100,
+      "bothNull": "NOT_MATCH",
+      "oneNull": "NOT_MATCH"
+     }
+    ],
+    "onTrue": "SUSPECTED",
+    "onFalse": "NOT_MATCHED"
+   },
+   {
+    "id": "N8",
+    "function": "ALL_FIELDS",
+    "fields": [
+     {
+      "field": "mobileE164",
+      "algorithm": "ebx-addon-mame@exact",
+      "minimumScore": 100,
+      "bothNull": "NOT_MATCH",
+      "oneNull": "NOT_MATCH"
+     }
+    ],
+    "onTrue": "N9",
+    "onFalse": "N10"
+   },
+   {
+    "id": "N9",
+    "function": "ALL_FIELDS",
+    "fields": [
+     {
+      "field": "street",
+      "via": "Adresse",
+      "algorithm": "ebx-addon-mame@exact",
+      "dataType": "STRING",
+      "minimumScore": 100,
+      "bothNull": "NOT_MATCH",
+      "oneNull": "NOT_MATCH"
+     }
+    ],
+    "onTrue": "SUSPECTED",
+    "onFalse": "NOT_MATCHED"
+   },
+   {
+    "id": "N10",
+    "function": "ALL_FIELDS",
+    "fields": [
+     {
+      "field": "personNameKey",
+      "algorithm": "ebx-addon-mame@exact",
+      "minimumScore": 100,
+      "bothNull": "NOT_MATCH",
+      "oneNull": "NOT_MATCH"
+     },
+     {
+      "field": "street",
+      "via": "Adresse",
+      "algorithm": "ebx-addon-mame@exact",
+      "dataType": "STRING",
+      "minimumScore": 100,
+      "bothNull": "NOT_MATCH",
+      "oneNull": "NOT_MATCH"
+     }
+    ],
+    "onTrue": "SUSPECTED",
+    "onFalse": "NOT_MATCHED"
+   }
+  ]
+ },
+ "clusteringFields": [
+  "mobileE164",
+  "personNameKey",
+  "emailKey",
+  "addressKeys"
+ ],
+ "relationClusteringWeights": {
+  "Adresse.street": 0
+ },
+ "mergePolicy": {
+  "mode": "ONLY_DUPLICATES",
+  "recordSelection": "lastUpdate",
+  "defaultFieldMerge": "longest"
+ }
+}

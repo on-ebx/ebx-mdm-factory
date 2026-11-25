@@ -1,0 +1,10 @@
+# Classes of the war that may reference the Match and Merge add-on (com.orchestranetworks.addon.*, ebx-addons.jar) although the war does not carry it
+# (X3-07, tools/check_war.py). The add-on is optional: an installation without it must still start, so every one of these classes is only reached
+# behind a LinkageError guard (the Factory's Addon* / Mame* wrappers, Connectors' MameGoldenRecords). A class NOT listed here that names an add-on
+# class fails the delivery gate: either guard it and list it with the reason, or stop using the add-on there.
+# Format: <fully qualified outer class name> then, after whitespace, the reason. Inner classes (Name$1) are covered by their outer class.
+com.on.ebx.factory.ebx.AddonMameGroups              Match and Merge group operations, called only when MameMatchingApi / the add-on probe says the add-on is present
+com.on.ebx.factory.ebx.AddonMameRecordState         Match and Merge record state, same guard
+com.on.ebx.factory.ebx.AddonMameSuspectDecision     Match and Merge suspect decision, same guard
+com.on.ebx.factory.ebx.MameMatchingApi              the facade that catches LinkageError when the add-on is absent
+com.on.ebx.connect.core.MameGoldenRecords           on-ebx-mapping.jar (Connectors): golden-record reads, catches LinkageError (CLAUDE.md section 8, MetadataHelper)

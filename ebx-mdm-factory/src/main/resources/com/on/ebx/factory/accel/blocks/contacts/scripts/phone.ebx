@@ -1,0 +1,12 @@
+uses core.message as messageContext;
+uses core.validation as validationContext;
+import Fasttrack.lib.phone as phone;
+export procedure check(record : .${table})
+begin
+  if isNull(record.${group}.phone) then return;
+  if not phone.isValid(record.${group}.phone) then
+    messageContext.addWarning('The phone number does not look valid (E.164 or a known national plan).');
+end
+export procedure setup()
+begin
+end

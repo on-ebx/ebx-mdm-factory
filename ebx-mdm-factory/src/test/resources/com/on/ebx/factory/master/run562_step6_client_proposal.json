@@ -1,0 +1,167 @@
+{
+ "entity": "Client",
+ "root": "F1",
+ "nodes": [
+  {
+   "id": "F1",
+   "function": "ALL_FIELDS",
+   "fields": [
+    {
+     "field": "emailKey",
+     "algorithm": "ebx-addon-mame@exact",
+     "minimumScore": 100,
+     "bothNullValueHandling": "NOT_MATCH",
+     "oneNullValueHandling": "NOT_MATCH"
+    },
+    {
+     "field": "personNameKey",
+     "algorithm": "ebx-addon-mame@exact",
+     "minimumScore": 100,
+     "bothNullValueHandling": "NOT_MATCH",
+     "oneNullValueHandling": "NOT_MATCH"
+    }
+   ],
+   "onTrue": "MATCH",
+   "onFalse": "F2"
+  },
+  {
+   "id": "F2",
+   "function": "ALL_FIELDS",
+   "fields": [
+    {
+     "field": "mobileE164",
+     "algorithm": "ebx-addon-mame@exact",
+     "minimumScore": 100,
+     "bothNullValueHandling": "NOT_MATCH",
+     "oneNullValueHandling": "NOT_MATCH"
+    }
+   ],
+   "onTrue": "SUSPECTED",
+   "onFalse": "F3"
+  },
+  {
+   "id": "F3",
+   "function": "ALL_FIELDS",
+   "fields": [
+    {
+     "field": "emailKey",
+     "algorithm": "ebx-addon-mame@exact",
+     "minimumScore": 100,
+     "bothNullValueHandling": "NOT_MATCH",
+     "oneNullValueHandling": "NOT_MATCH"
+    }
+   ],
+   "onTrue": "SUSPECTED",
+   "onFalse": "F4"
+  },
+  {
+   "id": "F4",
+   "function": "ALL_FIELDS",
+   "fields": [
+    {
+     "field": "addressKeys",
+     "algorithm": "ebx-addon-mame@exactFullText",
+     "minimumScore": 50,
+     "bothNullValueHandling": "NOT_MATCH",
+     "oneNullValueHandling": "NOT_MATCH"
+    }
+   ],
+   "onTrue": "F5",
+   "onFalse": "F7"
+  },
+  {
+   "id": "F5",
+   "function": "AVERAGE",
+   "minimumScore": 85,
+   "fields": [
+    {
+     "field": "personNameKey",
+     "algorithm": "ebx-addon-mame@jarowinkler",
+     "minimumScore": 85,
+     "weight": 4,
+     "bothNullValueHandling": "NOT_MATCH",
+     "oneNullValueHandling": "NOT_MATCH"
+    },
+    {
+     "field": "birthDate",
+     "algorithm": "ebx-addon-mame@exact",
+     "minimumScore": 100,
+     "weight": 2,
+     "bothNullValueHandling": "NOT_MATCH",
+     "oneNullValueHandling": "NOT_MATCH"
+    }
+   ],
+   "onTrue": "F6",
+   "onFalse": "SUSPECTED"
+  },
+  {
+   "id": "F6",
+   "function": "ALL_FIELDS",
+   "fields": [
+    {
+     "field": "street",
+     "via": "Adresse",
+     "algorithm": "ebx-addon-mame@exact",
+     "minimumScore": 100,
+     "bothNullValueHandling": "NOT_MATCH",
+     "oneNullValueHandling": "NOT_MATCH"
+    }
+   ],
+   "onTrue": "SUSPECTED",
+   "onFalse": "NOT_MATCHED"
+  },
+  {
+   "id": "F7",
+   "function": "ALL_FIELDS",
+   "fields": [
+    {
+     "field": "emailKey",
+     "algorithm": "ebx-addon-mame@exact",
+     "minimumScore": 100,
+     "bothNullValueHandling": "NOT_MATCH",
+     "oneNullValueHandling": "NOT_MATCH"
+    }
+   ],
+   "onTrue": "F8",
+   "onFalse": "F9"
+  },
+  {
+   "id": "F8",
+   "function": "ALL_FIELDS",
+   "fields": [
+    {
+     "field": "fullAddress",
+     "via": "Adresse",
+     "algorithm": "ebx-addon-mame@exactFullText",
+     "minimumScore": 100,
+     "bothNullValueHandling": "NOT_MATCH",
+     "oneNullValueHandling": "NOT_MATCH"
+    }
+   ],
+   "onTrue": "SUSPECTED",
+   "onFalse": "NOT_MATCHED"
+  },
+  {
+   "id": "F9",
+   "function": "ALL_FIELDS",
+   "fields": [
+    {
+     "field": "fullAddress",
+     "via": "Adresse",
+     "algorithm": "ebx-addon-mame@exactFullText",
+     "minimumScore": 100,
+     "bothNullValueHandling": "NOT_MATCH",
+     "oneNullValueHandling": "NOT_MATCH"
+    }
+   ],
+   "onTrue": "SUSPECTED",
+   "onFalse": "NOT_MATCHED"
+  }
+ ],
+ "clusteringFields": [
+  "emailKey",
+  "personNameKey"
+ ],
+ "rationale": "The starter structure is retained with SAFE emailKey/personNameKey MATCH; exact email and normalized phone produce review paths. Address evidence is included after own-record exact-key gates; fullAddress independent evidence is preserved for otherwise failed identity comparisons. The node paths are rooted in own record keys as required; STORES is reached by personNameKey/emailKey (email covers only 56% of STORES). birthDate is an optional refinement and not a standalone route. Child street/fullAddress evidence is precise; no coarse child-only confirmation is used. No special survivorship rule is supported: email has zero genuine divergence after folding and no source fill advantage sufficient to favor one source; technical fields are excluded.",
+ "confidence": 64
+}

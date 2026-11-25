@@ -1,0 +1,300 @@
+{
+ "format": "ebx-form-layout/1",
+ "name": "Company (pack)",
+ "model": "${publication}",
+ "table": "/root/Company",
+ "locales": [
+  "en-US",
+  "fr-FR"
+ ],
+ "tabs": [
+  {
+   "label": {
+    "en-US": "Overview",
+    "fr-FR": "Vue d'ensemble"
+   },
+   "count": [],
+   "rows": [
+    {
+     "columns": 1,
+     "blocks": [
+      [
+       {
+        "type": "hero",
+        "id": "co-hero",
+        "title": "/Identification/name",
+        "sub": [
+         "/Identification/legalName",
+         "/HeadOffice/city",
+         "/HeadOffice/country"
+        ],
+        "chips": [
+         "/Lifecycle/status",
+         "/Classification/activitySector"
+        ],
+        "meter": "",
+        "status": "/Lifecycle/status"
+       }
+      ]
+     ]
+    },
+    {
+     "columns": 1,
+     "blocks": [
+      [
+       {
+        "type": "validation",
+        "id": "co-val",
+        "title": {
+         "en-US": "To review",
+         "fr-FR": "À traiter"
+        },
+        "sev": {
+         "error": true,
+         "warning": true,
+         "info": false
+        },
+        "group": "severity",
+        "max": 5,
+        "links": true,
+        "hideEmpty": true,
+        "actions": []
+       }
+      ]
+     ]
+    },
+    {
+     "columns": 2,
+     "ratio": "11",
+     "blocks": [
+      [
+       {
+        "type": "panel",
+        "id": "co-id",
+        "title": {
+         "en-US": "Identity",
+         "fr-FR": "Identité"
+        },
+        "fields": [
+         {
+          "p": "/Identification/name"
+         },
+         {
+          "p": "/Identification/legalName"
+         },
+         {
+          "p": "/Identification/description",
+          "w": "area",
+          "wide": true
+         }
+        ]
+       },
+       {
+        "type": "panel",
+        "id": "co-legal",
+        "title": {
+         "en-US": "Legal",
+         "fr-FR": "Juridique"
+        },
+        "fields": [
+         {
+          "p": "/Legal/legalForm",
+          "w": "nocreate"
+         },
+         {
+          "p": "/Legal/jurisdiction",
+          "w": "nocreate"
+         },
+         {
+          "p": "/Legal/registrationNumber"
+         },
+         {
+          "p": "/Legal/incorporationDate"
+         },
+         {
+          "p": "/Legal/shareCapital"
+         },
+         {
+          "p": "/Legal/capitalCurrency",
+          "w": "nocreate"
+         },
+         {
+          "p": "/Legal/employeesCount"
+         },
+         {
+          "p": "/Legal/sizeCategory",
+          "w": "select"
+         }
+        ]
+       },
+       {
+        "type": "panel",
+        "id": "co-class",
+        "title": {
+         "en-US": "Classification",
+         "fr-FR": "Classification"
+        },
+        "fields": [
+         {
+          "p": "/Classification/activitySector",
+          "w": "nocreate"
+         },
+         {
+          "p": "/Classification/naceCode"
+         }
+        ]
+       }
+      ],
+      [
+       {
+        "type": "panel",
+        "id": "co-ho",
+        "title": {
+         "en-US": "Head office",
+         "fr-FR": "Siège"
+        },
+        "fields": [
+         {
+          "p": "/HeadOffice/street"
+         },
+         {
+          "p": "/HeadOffice/postcode"
+         },
+         {
+          "p": "/HeadOffice/city"
+         },
+         {
+          "p": "/HeadOffice/country",
+          "w": "nocreate"
+         }
+        ]
+       },
+       {
+        "type": "panel",
+        "id": "co-contact",
+        "title": {
+         "en-US": "Contact channels",
+         "fr-FR": "Canaux de contact"
+        },
+        "fields": [
+         {
+          "p": "/Contact/phone"
+         },
+         {
+          "p": "/Contact/email"
+         },
+         {
+          "p": "/Contact/website"
+         }
+        ]
+       },
+       {
+        "type": "stepper",
+        "id": "co-steps",
+        "title": {
+         "en-US": "Lifecycle",
+         "fr-FR": "Cycle de vie"
+        },
+        "field": "/Lifecycle/status",
+        "steps": [
+         "DRAFT",
+         "IN_REVIEW",
+         "ACTIVE"
+        ],
+        "exits": [
+         "BLOCKED",
+         "ARCHIVED"
+        ]
+       },
+       {
+        "type": "duplicates",
+        "id": "co-dup",
+        "title": {
+         "en-US": "Duplicates",
+         "fr-FR": "Doublons"
+        },
+        "hideCreate": true
+       },
+       {
+        "type": "recordInfo",
+        "id": "co-ri",
+        "style": "grid",
+        "hideCreate": true
+       }
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "label": {
+    "en-US": "Identifiers and addresses",
+    "fr-FR": "Identifiants et adresses"
+   },
+   "count": [
+    "/identifiers",
+    "/addresses"
+   ],
+   "rows": [
+    {
+     "columns": 1,
+     "blocks": [
+      [
+       {
+        "type": "grid",
+        "id": "co-ids",
+        "a": "/identifiers",
+        "style": "native",
+        "title": {
+         "en-US": "Identifiers",
+         "fr-FR": "Identifiants"
+        }
+       }
+      ]
+     ]
+    },
+    {
+     "columns": 1,
+     "blocks": [
+      [
+       {
+        "type": "grid",
+        "id": "co-addr",
+        "a": "/addresses",
+        "style": "native",
+        "title": {
+         "en-US": "Addresses",
+         "fr-FR": "Adresses"
+        }
+       }
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "label": {
+    "en-US": "Contacts",
+    "fr-FR": "Contacts"
+   },
+   "count": [
+    "/contacts"
+   ],
+   "rows": [
+    {
+     "columns": 1,
+     "blocks": [
+      [
+       {
+        "type": "grid",
+        "id": "co-ct",
+        "a": "/contacts",
+        "style": "native"
+       }
+      ]
+     ]
+    }
+   ]
+  }
+ ]
+}

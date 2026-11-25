@@ -1,0 +1,41 @@
+code,label_en,label_fr,kind
+C62,Unit,Unité,QUANTITY
+PCE,Piece,Pièce,QUANTITY
+PR,Pair,Paire,QUANTITY
+SET,Set,Jeu,QUANTITY
+DZN,Dozen,Douzaine,QUANTITY
+KGM,Kilogram,Kilogramme,MASS
+GRM,Gram,Gramme,MASS
+TNE,Tonne,Tonne,MASS
+LBR,Pound,Livre,MASS
+MTR,Metre,Mètre,LENGTH
+CMT,Centimetre,Centimètre,LENGTH
+MMT,Millimetre,Millimètre,LENGTH
+KMT,Kilometre,Kilomètre,LENGTH
+INH,Inch,Pouce,LENGTH
+FOT,Foot,Pied,LENGTH
+MTK,Square metre,Mètre carré,AREA
+CMK,Square centimetre,Centimètre carré,AREA
+MTQ,Cubic metre,Mètre cube,VOLUME
+LTR,Litre,Litre,VOLUME
+MLT,Millilitre,Millilitre,VOLUME
+CLT,Centilitre,Centilitre,VOLUME
+HUR,Hour,Heure,TIME
+MIN,Minute,Minute,TIME
+SEC,Second,Seconde,TIME
+DAY,Day,Jour,TIME
+WEE,Week,Semaine,TIME
+MON,Month,Mois,TIME
+ANN,Year,Année,TIME
+KWH,Kilowatt hour,Kilowattheure,ENERGY
+WTT,Watt,Watt,POWER
+KWT,Kilowatt,Kilowatt,POWER
+CEL,Degree Celsius,Degré Celsius,TEMPERATURE
+BX,Box,Boîte,PACKAGING
+CT,Carton,Carton,PACKAGING
+PK,Pack,Paquet,PACKAGING
+PF,Pallet,Palette,PACKAGING
+RO,Roll,Rouleau,PACKAGING
+BG,Bag,Sac,PACKAGING
+BO,Bottle,Bouteille,PACKAGING
+CA,Can,Canette,PACKAGING

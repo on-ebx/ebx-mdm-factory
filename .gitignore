@@ -1,0 +1,13 @@
+# build outputs
+**/target/
+ebx-mdm-factory/src/main/webapp/WEB-INF/lib/*.jar
+# IDE / OS
+.settings/
+.DS_Store
+*.class
+__pycache__/
+*.log
+*.out
+dist/
+# lot H2: reports of the end-to-end scenario
+/e2e-out/

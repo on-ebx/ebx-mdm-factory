@@ -1,0 +1,18 @@
+{"key": "reference-data", "version": "1.0.0",
+ "label": {"en-US": "Shared reference data", "fr-FR": "Référentiels partagés"},
+ "description": {"en-US": "Countries, currencies, languages, units, incoterms, payment terms, legal forms, identifier types, activity sectors: the tables every other pack points to, preloaded.", "fr-FR": "Pays, devises, langues, unités, incoterms, conditions de paiement, formes juridiques, types d'identifiant, secteurs : les tables que tous les autres packs référencent, préchargées."},
+ "requires": {"packs": [], "modules": []},
+ "mainTable": "/root/ReferenceData/Country",
+ "tables": [
+  {"path": "/root/ReferenceData/Country", "key": "alpha2", "data": "data/countries.csv", "columns": {"Alpha-2 Code": "alpha2", "Alpha-3 code": "alpha3", "Numeric code": "numeric", "Name": "name", "Name FR": "nameFr", "Dial": "dialCode"}},
+  {"path": "/root/ReferenceData/Currency", "key": "code", "data": "data/currencies.csv", "columns": {"Alpha code": "code", "Numeric code": "numeric", "Label": "name", "Symbol": "symbol", "Decimal": "decimals", "Active": "active"}},
+  {"path": "/root/ReferenceData/Language", "key": "code", "data": "data/languages.csv"},
+  {"path": "/root/ReferenceData/Unit", "key": "code", "data": "data/units.csv"},
+  {"path": "/root/ReferenceData/Incoterm", "key": "code", "data": "data/incoterms.csv"},
+  {"path": "/root/ReferenceData/PaymentTerm", "key": "code", "data": "data/payment-terms.csv"},
+  {"path": "/root/ReferenceData/LegalForm", "key": "code", "data": "data/legal-forms.csv", "columns": {"ELF code": "code", "Local name": "name", "Transliterated name": "transliteratedName", "Abbreviation": "abbreviation", "Country": "country", "Language": "language", "Status": "status"}},
+  {"path": "/root/ReferenceData/IdentifierType", "key": "code", "data": "data/identifier-types.csv"},
+  {"path": "/root/ReferenceData/ActivitySector", "key": "code", "data": "data/activity-sectors.csv"}
+ ],
+ "sources": {"countries": "instance export of Geographies/Country (ISO 3166-1), 2026-10-12", "currencies": "instance export of Currencies/Currency (ISO 4217)", "legal-forms": "instance export of Companies ReferenceData/LegalForm (ISO 20275 ELF, 3,599 rows)", "incoterms": "Incoterms 2020", "payment-terms": "common terms", "units": "UN/ECE Recommendation 20, subset", "languages": "ISO 639-1"}
+}

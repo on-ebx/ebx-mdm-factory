@@ -1,0 +1,17 @@
+{"key": "audit", "version": "1.0.0",
+ "label": {"en-US": "Audit", "fr-FR": "Audit"},
+ "description": {"en-US": "Created on/by and changed on/by, stamped by triggers; a forged creation date is written back.", "fr-FR": "Créé le/par et modifié le/par, posés par des triggers ; une date de création forgée est remise."},
+ "placement": "table",
+ "group": "Audit",
+ "fields": [
+  {"name": "createdOn", "type": "dateTime", "readOnly": true, "label": {"en-US": "Created on", "fr-FR": "Créé le"}},
+  {"name": "createdBy", "type": "string", "maxLength": 80, "readOnly": true, "label": {"en-US": "Created by", "fr-FR": "Créé par"}},
+  {"name": "changedOn", "type": "dateTime", "readOnly": true, "label": {"en-US": "Changed on", "fr-FR": "Modifié le"}},
+  {"name": "changedBy", "type": "string", "maxLength": 80, "readOnly": true, "label": {"en-US": "Changed by", "fr-FR": "Modifié par"}}
+ ],
+ "scripts": [
+  {"kind": "trigger", "type": "beforeCreate", "name": "AuditOnCreate", "body": "scripts/beforeCreate.ebx"},
+  {"kind": "trigger", "type": "beforeModify", "name": "AuditOnModify", "body": "scripts/beforeModify.ebx"}
+ ],
+ "layout": {"panel": {"title": {"en-US": "Record information", "fr-FR": "Informations sur la fiche"}, "ro": true, "hideCreate": true}}
+}

@@ -1,0 +1,100 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!--IntakeSignal: data model of the ebx-mdm-factory module (com.on.ebx.factory), packaged separately from MdmFactory.xsd (tools/build_xsd.py
+    only builds that one file) so it can be instantiated as a dataset INSIDE a project's own LANDING dataspace, next to the landing datasets -
+    docs/AUTOMATIC-INTAKE.md. The landing tables carry generated script triggers (IntakeAfterCreate / IntakeAfterModify) that only serve as a
+    wake-up: a table trigger cannot open `execute transaction` (measured live in the distribution lot, PipelineStep 395), so it can only write
+    through its own ambient `_ebx.transaction`, which is scoped to `_ebx.dataspace` - the record's OWN dataspace. The signal therefore lives
+    in that same dataspace, as a second dataset reached with `db.findDataset(_ebx.dataspace, 'MdmFactoryIntakeSignal')`; same design as
+    DistributionOutbox.xsd (its Control table is the proven primary-key lookup this table copies). One row per source system of the project
+    (the key is the landing dataset name, which is the source system code). ebx.IntakeSignalInstaller creates the dataset (doCreateRoot,
+    idempotent) when the intake is switched on.-->
+<xs:schema xmlns:osd="urn:ebx-schemas:common_1.0" xmlns:fmt="urn:ebx-schemas:format_1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:import namespace="urn:ebx-schemas:common_1.0" schemaLocation="http://schema.orchestranetworks.com/common_1.0.xsd"/>
+    <xs:annotation>
+        <xs:appinfo>
+            <osd:validation>
+                <validationMessageThreshold>1000</validationMessageThreshold>
+            </osd:validation>
+            <osd:inheritance>
+                <dataSetInheritance>none</dataSetInheritance>
+            </osd:inheritance>
+        </xs:appinfo>
+    </xs:annotation>
+    <xs:element name="root" osd:access="--">
+        <xs:complexType>
+            <xs:sequence>
+
+                <xs:element name="Signal" minOccurs="0" maxOccurs="unbounded">
+                    <xs:annotation>
+                        <xs:documentation xml:lang="en-US">
+                            <osd:label>Intake signal</osd:label>
+                            <osd:description>One row per source system of the project: when a landing row waiting to be processed (_status NEW or empty) was last written. Written by the generated landing triggers (at most once per 5 seconds per source), read by ebx.IntakeEngine to decide when the quiet period has elapsed. It is a wake-up only: the queue is the landing table itself. See docs/AUTOMATIC-INTAKE.md.</osd:description>
+                        </xs:documentation>
+                        <xs:documentation xml:lang="fr-FR">
+                            <osd:label>Signal de prise en charge</osd:label>
+                            <osd:description>Une ligne par système source du projet : quand une ligne du landing en attente de traitement (_status NEW ou vide) a été écrite pour la dernière fois. Écrite par les déclencheurs générés des tables du landing (au plus une fois toutes les 5 secondes par source), lue par ebx.IntakeEngine pour décider si la période calme est écoulée. C'est un simple réveil : la file est la table du landing elle-même. Voir docs/AUTOMATIC-INTAKE.md.</osd:description>
+                        </xs:documentation>
+                        <xs:appinfo>
+                            <osd:table>
+                                <primaryKeys>/sourceSystem </primaryKeys>
+                                <defaultLabel>${./sourceSystem} (${./lastRowAt})</defaultLabel>
+                                <defaultView>
+                                    <defaultViewForGroups>expanded</defaultViewForGroups>
+                                </defaultView>
+                            </osd:table>
+                        </xs:appinfo>
+                    </xs:annotation>
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="sourceSystem" minOccurs="1" maxOccurs="1">
+                                <xs:annotation>
+                                    <xs:documentation xml:lang="en-US">
+                                        <osd:label>Source system</osd:label>
+                                        <osd:description>The landing dataset name = ProjectSource.sourceSystem. A plain string, never a foreign key (this dataset is in the project's landing dataspace; MdmFactory is in another one).</osd:description>
+                                    </xs:documentation>
+                                    <xs:documentation xml:lang="fr-FR">
+                                        <osd:label>Système source</osd:label>
+                                        <osd:description>Le nom du dataset de landing = ProjectSource.sourceSystem. Simple chaîne, jamais une clé étrangère (ce dataset est dans le dataspace de landing du projet ; MdmFactory est dans un autre).</osd:description>
+                                    </xs:documentation>
+                                </xs:annotation>
+                                <xs:simpleType>
+                                    <xs:restriction base="xs:string">
+                                        <xs:maxLength value="80"/>
+                                    </xs:restriction>
+                                </xs:simpleType>
+                            </xs:element>
+                            <xs:element name="lastRowAt" type="xs:dateTime" minOccurs="0" maxOccurs="1">
+                                <xs:annotation>
+                                    <xs:documentation xml:lang="en-US">
+                                        <osd:label>Last row at</osd:label>
+                                        <osd:description>When a waiting row was last written. The trigger refreshes it only when the stored value is older than 5 seconds, so a mass load does not write this row once per landing row.</osd:description>
+                                    </xs:documentation>
+                                    <xs:documentation xml:lang="fr-FR">
+                                        <osd:label>Dernière ligne le</osd:label>
+                                        <osd:description>Quand une ligne en attente a été écrite pour la dernière fois. Le déclencheur ne la rafraîchit que si la valeur stockée a plus de 5 secondes, pour qu'un chargement en masse n'écrive pas cette ligne une fois par ligne du landing.</osd:description>
+                                    </xs:documentation>
+                                </xs:annotation>
+                            </xs:element>
+                            <xs:element name="updatedBy" minOccurs="0" maxOccurs="1">
+                                <xs:annotation>
+                                    <xs:documentation xml:lang="en-US">
+                                        <osd:label>Updated by</osd:label>
+                                    </xs:documentation>
+                                    <xs:documentation xml:lang="fr-FR">
+                                        <osd:label>Mis à jour par</osd:label>
+                                    </xs:documentation>
+                                </xs:annotation>
+                                <xs:simpleType>
+                                    <xs:restriction base="xs:string">
+                                        <xs:maxLength value="120"/>
+                                    </xs:restriction>
+                                </xs:simpleType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>

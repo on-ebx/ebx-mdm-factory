@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="https://jakarta.ee/xml/ns/jakartaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_5_0.xsd"
+	version="5.0" metadata-complete="false">
+	<display-name>ebx-mdm-factory</display-name>
+
+	<!-- REST API on the EBX REST Toolkit: the toolkit maps the application on its @ApplicationPath (/rest) -->
+	<servlet>
+		<servlet-name>JAX-RS-REST</servlet-name>
+		<servlet-class>com.orchestranetworks.rest.internal.RESTRegistrationServlet</servlet-class>
+		<init-param>
+			<param-name>RESTApplicationAbstract</param-name>
+			<param-value>com.on.ebx.factory.rest.FactoryRestApplication</param-value>
+		</init-param>
+		<init-param>
+			<param-name>ebxModuleName</param-name>
+			<param-value>ebx-mdm-factory</param-value>
+		</init-param>
+		<init-param>
+			<param-name>hide-service-list-page</param-name>
+			<param-value>true</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+</web-app>

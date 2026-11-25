@@ -1,0 +1,221 @@
+{
+  "key": "MdmFactory",
+  "labelEn": "MDM Factory",
+  "labelFr": "MDM Factory",
+  "activated": true,
+  "items": [
+    {
+      "type": "section",
+      "labelEn": "Projects",
+      "labelFr": "Projets",
+      "children": [
+        {
+          "type": "action",
+          "labelEn": "Project explorer",
+          "labelFr": "Explorateur de projets",
+          "default": true,
+          "serviceKey": "ebx-mdm-factory@/WEB-INF/ebx/schemas/MdmFactory.xsd@ProjectExplorer",
+          "parameters": [
+            { "name": "service", "value": "ProjectExplorer" },
+            { "name": "branch", "value": "MdmFactory" },
+            { "name": "instance", "value": "MdmFactory" },
+            { "name": "xpath", "value": "/root/Project" }
+          ],
+          "iconUrl": "/ebx-mdm-factory/www/common/images/factory/perspective/projects.svg"
+        },
+        {
+          "type": "action",
+          "labelEn": "Project wizard",
+          "labelFr": "Assistant de projet",
+          "serviceKey": "ebx-mdm-factory@/WEB-INF/ebx/schemas/MdmFactory.xsd@ProjectWizard",
+          "parameters": [
+            { "name": "service", "value": "ProjectWizard" },
+            { "name": "branch", "value": "MdmFactory" },
+            { "name": "instance", "value": "MdmFactory" },
+            { "name": "xpath", "value": "/root/Project" }
+          ],
+          "iconUrl": "/ebx-mdm-factory/www/common/images/factory/perspective/projects.svg"
+        },
+        {
+          "type": "action",
+          "labelEn": "Project sources",
+          "labelFr": "Sources du projet",
+          "dataspace": "MdmFactory",
+          "dataset": "MdmFactory",
+          "xpath": "/root/ProjectSource",
+          "iconUrl": "/ebx-mdm-factory/www/common/images/factory/perspective/sources.svg"
+        },
+        {
+          "type": "action",
+          "labelEn": "Cockpit",
+          "labelFr": "Cockpit",
+          "dataspace": "MdmFactory",
+          "dataset": "MdmFactory",
+          "xpath": "/root/Project",
+          "iconUrl": "/ebx-mdm-factory/www/common/images/factory/perspective/cockpit.svg"
+        }
+      ]
+    },
+    {
+      "type": "section",
+      "labelEn": "Landing",
+      "labelFr": "Landing",
+      "children": [
+        {
+          "type": "action",
+          "labelEn": "Tables",
+          "labelFr": "Tables",
+          "dataspace": "MdmFactory",
+          "dataset": "MdmFactory",
+          "xpath": "/root/LandingTable",
+          "iconUrl": "/ebx-mdm-factory/www/common/images/factory/perspective/landing-tables.svg"
+        },
+        {
+          "type": "action",
+          "labelEn": "Columns",
+          "labelFr": "Colonnes",
+          "dataspace": "MdmFactory",
+          "dataset": "MdmFactory",
+          "xpath": "/root/LandingColumn",
+          "iconUrl": "/ebx-mdm-factory/www/common/images/factory/perspective/landing-columns.svg"
+        },
+        {
+          "type": "action",
+          "labelEn": "Relations",
+          "labelFr": "Relations",
+          "dataspace": "MdmFactory",
+          "dataset": "MdmFactory",
+          "xpath": "/root/LandingRelation",
+          "iconUrl": "/ebx-mdm-factory/www/common/images/factory/perspective/landing-relations.svg"
+        }
+      ]
+    },
+    {
+      "type": "section",
+      "labelEn": "Staging",
+      "labelFr": "Staging",
+      "children": [
+        {
+          "type": "action",
+          "labelEn": "Entities",
+          "labelFr": "Entités",
+          "dataspace": "MdmFactory",
+          "dataset": "MdmFactory",
+          "xpath": "/root/StagingEntity",
+          "iconUrl": "/ebx-mdm-factory/www/common/images/factory/perspective/staging-entities.svg"
+        },
+        {
+          "type": "action",
+          "labelEn": "Attributes",
+          "labelFr": "Attributs",
+          "dataspace": "MdmFactory",
+          "dataset": "MdmFactory",
+          "xpath": "/root/StagingAttribute",
+          "iconUrl": "/ebx-mdm-factory/www/common/images/factory/perspective/staging-attributes.svg"
+        },
+        {
+          "type": "action",
+          "labelEn": "Mappings",
+          "labelFr": "Mappings",
+          "dataspace": "MdmFactory",
+          "dataset": "MdmFactory",
+          "xpath": "/root/AttributeMapping",
+          "iconUrl": "/ebx-mdm-factory/www/common/images/factory/perspective/staging-mappings.svg"
+        }
+      ]
+    },
+    {
+      "type": "section",
+      "labelEn": "Operations",
+      "labelFr": "Pilotage",
+      "children": [
+        {
+          "type": "action",
+          "labelEn": "Pipeline steps",
+          "labelFr": "Étapes du pipeline",
+          "dataspace": "MdmFactory",
+          "dataset": "MdmFactory",
+          "xpath": "/root/PipelineStep",
+          "iconUrl": "/ebx-mdm-factory/www/common/images/factory/perspective/pipeline-steps.svg"
+        },
+        {
+          "type": "action",
+          "labelEn": "Agent runs",
+          "labelFr": "Exécutions de l'agent",
+          "dataspace": "MdmFactory",
+          "dataset": "MdmFactory",
+          "xpath": "/root/AgentRun",
+          "iconUrl": "/ebx-mdm-factory/www/common/images/factory/perspective/agent-runs.svg"
+        },
+        {
+          "type": "action",
+          "labelEn": "Proposal review",
+          "labelFr": "Revue des propositions",
+          "serviceKey": "ebx-mdm-factory@/WEB-INF/ebx/schemas/MdmFactory.xsd@ProposalReview",
+          "parameters": [
+            { "name": "service", "value": "ProposalReview" },
+            { "name": "branch", "value": "MdmFactory" },
+            { "name": "instance", "value": "MdmFactory" },
+            { "name": "xpath", "value": "/root/Project" }
+          ],
+          "iconUrl": "/ebx-mdm-factory/www/common/images/factory/perspective/proposal-review.svg"
+        },
+        {
+          "type": "action",
+          "labelEn": "Record lineage",
+          "labelFr": "Lineage de l'enregistrement",
+          "serviceKey": "ebx-mdm-factory@/WEB-INF/ebx/schemas/MdmFactory.xsd@RecordLineage",
+          "parameters": [
+            { "name": "service", "value": "RecordLineage" },
+            { "name": "branch", "value": "MdmFactory" },
+            { "name": "instance", "value": "MdmFactory" },
+            { "name": "xpath", "value": "/root/Project" }
+          ],
+          "iconUrl": "/ebx-mdm-factory/www/common/images/factory/perspective/record-lineage.svg"
+        }
+      ]
+    },
+    {
+      "type": "section",
+      "labelEn": "Settings",
+      "labelFr": "Paramètres",
+      "children": [
+        {
+          "type": "action",
+          "labelEn": "Connection",
+          "labelFr": "Connexion",
+          "serviceKey": "ebx-mdm-factory@/WEB-INF/ebx/schemas/MdmFactory.xsd@FactoryConnection",
+          "parameters": [
+            { "name": "service", "value": "FactoryConnection" },
+            { "name": "branch", "value": "MdmFactory" },
+            { "name": "instance", "value": "MdmFactory" },
+            { "name": "xpath", "value": "/root/FactorySettings" }
+          ],
+          "iconUrl": "/ebx-mdm-factory/www/common/images/factory/perspective/connection.svg"
+        },
+        {
+          "type": "action",
+          "labelEn": "Settings",
+          "labelFr": "Paramètres",
+          "dataspace": "MdmFactory",
+          "dataset": "MdmFactory",
+          "xpath": "/root/FactorySettings",
+          "iconUrl": "/ebx-mdm-factory/www/common/images/factory/perspective/settings.svg"
+        },
+        {
+          "type": "action",
+          "labelEn": "About",
+          "labelFr": "À propos",
+          "serviceKey": "ebx-mdm-factory@/WEB-INF/ebx/schemas/MdmFactory.xsd@About",
+          "parameters": [
+            { "name": "service", "value": "About" },
+            { "name": "branch", "value": "MdmFactory" },
+            { "name": "instance", "value": "MdmFactory" },
+            { "name": "xpath", "value": "/root/Project" }
+          ],
+          "iconCss": "fa-info-circle"
+        }
+      ]
+    }
+  ]
+}

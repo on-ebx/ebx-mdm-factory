@@ -1,0 +1,9 @@
+// Audit block: stamp creation. ${group} is the group name chosen at placement (default Audit).
+uses core.datetime as dt;
+export procedure onBeforeCreate()
+begin
+  _ebx.record.${group}.createdOn := dt.now();
+  _ebx.record.${group}.createdBy := _ebx.session.userId;
+  _ebx.record.${group}.changedOn := dt.now();
+  _ebx.record.${group}.changedBy := _ebx.session.userId;
+end

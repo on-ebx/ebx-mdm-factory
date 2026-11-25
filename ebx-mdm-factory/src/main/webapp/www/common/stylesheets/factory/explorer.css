@@ -1,0 +1,158 @@
+/* Project explorer (PLAN.md screen 6): the faceted layout copied from ebx-connectors' facets.css, plus the
+   generic card/grid/tools/group/count/empty-state rules of its connector-catalog.css that FacetedPage still
+   needs, on top of factory.css. Renamed prefixes: mdmx- (rail/tools/facets, was ftcx-) and mdmc- (cards/grids,
+   was ftcc-), so nothing collides with ebx-connectors' own stylesheets if both happen to be loaded in the same
+   browser tab. Colours are the factory's own tokens (--ink/--muted/--line/--accent/--accent-soft/--good/--warn/
+   --info/--muted, all declared once on .mdmf in factory.css) - this file never redeclares them, unlike
+   ebx-connectors' connector-catalog.css, which declares its own token set on its own wrapper class: the
+   project explorer's root element carries .mdmf (for the tokens) together with .mdmc-explorer (for the layout
+   below) and a bare .mdmx marker (the same three-class wrapper convention ebx-connectors uses on its own root,
+   ".ftcc .ftcx .ftcx-connectors").
+   status/style/mode chips reuse factory.css's own .mdmf-chip-* classes (no new chip variant needed for style
+   and mode; a project's STATUS pill needed one that did not exist yet, --info, added to factory.css itself as
+   .mdmf-chip-info, next to the other four -real/-target/-warn/-bad/-accent/-muted variants). */
+
+/* ---- layout: the explorer's own root wrapper (ebx-connectors' bare .ftcc, minus the token declarations that
+   now live on .mdmf) ---- */
+.mdmc-explorer{max-width:1500px;margin:auto;padding:6px 18px 40px}
+@media(max-width:700px){.mdmc-explorer{padding:4px 8px 30px}.mdmc-grid{grid-template-columns:repeat(auto-fill,minmax(180px,1fr))}}
+
+/* ---- tools row: search box, sort, advanced-filter toggle, rail toggle, "New project" ---- */
+.mdmc-tools{position:sticky;top:0;z-index:2;background:rgba(255,255,255,.96);padding:18px 0 12px;backdrop-filter:blur(8px)}
+.mdmc-search{height:42px;border:1px solid #d8dee8;border-radius:10px;display:flex;align-items:center;gap:9px;padding:0 13px;background:#fff;box-shadow:0 2px 8px rgba(16,24,40,.04)}
+.mdmc-search input{border:0;outline:0;width:100%;font:inherit;font-size:14px;color:var(--ink)}
+.mdmc-search-row{display:flex;align-items:center;gap:9px}
+.mdmc-search{flex:1}
+.mdmc-advanced{flex:0 0 auto;padding:12px 14px;border:1px solid #d8dee8;border-radius:10px;background:#fff;color:var(--accent-ink)!important;font-size:12px;font-weight:700;text-decoration:none!important}
+.mdmc-advanced:hover{border-color:var(--accent-mid);background:var(--accent-faint)}
+.mdmc-result-count{color:#667085;font-size:12px;white-space:nowrap}
+.mdmc-count{color:var(--muted);font-size:12px;white-space:nowrap;min-width:70px;text-align:right}
+.mdmc-filter-label{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);margin-right:2px}
+.mdmx-links .mdmc-advanced{padding:5px 10px;border-radius:8px}
+.mdmx-links .mdmc-result-count{margin-right:8px}
+
+/* "New project" - a prominent button at the top right of the search row (task brief); disabled on a TARGET
+   instance, with the refusal as its title (ProjectExplorerPage#newProjectButton). */
+.mdmx-newproject{margin-left:auto;flex:0 0 auto;height:42px;box-sizing:border-box;display:inline-flex;align-items:center;padding:0 16px;border:1px solid var(--btn);border-radius:10px;background:var(--btn);color:var(--btn-text)!important;font:inherit;font-size:13px;font-weight:700;text-decoration:none!important;cursor:pointer}
+.mdmx-newproject:hover{opacity:.92}
+.mdmx-newproject:disabled{border-color:var(--line);background:#f2f4f7;color:var(--muted)!important;cursor:not-allowed}
+
+/* ---- groups and grid ---- */
+.mdmc-group{margin-top:22px}
+.mdmc-heading{display:flex;justify-content:space-between;align-items:end;margin:0 2px 10px}
+.mdmc-heading h2{font-size:18px;margin:0 0 3px}
+.mdmc-heading p{font-size:12px;color:var(--muted);margin:0}
+.mdmc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px}
+.mdmc-card[hidden],.mdmc-group[hidden]{display:none!important}
+.mdmc-empty{display:none;text-align:center;border:1px dashed #ccd2dc;border-radius:12px;color:var(--muted);padding:35px;margin-top:18px}
+
+/* ---- one project card ---- */
+.mdmc-card{display:block;position:relative;background:#fff;border:1px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:0 3px 12px rgba(16,24,40,.06);transition:transform .16s ease,box-shadow .16s ease,border-color .16s ease}
+.mdmc-card:hover,.mdmc-card:focus-within{transform:translateY(-3px);border-color:var(--accent-mid);box-shadow:0 12px 28px color-mix(in srgb,var(--accent-ink) 14%,transparent)}
+.mdmc-body{padding:14px 16px 16px}
+/* Favorites (2026-09-23, ported from ebx-connectors' FavoriteStars/Favorites - the product owner asked for the project
+   explorer to be "consistent" with the connector explorer): unlike that module's card (a single whole-card
+   link, so its star has to be an absolutely positioned overlay outside it), a project card has no whole-card
+   link - only the two .mdmc-btn buttons navigate - so .mdmc-meta drops justify-content:space-between for a
+   plain flex row (chip, then the code shrinking with min-width:0 so its own ellipsis actually applies, then
+   the star at a fixed size) and the star (.mdmx-fav) is a normal flex child, never position:absolute. */
+.mdmc-meta{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.mdmc-meta code{flex:1 1 auto;min-width:0;font-size:10px;color:#98a2b3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mdmc-meta .mdmx-fav{flex:0 0 auto;width:22px;height:22px;padding:0;border:1px solid #d0d5dd;background:#fff;color:#667085;border-radius:7px;font-size:13px;line-height:1;cursor:pointer;font-family:inherit}
+.mdmc-meta .mdmx-fav:hover{border-color:#e9ad24;color:#e9ad24}
+.mdmc-meta .mdmx-fav.on{border-color:#e9ad24;background:#fff8e1;color:#e9ad24}
+.mdmc-meta .mdmx-fav:disabled{opacity:.5;cursor:progress}
+.mdmc-meta .mdmx-fav:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+.mdmc-card h3{font-size:16px;line-height:1.25;margin:0 0 6px}
+.mdmc-desc{color:var(--muted);font-size:12px;line-height:1.45;margin:0 0 8px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.mdmc-chips{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 8px}
+.mdmc-info{color:var(--muted);font-size:11.5px;line-height:1.5;margin:3px 0}
+.mdmc-zones{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
+.mdmc-actions{display:flex;gap:8px;margin-top:12px}
+.mdmc-btn{flex:1 1 0;text-align:center;padding:8px 10px;border:1px solid var(--accent-fg);border-radius:9px;background:#fff;color:var(--accent-fg)!important;font-size:12.5px;font-weight:700;text-decoration:none!important}
+.mdmc-btn:hover{background:var(--accent-soft)}
+/* project-deletion lot (2026-09-23): the card's "Delete" button, administrators only (ProjectExplorerPage,
+   Model.canDelete) - the --bad/--bad-soft tokens already exist on .mdmf (factory.css), never redeclared here. */
+.mdmc-btn-danger{border-color:var(--bad);color:var(--bad)!important}
+.mdmc-btn-danger:hover{background:var(--bad-soft)}
+
+/* ---- facet rail, advanced filters, active-filter chips, sort control, search row (ebx-connectors' facets.css,
+   renamed) ---- */
+.mdmx-heading{display:flex;justify-content:space-between;align-items:flex-end}
+.mdmx-heading h2 a{color:inherit;text-decoration:none}
+.mdmx-heading h2 a:hover{color:var(--accent-fg)}
+.mdmx-groupcount{font-size:12px;font-weight:400;color:#667085;margin-left:6px}
+.mdmx-more[hidden]{display:none!important}
+.mdmx-more-toggle{display:inline-flex;align-items:center;gap:6px;height:42px;border:1px solid #d8dee8;border-radius:10px;background:#fff;color:var(--accent-fg);font:inherit;font-size:12px;font-weight:700;padding:0 12px;cursor:pointer;white-space:nowrap}
+.mdmx-more-toggle:hover,.mdmx-more-toggle[aria-expanded=true]{border-color:var(--accent-fg);background:var(--accent-soft)}
+.mdmx-more-toggle b{display:inline-flex;min-width:18px;height:18px;align-items:center;justify-content:center;border-radius:999px;background:var(--accent);color:var(--accent-text);font-size:10px;padding:0 5px}
+.mdmx-more-toggle b[hidden]{display:none}
+.mdmx-more-toggle:focus-visible,.mdmc-filters button:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+.mdmx-more{padding:4px 0 2px}
+.mdmx-pills{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-top:8px}
+.mdmx-pills .mdmc-filter-label{min-width:92px}
+.mdmx-pills button{border:1px solid #dfe3ea;background:#fff;color:#475467;border-radius:999px;padding:4px 10px;font:inherit;font-size:12px;cursor:pointer;white-space:nowrap}
+.mdmx-pills button:hover,.mdmx-pills button.active{background:var(--accent);border-color:var(--accent);color:var(--accent-text)}
+.mdmx-pills button i{font-style:normal;font-size:11px;opacity:.7;margin-left:2px}
+.mdmx-pills button.mdmx-zero{opacity:.45}
+.mdmx-activebar{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-top:10px;min-height:24px}
+.mdmx-chips{display:contents}
+.mdmx-chip{display:inline-flex;align-items:center;gap:4px;background:var(--accent-soft);color:var(--accent-deep);border:1px solid var(--accent-line);border-radius:999px;padding:2px 3px 2px 10px;font-size:12px;font-weight:600}
+.mdmx-chip button{border:0;background:transparent;color:inherit;width:18px;height:18px;border-radius:50%;padding:0;font-size:14px;line-height:1;cursor:pointer}
+.mdmx-chip button:hover{background:#fff}
+.mdmx-clear{border:0;background:none;color:var(--accent-fg);font:inherit;font-size:12px;font-weight:700;cursor:pointer;padding:0 4px}
+.mdmx-clear:hover{text-decoration:underline}
+.mdmx-activebar .mdmc-count{margin-left:auto}
+.mdmx-body{display:grid;grid-template-columns:230px minmax(0,1fr);gap:24px;align-items:start;margin-top:12px}
+.mdmx-rail{min-width:0}
+.mdmx-facet{border-bottom:1px solid var(--line);padding:10px 0 12px}
+.mdmx-facet:first-child{padding-top:2px}
+.mdmx-facet-h{display:flex;align-items:center;gap:6px;width:100%;border:0;background:none;padding:2px 0 6px;font:inherit;font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);cursor:pointer;text-align:left}
+.mdmx-facet-h span{flex:1}
+.mdmx-facet-n{font-size:10px;min-width:16px;height:16px;border-radius:999px;background:var(--accent);color:var(--accent-text);display:inline-flex;align-items:center;justify-content:center;padding:0 4px}
+.mdmx-facet-n:empty{display:none}
+.mdmx-facet-h i{width:8px;height:8px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(45deg);margin:-3px 3px 0 0;transition:transform .15s}
+.mdmx-folded .mdmx-facet-h i{transform:rotate(-45deg);margin-top:0}
+.mdmx-folded .mdmx-opts,.mdmx-folded .mdmx-find,.mdmx-folded .mdmx-moreopts{display:none!important}
+.mdmx-find{width:100%;box-sizing:border-box;height:30px;border:1px solid #d8dee8;border-radius:8px;padding:0 9px;font:inherit;font-size:12px;margin:0 0 6px;color:var(--ink);background:#fff}
+.mdmx-opts{display:flex;flex-direction:column}
+.mdmx-opt{display:flex;align-items:center;gap:8px;padding:3px 4px;border-radius:6px;font-size:12.5px;color:var(--ink);cursor:pointer;line-height:1.3}
+.mdmx-opt:hover{background:var(--accent-soft)}
+.mdmx-opt input{margin:0;accent-color:var(--accent);flex:0 0 auto}
+.mdmx-opt span{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mdmx-opt i{font-style:normal;font-size:11px;color:#98a2b3;font-variant-numeric:tabular-nums}
+.mdmx-opt.active span{font-weight:700}
+.mdmx-opt.mdmx-zero{opacity:.45}
+.mdmx-opt[hidden],.mdmx-moreopts[hidden],.mdmx-showmore[hidden],.mdmx-clear[hidden]{display:none!important}
+.mdmx-moreopts{border:0;background:none;color:var(--accent-fg);font:inherit;font-size:12px;font-weight:700;padding:4px 4px 0;cursor:pointer}
+.mdmx-moreopts:hover{text-decoration:underline}
+.mdmx-main{min-width:0}
+.mdmx-main .mdmc-group{margin-top:0;margin-bottom:26px}
+.mdmx-main .mdmc-grid{grid-template-columns:repeat(auto-fill,minmax(230px,1fr))}
+.mdmc-card.mdmx-cut{display:none!important}
+.mdmx-showmore{display:block;width:100%;margin-top:10px;border:1px dashed #c9d1db;background:#fff;color:var(--accent-fg);border-radius:10px;padding:8px;font:inherit;font-size:12px;font-weight:700;cursor:pointer}
+.mdmx-showmore:hover{border-color:var(--accent-fg);background:var(--accent-soft)}
+.mdmx-opt:focus-within,.mdmx-showmore:focus-visible,.mdmx-moreopts:focus-visible,.mdmx-facet-h:focus-visible,.mdmx-pills button:focus-visible,.mdmx-chip button:focus-visible{outline:2px solid var(--focus);outline-offset:1px}
+@media(max-width:900px){.mdmx-body{grid-template-columns:1fr}.mdmx-rail{border-bottom:1px solid var(--line)}}
+.mdmx .mdmc-search-row{flex-wrap:nowrap}
+.mdmx .mdmc-search{flex:1 1 auto;min-width:200px}
+.mdmx-sort{display:inline-flex;align-items:stretch;flex:0 0 auto;height:42px;border:1px solid #d8dee8;border-radius:10px;background:#fff;overflow:hidden}
+.mdmx-sort select{border:0;background:transparent;height:100%;max-width:130px;padding:0 4px 0 10px;font:inherit;font-size:13px;color:var(--ink);cursor:pointer}
+.mdmx-sort select:focus-visible,.mdmx-dir:focus-visible,.mdmx-rail-toggle:focus-visible{outline:2px solid var(--focus);outline-offset:-2px}
+.mdmx-dir{border:0;border-left:1px solid #e4e7ec;background:#fff;width:36px;font:inherit;font-size:16px;font-weight:700;color:var(--accent-fg);cursor:pointer}
+.mdmx-dir:hover{background:var(--accent-soft)}
+.mdmx-rail-toggle{display:inline-flex;align-items:center;gap:7px;flex:0 0 auto;height:42px;border:1px solid #d8dee8;border-radius:10px;background:#fff;color:#475467;font:inherit;font-size:12px;font-weight:700;padding:0 12px;cursor:pointer;white-space:nowrap}
+.mdmx-rail-toggle i{width:14px;height:11px;border:2px solid currentColor;border-radius:3px;box-sizing:border-box;background:linear-gradient(to right,currentColor 0 4px,transparent 4px)}
+.mdmx-rail-toggle.active{border-color:var(--accent-line);color:var(--accent-fg);background:var(--accent-soft)}
+.mdmx-rail-toggle:hover{border-color:var(--accent-fg);color:var(--accent-fg)}
+.mdmx-rail-toggle b{display:inline-flex;min-width:18px;height:18px;align-items:center;justify-content:center;border-radius:999px;background:var(--accent);color:var(--accent-text);font-size:10px;padding:0 5px}
+.mdmx-rail-toggle b[hidden]{display:none}
+.mdmx-norail .mdmx-body{grid-template-columns:minmax(0,1fr)}
+.mdmx-norail .mdmx-rail{display:none}
+.mdmx-links{display:inline-flex;align-items:center;gap:2px;margin-left:auto}
+.mdmx-links:empty{display:none}
+.mdmx-links+.mdmc-count{margin-left:12px}
+@media(max-width:900px){.mdmx-rail-toggle span{display:none}}
+@media(max-width:760px){.mdmx .mdmc-search-row{flex-wrap:wrap}.mdmx .mdmc-search{flex:1 1 100%;order:-1}}
+.mdmx-main .mdmx-probe{height:0;margin:0;overflow:hidden;visibility:hidden}
+.mdmx .mdmc-search-row>*:not(.mdmc-search){flex-shrink:0}

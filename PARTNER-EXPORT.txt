@@ -1,0 +1,3 @@
+Exported from EBX-MDM-Factory commit 0bb8257ac6dd0a6d40883b942b1f59a19840f538
+Merge fix/v1.4.3-zone-permissions-default: new zones copy their parent's permissions by default (X3-11)
+This repository is generated: every sync replaces its whole content. A change made here is lost at the next sync.

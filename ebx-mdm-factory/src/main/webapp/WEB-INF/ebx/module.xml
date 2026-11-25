@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module xmlns="urn:ebx-schemas:module_2.4" xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="urn:ebx-schemas:module_2.4 https://schema.orchestranetworks.com/module_2.4.xsd">
+	<name>ebx-mdm-factory</name>
+	<publicPath>ebx-mdm-factory</publicPath>
+	<services>
+	</services>
+	<beans>
+		<bean className="com.on.ebx.factory.workflow.MatchingRunTaskBean">
+			<documentation xml:lang="en-US">
+				<label>Run Match and Merge</label>
+				<description>Runs Match and Merge for every promoted entity of the project (matching, decision tree, auto-merge). scope=incremental (default) matches only new/changed records; scope=all re-matches every record with an Xref row.</description>
+			</documentation>
+			<documentation xml:lang="fr-FR">
+				<label>Lancer le rapprochement (Match and Merge)</label>
+				<description>Lance le rapprochement et la fusion pour chaque entité promue du projet (matching, arbre de décision, fusion automatique). scope=incremental (défaut) ne rapproche que les enregistrements nouveaux/modifiés ; scope=all rapproche tout enregistrement ayant une ligne Xref.</description>
+			</documentation>
+			<properties>
+				<property name="projectCode" input="true"><documentation xml:lang="en-US"><label>Project code</label></documentation><documentation xml:lang="fr-FR"><label>Code du projet</label></documentation></property>
+				<property name="scope" input="true"><documentation xml:lang="en-US"><label>Scope: incremental (default) or all</label></documentation><documentation xml:lang="fr-FR"><label>Portée : incremental (défaut) ou all</label></documentation></property>
+				<property name="maxWaitMs" input="true"><documentation xml:lang="en-US"><label>Maximum wait per matching process, in milliseconds (default: MatchingConfigurator.DEFAULT_MAX_WAIT_MS)</label></documentation><documentation xml:lang="fr-FR"><label>Attente maximale par processus de matching, en millisecondes (défaut : MatchingConfigurator.DEFAULT_MAX_WAIT_MS)</label></documentation></property>
+				<property name="resultJson" output="true"><documentation xml:lang="en-US"><label>Result (JSON text)</label></documentation><documentation xml:lang="fr-FR"><label>Résultat (texte JSON)</label></documentation></property>
+			</properties>
+		</bean>
+		<bean className="com.on.ebx.factory.workflow.LandingLoadTaskBean">
+			<documentation xml:lang="en-US">
+				<label>Load the landing zone</label>
+				<description>Loads every ProjectSource of the project into the landing zone (connectors preflight included). Leave projectSource blank to load every source; set it to load a single one.</description>
+			</documentation>
+			<documentation xml:lang="fr-FR">
+				<label>Charger la zone de landing</label>
+				<description>Charge chaque ProjectSource du projet dans la zone de landing (préflight des connecteurs inclus). Laisser projectSource vide pour charger toutes les sources ; le renseigner pour n'en charger qu'une seule.</description>
+			</documentation>
+			<properties>
+				<property name="projectCode" input="true"><documentation xml:lang="en-US"><label>Project code</label></documentation><documentation xml:lang="fr-FR"><label>Code du projet</label></documentation></property>
+				<property name="projectSource" input="true"><documentation xml:lang="en-US"><label>Project source id (optional): blank loads every source of the project</label></documentation><documentation xml:lang="fr-FR"><label>Id de la source projet (optionnel) : vide, toutes les sources du projet sont chargées</label></documentation></property>
+				<property name="resultJson" output="true"><documentation xml:lang="en-US"><label>Aggregate result (JSON text)</label></documentation><documentation xml:lang="fr-FR"><label>Résultat agrégé (texte JSON)</label></documentation></property>
+				<property name="failed" output="true"><documentation xml:lang="en-US"><label>Number of tables that failed to load, as text</label></documentation><documentation xml:lang="fr-FR"><label>Nombre de tables dont le chargement a échoué, en texte</label></documentation></property>
+			</properties>
+		</bean>
+		<bean className="com.on.ebx.factory.workflow.StagingLoadTaskBean">
+			<documentation xml:lang="en-US">
+				<label>Transfer landing to staging</label>
+				<description>Transfers landing rows into the staging zone of the project. scope=new (default) transfers only landing rows still at "version received, not yet transferred" and skips an unchanged row's write; scope=all re-transfers every landing row (needed after a mapping/cleaning-step/derived-field change).</description>
+			</documentation>
+			<documentation xml:lang="fr-FR">
+				<label>Transférer le landing vers le staging</label>
+				<description>Transfère les lignes de landing vers la zone de staging du projet. scope=new (défaut) ne transfère que les lignes de landing encore « reçues, non transférées » et ignore l'écriture d'une ligne inchangée ; scope=all retransfère chaque ligne de landing (nécessaire après un changement de mapping, d'étape de nettoyage ou de champ dérivé).</description>
+			</documentation>
+			<properties>
+				<property name="projectCode" input="true"><documentation xml:lang="en-US"><label>Project code</label></documentation><documentation xml:lang="fr-FR"><label>Code du projet</label></documentation></property>
+				<property name="maxRejectPercent" input="true"><documentation xml:lang="en-US"><label>Stop when at least this percentage of the rows read is held back (1-100, empty = never stop)</label></documentation><documentation xml:lang="fr-FR"><label>Arrêter si au moins ce pourcentage des lignes lues est retenu (1-100, vide = jamais)</label></documentation></property>
+				<property name="intakeChain" input="true"><documentation xml:lang="en-US"><label>Automatic intake chain token (empty for a pipeline launched by a person)</label></documentation><documentation xml:lang="fr-FR"><label>Jeton de la chaîne de prise en charge automatique (vide pour un pipeline lancé par une personne)</label></documentation></property>
+				<property name="scope" input="true"><documentation xml:lang="en-US"><label>Scope: new (default) or all</label></documentation><documentation xml:lang="fr-FR"><label>Portée : new (défaut) ou all</label></documentation></property>
+				<property name="resultJson" output="true"><documentation xml:lang="en-US"><label>Result (JSON text)</label></documentation><documentation xml:lang="fr-FR"><label>Résultat (texte JSON)</label></documentation></property>
+				<property name="rejected" output="true"><documentation xml:lang="en-US"><label>Number of rows rejected, as text</label></documentation><documentation xml:lang="fr-FR"><label>Nombre de lignes rejetées, en texte</label></documentation></property>
+				<property name="written" output="true"><documentation xml:lang="en-US"><label>Number of rows written to staging, as text</label></documentation><documentation xml:lang="fr-FR"><label>Nombre de lignes écrites en staging, en texte</label></documentation></property>
+				<property name="unchanged" output="true"><documentation xml:lang="en-US"><label>Number of rows read but not written (identical content), as text</label></documentation><documentation xml:lang="fr-FR"><label>Nombre de lignes lues mais non écrites (contenu identique), en texte</label></documentation></property>
+				<property name="status" output="true"><documentation xml:lang="en-US"><label>Status ("DONE" on every successful return)</label></documentation><documentation xml:lang="fr-FR"><label>Statut (« DONE » à chaque retour réussi)</label></documentation></property>
+				<property name="stopped" output="true"><documentation xml:lang="en-US"><label>"true" when maxRejectPercent was reached or, in an intake chain, every row read was rejected; else "false"</label></documentation><documentation xml:lang="fr-FR"><label>« true » si maxRejectPercent est atteint ou, dans une chaîne de prise en charge, si toutes les lignes lues sont rejetées ; sinon « false »</label></documentation></property>
+			</properties>
+		</bean>
+		<bean className="com.on.ebx.factory.workflow.MasterLoadTaskBean">
+			<documentation xml:lang="en-US">
+				<label>Transfer staging to master</label>
+				<description>Transfers staging rows into the master (MDM) zone of the project.</description>
+			</documentation>
+			<documentation xml:lang="fr-FR">
+				<label>Transférer le staging vers le MDM</label>
+				<description>Transfère les lignes de staging vers la zone MDM (master) du projet.</description>
+			</documentation>
+			<properties>
+				<property name="projectCode" input="true"><documentation xml:lang="en-US"><label>Project code</label></documentation><documentation xml:lang="fr-FR"><label>Code du projet</label></documentation></property>
+				<property name="resultJson" output="true"><documentation xml:lang="en-US"><label>Result (JSON text)</label></documentation><documentation xml:lang="fr-FR"><label>Résultat (texte JSON)</label></documentation></property>
+				<property name="rejected" output="true"><documentation xml:lang="en-US"><label>Number of rows rejected, as text</label></documentation><documentation xml:lang="fr-FR"><label>Nombre de lignes rejetées, en texte</label></documentation></property>
+				<property name="written" output="true"><documentation xml:lang="en-US"><label>Number of rows written to the master zone, as text</label></documentation><documentation xml:lang="fr-FR"><label>Nombre de lignes écrites en zone MDM, en texte</label></documentation></property>
+				<property name="status" output="true"><documentation xml:lang="en-US"><label>Status: "DONE" or "FAILED"</label></documentation><documentation xml:lang="fr-FR"><label>Statut : « DONE » ou « FAILED »</label></documentation></property>
+			</properties>
+		</bean>
+		<bean className="com.on.ebx.factory.workflow.DistributionTaskBean">
+			<documentation xml:lang="en-US">
+				<label>Send a distribution target</label>
+				<description>Sends one distribution target (or every ON_DEMAND/SCHEDULED target of the project when targetId is blank) through Connectors. scope=changed (default) sends only changed golden records; scope=all resends every one. A REALTIME target is never driven from here.</description>
+			</documentation>
+			<documentation xml:lang="fr-FR">
+				<label>Envoyer une cible de diffusion</label>
+				<description>Envoie une cible de diffusion (ou toutes les cibles ON_DEMAND/SCHEDULED du projet si targetId est vide) via Connectors. scope=changed (défaut) n'envoie que les golden records modifiés ; scope=all les renvoie tous. Une cible REALTIME n'est jamais pilotée d'ici.</description>
+			</documentation>
+			<properties>
+				<property name="projectCode" input="true"><documentation xml:lang="en-US"><label>Project code</label></documentation><documentation xml:lang="fr-FR"><label>Code du projet</label></documentation></property>
+				<property name="targetId" input="true"><documentation xml:lang="en-US"><label>Target id (optional): blank sends every ON_DEMAND/SCHEDULED target of the project</label></documentation><documentation xml:lang="fr-FR"><label>Id de la cible (optionnel) : vide, toutes les cibles ON_DEMAND/SCHEDULED du projet sont envoyées</label></documentation></property>
+				<property name="scope" input="true"><documentation xml:lang="en-US"><label>Scope: changed (default) or all</label></documentation><documentation xml:lang="fr-FR"><label>Portée : changed (défaut) ou all</label></documentation></property>
+				<property name="resultJson" output="true"><documentation xml:lang="en-US"><label>Result per target (JSON text)</label></documentation><documentation xml:lang="fr-FR"><label>Résultat par cible (texte JSON)</label></documentation></property>
+				<property name="failed" output="true"><documentation xml:lang="en-US"><label>Number of targets that failed to send, as text</label></documentation><documentation xml:lang="fr-FR"><label>Nombre de cibles dont l'envoi a échoué, en texte</label></documentation></property>
+				<property name="status" output="true"><documentation xml:lang="en-US"><label>Status: "DONE" or "FAILED"</label></documentation><documentation xml:lang="fr-FR"><label>Statut : « DONE » ou « FAILED »</label></documentation></property>
+			</properties>
+		</bean>
+		<bean className="com.on.ebx.factory.workflow.AgentDecisionTaskBean">
+			<documentation xml:lang="en-US">
+				<label>Agent review: decide the proposals</label>
+				<description>Decides the AgentProposal lines of a run as the reviewer did: accepted task = the open lines accepted, and applied with the reviewer's permissions when the agent may act; rejected task = the open lines rejected.</description>
+			</documentation>
+			<documentation xml:lang="fr-FR">
+				<label>Revue d'agent : décider les propositions</label>
+				<description>Décide les lignes AgentProposal d'une exécution comme la personne qui a revu : tâche acceptée = lignes ouvertes acceptées, et appliquées avec ses permissions quand l'agent peut agir ; tâche refusée = lignes ouvertes refusées.</description>
+			</documentation>
+			<properties>
+				<property name="agentRun" input="true"><documentation xml:lang="en-US"><label>Agent run id</label></documentation><documentation xml:lang="fr-FR"><label>Id de l'exécution d'agent</label></documentation></property>
+				<property name="decision" input="true"><documentation xml:lang="en-US"><label>ACCEPTED or REJECTED (from the review task)</label></documentation><documentation xml:lang="fr-FR"><label>ACCEPTED ou REJECTED (de la tâche de revue)</label></documentation></property>
+				<property name="decidedBy" input="true"><documentation xml:lang="en-US"><label>Reviewer (from the review task)</label></documentation><documentation xml:lang="fr-FR"><label>Personne qui a revu (de la tâche de revue)</label></documentation></property>
+				<property name="resultJson" output="true"><documentation xml:lang="en-US"><label>Result (JSON text)</label></documentation><documentation xml:lang="fr-FR"><label>Résultat (texte JSON)</label></documentation></property>
+			</properties>
+		</bean>
+	</beans>
+</module>

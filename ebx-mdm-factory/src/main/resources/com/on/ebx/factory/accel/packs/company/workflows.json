@@ -1,0 +1,8 @@
+{"format": "accelerator-pack-workflows/1",
+ "workflows": [
+  {"type": "creationWithReview", "table": "/root/Company", "name": "CompanyCreationRequest",
+   "parameters": {"reviewers": ["Reviewer"], "mode": "sequential", "requester": "Requester",
+                  "acceptLabel": {"en-US": "Approve company", "fr-FR": "Approuver la société"},
+                  "rejectLabel": {"en-US": "Send back", "fr-FR": "Renvoyer"}},
+   "statusField": "/root/Company/Lifecycle/status", "statusOnSubmit": "IN_REVIEW", "statusOnApprove": "ACTIVE"}
+ ]}

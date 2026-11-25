@@ -1,0 +1,1114 @@
+/* Project wizard (ProjectWizardUserService). Loaded together with the shared factory/factory.css (tokens,
+   mdmf-panel, mdmf-lead, mdmf-hint, mdmf-field, mdmf-grid-2, mdmf-actions, mdmf-chip variants, mdmf-table
+   variants, mdmf-notice variants, mdmf-subtitle) and factory/review.css (mdmf-btn variants, mdmf-conf
+   variants, mdmf-rationale, mdmf-decide variants - the accept/reject and confidence-bar vocabulary this
+   screen reuses verbatim for its own relation/entity/attribute rows). This file only adds what neither
+   already declares: the stepper rail, the step panels, the entity/source cards, the pipeline track and the
+   implementation-style cards - checked against both files line by line so nothing here redeclares a
+   selector they already set. Class names and layout copied from the approved mockup
+   (docs/mockups/mdm-factory.html, screen 2).
+
+   Note (2026-09-22, coordinator review of the record-lineage graphic rebuild): an earlier version of this
+   comment wrote an asterisk directly followed by a slash TWICE, mid-sentence, in an informal wildcard
+   notation for two different class-name families - each occurrence was read by the CSS parser as an
+   accidental end-of-comment, not as a wildcard. Measured before/after in `docs/RECORD-LINEAGE.md` (a
+   handful of rules right after each broken point were lost, not the whole file, unlike `factory/
+   lineage.css`'s own single-corruption case, which lost every rule). Never write that two-character
+   sequence inside a CSS comment, even to illustrate the bug itself - spell it out in words instead, the way
+   this very sentence does. */
+
+/* wizard-visual-pass lot (2026-09-24): the boards' own page background sits behind every step's cards -
+   the topbar (white, its own -6px bleed) is the only part that is NOT on this grey */
+/* fix/wizard-live-wave1 (2026-09-24, live bug item 4): 28px was not enough clearance from EBX's own bottom
+   "Close" bar (a fixed element painted over the pane's own content, not part of this page's flow) - it
+   overlapped the last buttons of every step (e.g. step 3's "Continue to the landing"). 88px matches the
+   bar's own real height plus the same breathing room every other panel already gets. */
+.mdmf-wizard{max-width:1360px;margin:0 auto;padding:6px 6px 88px;background:#f4f5f8}
+
+/* wizard-visual-pass ROUND 3 (2026-09-24, coordinator): one global rule for every plain link inside the
+   wizard - accent colour, no underline, 600 weight, never the browser's default blue+underline (seen live
+   on step 5's "Open the Person table" and step 7's zone-card links). Excludes .mdmf-btn entirely
+   (:not(), not a color override after the fact) - review.css's own .mdmf-btn/.mdmf-btn-primary rules (white
+   text on a purple background, among others) must never compete on specificity with this one; a first
+   version here instead re-set color:inherit on .mdmf-btn links, which still OUTRANKED
+   .mdmf-btn-primary's own color:#fff (two classes beat one) and rendered "Open the Cockpit" as invisible
+   purple-on-purple text - caught in the ROUND 3 full-tour screenshot. */
+.mdmf-wizard a:not(.mdmf-btn){color:var(--accent-fg);text-decoration:none;font-weight:600}
+.mdmf-wizard a:not(.mdmf-btn):hover{text-decoration:underline}
+
+.mdmf-panel-muted{background:#f8fafc}
+
+.mdmf-radio-row{display:flex;flex-wrap:wrap;gap:16px;margin:2px 0 14px}
+
+/* ---- searchable combobox: moved to factory.css (llm-connector-combo lot, 2026-09-24), shared with the Connexion screen. ---- */
+.mdmf-radio-row label{display:flex;align-items:center;gap:7px;font-size:13px;cursor:pointer}
+
+/* ---- "Create a catalog source" checklist (source-onboarding lot, 2026-09-23): one row per SourceOnboarding.Step,
+   coloured by its state - the same --good/--muted/--bad tokens factory.css already declares, no new one added. ---- */
+.mdmf-onboard-checklist{margin-top:14px}
+.mdmf-onboard-steps{list-style:none;margin:8px 0;padding:0;display:flex;flex-direction:column;gap:6px}
+/* fix lot (2026-09-25, bug 2): flex-wrap - a narrow card (measured live, 943px viewport, ~176px of usable
+   content in a 3-card row) left .mdmf-onboard-text only ~21px once .mdmf-onboard-name's own intrinsic width
+   (nowrap, flex:0 0 auto - never shrinks) was subtracted from a nowrap row - one/two letters per line, ~700px
+   tall. The name+icon now form their own short line (flex-wrap), the message (flex-basis:100% below) always
+   wraps onto its own full-width line under them, on every card width, not just a wide one. */
+.mdmf-onboard-step{font-size:13px;color:var(--ink);display:flex;flex-wrap:wrap;align-items:flex-start;gap:2px 6px}
+.mdmf-onboard-icon{font-weight:700;line-height:1.5}
+.mdmf-onboard-step-done .mdmf-onboard-icon{color:var(--good)}
+.mdmf-onboard-step-todo .mdmf-onboard-icon{color:var(--warn)}
+.mdmf-onboard-step-blocked .mdmf-onboard-icon{color:var(--bad)}
+.mdmf-onboard-step-waiting{color:var(--muted)}
+.mdmf-onboard-step-waiting .mdmf-onboard-icon{color:var(--muted)}
+/* coordinator review (2026-09-23), from a re-rendered static mockup: .mdmf-onboard-step is a flex row, and the
+   bold step name was just another flex item competing for width with the message - "Source du catalogue"
+   wrapped over three lines while the message text claimed the row. mdmf-onboard-name (white-space:nowrap,
+   flex:0 0 auto) keeps the name at its own intrinsic width, never shrinking or wrapping.
+   fix lot (2026-09-25, bug 2): mdmf-onboard-text now has flex-basis:100% (flex:1 1 100%) instead of auto - it
+   no longer tries to share the FIRST line with the name at all (which only worked above some untested card
+   width); it always wraps to a full-width second line, where min-width:0 still lets it wrap normally instead
+   of forcing the row wider than the card. The row's own " - " separator moved inside <b class="mdmf-onboard-
+   name"> (WizardPage), so this is now exactly two flex items, never a stray unstyled text-node item. */
+.mdmf-onboard-name{white-space:nowrap;flex:0 0 auto}
+.mdmf-onboard-text{flex:1 1 100%;min-width:0}
+.mdmf-onboard-text .mdmf-hint{display:block}
+
+/* ---- wizard shell (wizard-visual-pass lot, 2026-09-24, docs/mockups/wizard-flow, board files): a white top
+   bar (eyebrow + step line on the left, the horizontal 7-step rail on the right) instead of the previous
+   sidebar list, content full width below on the page's own #f4f5f8 background - product owner: "the step
+   breadcrumb must be at the TOP, the colours are wrong, do a complete pass on the whole wizard". The rail's
+   markup (<ol class="mdmf-wiz-steps"><li data-step="n"><button><b>n</b><span>Name</span>) is untouched -
+   only its layout changes, so wizard.js's stepLi()/panel() lookups and the GOTO_STEP action keep working. */
+.mdmf-wiz{display:flex;flex-direction:column}
+.mdmf-wiz-topbar{display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;
+	background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px 22px;margin:-6px -6px 22px}
+.mdmf-wiz-topbar-left{display:flex;flex-direction:column;gap:3px;min-width:0}
+.mdmf-wiz-eyebrow{font-size:10.5px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:#98a2b3;white-space:nowrap}
+.mdmf-wiz-stepline{font-size:13px;color:var(--muted)}
+/* audit F-40: the link to the user guide, next to the step line */
+.mdmf-wiz-help{margin-left:8px;font-weight:600;color:var(--accent-fg);text-decoration:none;border-bottom:1px dotted currentColor}
+.mdmf-wiz-help:hover,.mdmf-wiz-help:focus-visible{text-decoration:none;border-bottom-style:solid}
+
+.mdmf-wiz-steps{list-style:none;margin:0;padding:0;display:flex;align-items:center;flex-wrap:wrap;row-gap:6px}
+.mdmf-wiz-steps li{display:flex;align-items:center}
+/* the short connector line between two circles - a pseudo-element, not extra markup, so the rail stays the
+   exact same <li> list wizard.js already knows how to walk */
+.mdmf-wiz-steps li:not(:first-child)::before{content:"";width:22px;height:1.5px;background:#d0d5dd;margin:0 5px;flex:0 0 auto}
+.mdmf-wiz-steps button{display:flex;align-items:center;gap:7px;border:1px solid transparent;background:none;border-radius:999px;padding:4px 8px 4px 4px;cursor:pointer;font-family:inherit;color:var(--muted);font-size:12px;font-weight:600;white-space:nowrap}
+.mdmf-wiz-steps button:disabled{cursor:not-allowed;opacity:.55}
+.mdmf-wiz-steps b{position:relative;width:22px;height:22px;border-radius:50%;border:1.5px solid #d0d5dd;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:var(--muted);background:#fff;flex:0 0 auto}
+/* current = filled accent circle, white number */
+.mdmf-wiz-steps li.current button{color:var(--ink)}
+.mdmf-wiz-steps li.current b{border-color:var(--accent);background:var(--accent);color:var(--accent-text)}
+/* done (not current) = light green circle with a check mark instead of the number (product owner,
+   2026-09-24) - the number stays in the markup (still useful with CSS off / to assistive tech that reads
+   text content) but is visually replaced by a check glyph */
+.mdmf-wiz-steps li.done:not(.current) b{border-color:#87c9a3;background:var(--good-soft);color:transparent}
+.mdmf-wiz-steps li.done:not(.current) b::after{content:"\2713";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--good);font-size:12px;font-weight:800}
+/* a step can be both current and done - it keeps the current accent colour so "where am I" still reads on
+   the circle alone (completed-rail lot, 2026-09-23; carried over unchanged by this lot) */
+.mdmf-wiz-steps li.current.done b{border-color:var(--accent);background:var(--accent);color:var(--accent-text)}
+.mdmf-wiz-steps button:not(:disabled):hover{color:var(--accent-fg)}
+.mdmf-wiz-main{min-width:0}
+.mdmf-wiz-panel[hidden]{display:none}
+.mdmf-wiz-panel h2{font-size:18px;margin:0 0 4px}
+.mdmf-wiz-nav{display:flex;gap:10px;align-items:center;margin-top:6px}
+.mdmf-wiz-progress{flex:1;text-align:right;font-size:12px;color:var(--muted)}
+@media(max-width:900px){.mdmf-wiz-steps span{display:none}.mdmf-wiz-topbar{padding:12px 16px}.mdmf-wiz-steps li:not(:first-child)::before{width:12px}}
+
+/* ---- choice cards: the implementation-style picker (with a diagram) and the staging-mode picker (without),
+   step 1, redesigned 2026-09-21 around "where is the master data created and maintained". One shared card
+   pattern (.mdmf-choice-card) so both read as the same kind of control; the whole label is the click target,
+   selection is never colour-only (accent border + tint + a check mark), the availability chip sits in the
+   card's own top-right corner via absolute positioning, never inside a sentence. ---- */
+/* the axis: product owner missed it once ("didn't notice it"), 2026-09-21 - made noticeable with an intro
+   sentence, normal-weight readable end captions (no more tiny grey uppercase) and a real arrow-ended line */
+.mdmf-style-axis-intro{font-size:12.5px;color:var(--muted);margin:2px 0 8px;line-height:1.5;max-width:640px}
+.mdmf-style-axis{display:flex;align-items:center;gap:12px;margin:2px 0 14px;font-size:13px;font-weight:600;color:var(--ink)}
+.mdmf-style-axis-line{position:relative;flex:1 1 auto;height:2px;background:var(--accent);margin:0 6px}
+.mdmf-style-axis-line::before,.mdmf-style-axis-line::after{content:"";position:absolute;top:50%;width:0;height:0;border-top:5px solid transparent;border-bottom:5px solid transparent;transform:translateY(-50%)}
+.mdmf-style-axis-line::before{left:-6px;border-right:7px solid var(--accent)}
+.mdmf-style-axis-line::after{right:-6px;border-left:7px solid var(--accent)}
+
+.mdmf-choice-card{position:relative;display:flex;flex-direction:column;gap:6px;border:1.5px solid var(--line);border-radius:12px;padding:14px 16px;cursor:pointer;background:#fff;text-align:left}
+.mdmf-choice-card:hover{border-color:var(--accent-line)}
+/* the radio stays in the tab order and reachable by assistive tech (never display:none), but is not drawn on
+   top of the diagram: the card's own border/tint/check mark is the visible selection state, native focus is
+   shown on the whole card via :focus-within below (standard "visually hidden" technique, not display:none,
+   which would pull it out of the accessibility tree and break keyboard selection) */
+.mdmf-choice-card input[type=radio]{position:absolute;width:1px;height:1px;margin:-1px;padding:0;border:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.mdmf-choice-card:focus-within{outline:3px solid var(--accent-soft);outline-offset:2px}
+.mdmf-choice-card.selected{border-color:var(--select);background:var(--accent-soft);box-shadow:0 0 0 1px var(--select) inset}
+.mdmf-choice-card.selected::after{content:"\2713";position:absolute;top:12px;right:12px;width:20px;height:20px;border-radius:50%;background:var(--accent);color:var(--accent-text);font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center}
+.mdmf-choice-card-disabled{cursor:not-allowed;background:#f8fafc;color:#475467}
+.mdmf-choice-card-disabled .mdmf-choice-card-title,.mdmf-choice-card-disabled .mdmf-style-card-facts,.mdmf-choice-card-disabled .mdmf-style-card-when{opacity:.85}
+.mdmf-choice-card-chip{position:absolute;top:12px;right:12px}
+.mdmf-choice-card-title{display:block;font-size:14px;font-weight:700;color:var(--ink)}
+.mdmf-style-card .mdmf-choice-card-title{margin-top:2px}
+/* "Most common" (Consolidation): next to the title, never replacing the selection check (2026-09-21) */
+.mdmf-style-card-common{font-size:9.5px;padding:2px 7px;vertical-align:middle}
+
+.mdmf-style-cards{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:4px 0 8px}
+@media(max-width:1100px){.mdmf-style-cards{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:520px){.mdmf-style-cards{grid-template-columns:1fr}}
+/* grid items stretch to the row's tallest card by default (align-items:stretch) - .mdmf-choice-card is a
+   column flexbox with no flex-grow on its children, so it fills that height without forcing any one card
+   to dictate the others' content layout (2026-09-21: "do the four cards keep equal heights") */
+.mdmf-style-diagram{width:100%;height:auto;color:var(--muted);margin:0 0 4px}
+.mdmf-choice-card.selected .mdmf-style-diagram{color:var(--accent-fg)}
+/* the headline: the card's first, dominant fact - "data created in: ..." - bold and in plain words, not
+   buried in a bullet list (2026-09-21: "that is the whole point of the choice") */
+.mdmf-style-card-headline{font-size:12.5px;font-weight:700;color:var(--ink);margin:2px 0 0;line-height:1.4}
+.mdmf-style-card-facts{list-style:none;margin:6px 0 0;padding:0;font-size:11.5px;color:#344054;line-height:1.6}
+.mdmf-style-card-facts b{color:var(--muted);font-weight:700;margin-right:3px}
+.mdmf-style-card-when{font-size:11px;color:var(--muted);line-height:1.5;margin:4px 0 0}
+.mdmf-style-card-when b{color:#344054}
+.mdmf-style-consequence{font-size:12.5px;color:var(--ink);background:#f8fafc;border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:2px 0 16px;line-height:1.5}
+
+.mdmf-mode-cards{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin:4px 0 6px}
+@media(max-width:560px){.mdmf-mode-cards{grid-template-columns:1fr}}
+/* row layout, not the style card's column layout: title and the "coming later" chip sit side by side, so the
+   chip (no diagram to float over here) never overlaps the text the way an absolutely-positioned one would */
+.mdmf-mode-card{flex-direction:row;align-items:center;justify-content:space-between;gap:10px;min-height:44px}
+.mdmf-mode-card .mdmf-choice-card-chip{position:static;flex:0 0 auto}
+.mdmf-mode-card .mdmf-choice-card-title{order:-1}
+/* wizard-visual-pass ROUND 1 (2026-09-24): the selected check mark is absolutely positioned top-right on
+   every .mdmf-choice-card (style cards too) - a mode card's own text can wrap onto two lines at the
+   narrower column width this round's two-column layout gives it, and the check then sits on top of the
+   text. Reserve room for it instead of letting it overlap. */
+.mdmf-mode-card.selected{padding-right:38px}
+/* wizard-llm-value-sharing lot (2026-09-28): the three "what may reach the language model" cards of step 1 share
+   the mode-card pattern, three across; the disabled ones carry the "capped" chip the way the not-yet mode card does */
+.mdmf-llm-cards{grid-template-columns:repeat(3,1fr)}
+@media(max-width:720px){.mdmf-llm-cards{grid-template-columns:1fr}}
+.mdmf-llm-sharing .mdmf-llm-capped{margin:0 0 10px}
+.mdmf-llm-sample{margin:10px 0 0;max-width:260px}
+.mdmf-llm-consequence{margin-top:8px}
+
+/* ---- entity/source cards (sources, staging) ---- */
+.mdmf-entity{border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin-bottom:14px}
+.mdmf-entity>header{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap}
+.mdmf-entity h3{font-size:14px;margin:0}
+.mdmf-entity p{font-size:12px;color:var(--muted);margin:2px 0 0}
+
+/* ---- pipeline track (landing generation) ---- */
+.mdmf-track{display:flex;flex-wrap:nowrap;align-items:flex-start;gap:0;overflow-x:auto;padding:6px 2px 4px}
+.mdmf-track-step{flex:0 0 auto;text-align:center;min-width:118px;padding:0 6px}
+.mdmf-track-step i{display:block;width:20px;height:20px;border-radius:50%;margin:0 auto 6px;background:#fff;border:2px solid #d0d5dd;box-sizing:border-box;font-style:normal;line-height:16px;font-size:11px;color:#fff}
+.mdmf-track-step b{display:block;font-size:11.5px;color:var(--ink)}
+.mdmf-track-step small{display:block;margin-top:2px;font-size:10px;color:#98a2b3;line-height:1.35}
+.mdmf-track-done i{background:var(--good);border-color:var(--good)}.mdmf-track-done i::before{content:"\2713"}
+.mdmf-track-fail i{background:var(--bad);border-color:var(--bad)}.mdmf-track-fail i::before{content:"\2715"}.mdmf-track-fail b{color:var(--bad)}
+.mdmf-track-now i{border-color:var(--warn);background:var(--warn-soft)}.mdmf-track-now b{color:var(--warn)}
+.mdmf-track-todo b{color:#98a2b3}
+.mdmf-track-rail{flex:1 1 24px;min-width:18px;height:2px;margin-top:9px;background:#e4e7ec}
+.mdmf-track-rail-on{background:#b7e3ca}
+
+/* ---- landing table key edit ---- */
+.mdmf-key-input{width:100%;min-width:120px;font:inherit;font-size:12.5px;border:1px solid #d0d5dd;border-radius:6px;padding:5px 8px;margin-bottom:4px}
+.mdmf-key-picker{display:flex;flex-wrap:wrap;gap:4px 10px;max-height:110px;overflow-y:auto;margin-bottom:6px;padding:4px 2px;min-width:160px;border:1px solid #e4e7ec;border-radius:6px}
+.mdmf-change-col{margin-top:8px;padding-top:6px;border-top:1px dashed #e4e7ec}
+.mdmf-change-col select{font-size:12px;max-width:180px}
+.mdmf-key-picker label{display:flex;align-items:center;gap:4px;font-size:12px;white-space:nowrap;cursor:pointer}
+
+/* ---- landing table sample preview ---- */
+.mdmf-preview-panel{margin-top:8px}
+/* landing key-study lot (2026-09-23): the proposal block, the per-column evidence table and its highlighted proposed rows */
+.mdmf-key-study{margin-top:8px}
+.mdmf-key-proposal{padding:8px 10px;border:1px solid #e4e7ec;border-radius:8px;background:#fff;margin-bottom:8px}
+.mdmf-key-proposal p{margin:4px 0}
+.mdmf-key-rationale{font-size:13px;color:#3c4043}
+.mdmf-key-evidence td.mdmf-key-values code{font-size:11px;background:#f1f3f4;padding:1px 4px;border-radius:4px;white-space:nowrap}
+.mdmf-key-evidence tr.mdmf-key-proposed td{background:var(--accent-soft)}
+
+/* ---- pipeline-buttons lot (2026-09-23): waiting-for-review line, match plan cards ---- */
+.mdmf-plain-list{margin:6px 0 0;padding-left:18px;font-size:12.5px;color:var(--muted)}
+.mdmf-plain-list li{margin-bottom:2px}
+.mdmf-match-plan{border:1px solid var(--line);border-radius:12px;padding:12px 16px;margin-bottom:12px}
+.mdmf-match-plan header{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:6px}
+.mdmf-match-plan h3{font-size:14px;margin:0}
+.mdmf-match-plan p{font-size:12px;color:var(--muted);margin:2px 0 0}
+/* wizard-match-tree lot (2026-09-23): the plan card carries the review screen's own decision tree (review.MatchPlanView.renderTree,
+   styled by review.css: .mdmf-match-body/.mdmf-tree-*) right under its one-line summary, and folds evidence/simulation/
+   survivorship behind a <details> that reuses .mdmf-match-expanded-row's summary look (a div here, not a table row). */
+.mdmf-match-plan .mdmf-match-plan-summary{font-weight:600;color:var(--ink)}
+.mdmf-match-plan .mdmf-match-plan-tree{margin:8px 0 4px}
+.mdmf-match-plan .mdmf-match-plan-tree .mdmf-match-body{padding:0}
+.mdmf-match-plan .mdmf-match-plan-details{margin:4px 0 6px}
+.mdmf-match-plan .mdmf-match-body p{color:inherit}
+/* wizard visual pass, step 6/7 round (2026-09-24): the compact "Simulation" + "Which value wins" strip under the
+   tree (review.MatchPlanView#renderSummaryStrip) - board MatchingPlan.dc.html's own 2-col row under the SVG. */
+.mdmf-match-summary-strip{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;border-top:1px solid var(--line);padding-top:12px;margin:10px 0 4px}
+.mdmf-match-summary-strip .mdmf-eyebrow{display:block;margin-bottom:6px}
+.mdmf-strip-chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:6px}
+/* step 6 side column (validated-detail-screens card + glossary + "Next: results") */
+.mdmf-side-next{font-size:12px;color:var(--muted);line-height:1.5;padding:0 4px}
+.mdmf-side-next a{color:var(--accent-fg);text-decoration:none;font-weight:600}
+/* step 6 plan card, board MatchingPlan.dc.html: a white 14px card; header = name, chips, Simulate on the right;
+   an eyebrow row above the tree; decisions in their own row under a hairline. */
+.mdmf-wiz-panel[data-step="6"] .mdmf-match-plan{background:#fff;border:1px solid var(--line);border-radius:14px;padding:22px;margin:0 0 20px;display:flex;flex-direction:column;gap:14px}
+.mdmf-match-plan header{justify-content:flex-start;margin:0}
+.mdmf-match-plan-name{font-size:16px;font-weight:800;color:var(--ink)}
+.mdmf-match-plan-tools{margin-left:auto;display:flex;gap:8px}
+.mdmf-match-plan-treehead{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.mdmf-match-plan-treehead .mdmf-eyebrow{margin:0}
+.mdmf-match-plan .mdmf-match-plan-treehead .mdmf-match-plan-summary{margin-left:auto;font-size:11.5px;font-weight:400;color:var(--muted)}
+.mdmf-match-plan .mdmf-match-plan-tree{margin:0}
+.mdmf-match-plan .mdmf-match-summary-strip{margin:0}
+.mdmf-match-plan-details>details>summary{cursor:pointer;display:inline-flex;font-size:12.5px;font-weight:700;color:var(--muted);padding:6px 0;list-style:none}
+.mdmf-match-plan-details>details>summary::-webkit-details-marker{display:none}
+.mdmf-match-plan-details>details>summary:hover{color:var(--accent-fg)}
+.mdmf-match-plan .mdmf-rationale{margin:0}
+.mdmf-match-plan-decide{display:flex;gap:10px;flex-wrap:wrap;align-items:center;border-top:1px solid var(--line);padding-top:14px}
+.mdmf-match-plan-decide .mdmf-btn svg,.mdmf-match-plan-tools .mdmf-btn svg,.mdmf-primary-block .mdmf-btn svg{margin-right:6px;vertical-align:-1px}
+.mdmf-match-plan-decide .mdmf-match-inline{flex-basis:100%}
+.mdmf-step6-propose{margin:0 0 16px}
+.mdmf-step6-propose-card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px 22px;margin:0 0 20px;display:flex;flex-direction:column;gap:10px}
+.mdmf-step6-propose .mdmf-step6-propose-card{margin:8px 0 0}
+.mdmf-wiz-panel[data-step="6"] .mdmf-primary-block{margin:0 0 20px;flex-wrap:nowrap;align-items:flex-start}
+.mdmf-wiz-panel[data-step="6"] .mdmf-primary-block .mdmf-primary-text{flex:1 1 auto;min-width:0}
+
+/* ---- inline-reviews lot (2026-09-23): QUALITY line's severity control ---- */
+.mdmf-quality-severity{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-bottom:6px}
+.mdmf-quality-severity select{font:inherit;font-size:12.5px;border:1px solid #d0d5dd;border-radius:6px;padding:3px 6px}
+
+/* ---- apply-visibility / threshold-left-out lot (2026-09-23) ---- */
+.mdmf-capability-applyMessage{margin:6px 0 0;font-size:11.5px;color:var(--bad);max-width:420px;line-height:1.45}
+.mdmf-bulk-threshold-value{font-weight:600}
+
+/* ---- target-mapping lot 3 (docs/TARGET-MAPPING.md sec 4.3): the feed tree ---- */
+.mdmf-feeds{margin-top:10px}
+.mdmf-feed{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin-bottom:10px}
+.mdmf-feed-child{margin-left:24px;border-style:dashed}
+.mdmf-feed-header{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.mdmf-feed-label{font-weight:600;color:var(--ink)}
+.mdmf-feed input[type="text"]{font:inherit;font-size:12.5px;border:1px solid #d0d5dd;border-radius:6px;padding:3px 6px;min-width:220px}
+
+@media(max-width:380px){
+ .mdmf-entity>header{flex-direction:column;align-items:flex-start}
+}
+
+/* ---- sample-files lot (2026-09-23): "Sources from sample files" panel (WizardPage.renderSampleFilesPanel,
+   wizard.js) - the drop zone, its table of chosen files, and the per-file report reusing .mdmf-onboard-*
+   from the block above. .mdmf-table/.mdmf-notice/.mdmf-panel/.mdmf-hint/.mdmf-actions all come from
+   factory.css already linked on this screen - only what neither file declares is added here. */
+.mdmf-sample-dropzone{border:2px dashed var(--line);border-radius:12px;padding:22px 16px;text-align:center;cursor:pointer;background:#fff;margin:10px 0}
+.mdmf-sample-dropzone:hover,.mdmf-sample-dropzone:focus-visible{border-color:var(--accent-fg);background:var(--accent-soft)}
+.mdmf-sample-dropzone.is-dragging{border-color:var(--accent-fg);background:var(--accent-soft)}
+.mdmf-sample-dropzone p{margin:4px 0;color:var(--muted);font-size:13px}
+.mdmf-scroll-x{overflow-x:auto;max-width:100%;scrollbar-width:thin}
+.mdmf-sample-table{margin:10px 0;width:100%}
+.mdmf-sample-table th,.mdmf-sample-table td{padding-left:8px;padding-right:8px}
+.mdmf-sample-table input.mdmf-sample-code{width:100%;min-width:110px;max-width:170px;box-sizing:border-box;font:inherit;font-size:12.5px;border:1px solid #d0d5dd;border-radius:6px;padding:4px 6px}
+.mdmf-sample-table input.mdmf-sample-trust{width:64px;font:inherit;font-size:12.5px;border:1px solid #d0d5dd;border-radius:6px;padding:4px 6px}
+.mdmf-sample-report{display:flex;flex-direction:column;gap:10px;margin-top:12px}
+.mdmf-sample-report-row{background:#fff}
+.mdmf-sample-report-row h4{margin:0 0 6px;font-size:13.5px;color:var(--ink)}
+
+/* ---- staging-proposal-run lot (2026-09-24): the one-click "Propose the staging" flow (WizardPage
+   .renderProposalRun/renderProposalRunning/renderProposalDone) - a plain bullet list for the intro's three
+   items, the disclosure wrapping the old per-pass buttons and entity cards, and the running screen's stage
+   list/progress bar. Colour tokens (--good/--warn/--bad/--muted/--line/--accent) all come from factory.css,
+   already linked on this screen - no new token declared here. */
+.mdmf-list{margin:8px 0 4px;padding-left:20px;font-size:13px;color:var(--ink);line-height:1.6}
+.mdmf-disclosure{margin:10px 0 18px}
+.mdmf-disclosure>summary{cursor:pointer;font-size:13px;color:var(--accent-fg);font-weight:600;padding:4px 0}
+.mdmf-proposal-stages{list-style:none;margin:10px 0;padding:0;display:flex;flex-direction:column;gap:8px}
+.mdmf-proposal-stage{border:1px solid var(--line);border-radius:10px;padding:9px 12px;font-size:13px}
+.mdmf-proposal-stage-label{font-weight:600}
+/* UX lot U3 (2026-10-13): the live "Now: ..." line of the proposal run, step 4's one counts list, the Summary's per-object lines */
+.mdmf-proposal-now{margin:6px 0}
+.mdmf-step4-counts li{margin:2px 0}
+.mdmf-zone-detail-bad{color:var(--bad)}
+.mdmf-completeness-scope{margin:10px 0 4px;font-size:12px}
+.mdmf-proposal-stage-state{font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);margin-left:6px}
+.mdmf-proposal-stage-running{border-color:var(--accent-fg);background:var(--accent-soft)}
+.mdmf-proposal-stage-running .mdmf-proposal-stage-state{color:var(--accent-fg)}
+.mdmf-proposal-stage-done{background:var(--good-soft)}
+.mdmf-proposal-stage-done .mdmf-proposal-stage-state{color:var(--good)}
+.mdmf-proposal-stage-failed{background:var(--bad-soft)}
+.mdmf-proposal-stage-failed .mdmf-proposal-stage-state{color:var(--bad)}
+.mdmf-proposal-stage-skipped{opacity:.65}
+.mdmf-proposal-bar{height:6px;border-radius:4px;background:var(--line);margin:14px 0 4px;overflow:hidden}
+.mdmf-proposal-bar-fill{height:100%;background:var(--accent);border-radius:4px;transition:width .3s ease}
+
+/* sources-landing lot SOURCES (2026-09-24): one application's ApplicationStages 4-stage progress card
+   (WizardPage.renderApplicationProgressCard) - same visual family as .mdmf-proposal-stage* above, a
+   horizontal row instead of a vertical list. Only mdmf-stage-needs-person is orange (--warn): the task
+   brief's own rule, "orange only when a person must act" - running/waiting reuse the accent/muted tokens
+   every other progress indicator on this screen already uses. */
+.mdmf-app-progress{margin:10px 0 18px;padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:#fafbfc}
+.mdmf-app-stages{list-style:none;margin:8px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:8px}
+.mdmf-stage{flex:1 1 140px;border:1px solid var(--line);border-radius:8px;padding:7px 10px;font-size:12px;background:#fff}
+.mdmf-stage-label{display:block;font-weight:700;text-transform:uppercase;letter-spacing:.04em;font-size:10.5px;color:var(--muted)}
+.mdmf-stage-text{display:block;margin-top:2px;color:var(--ink)}
+.mdmf-stage-running{border-color:var(--accent-fg);background:var(--accent-soft)}
+.mdmf-stage-running .mdmf-stage-label{color:var(--accent-fg)}
+.mdmf-stage-done{background:var(--good-soft)}
+.mdmf-stage-done .mdmf-stage-label{color:var(--good)}
+.mdmf-stage-needs-person{background:var(--warn-soft);border-color:#fedf89}
+.mdmf-stage-needs-person .mdmf-stage-label{color:var(--warn)}
+.mdmf-stage-waiting{opacity:.6}
+
+/* sources-landing lot SOURCES (2026-09-24): wrapper around the one-card-per-application list (WizardPage.
+   renderApplicationProgressCards) - vertical stack, each .mdmf-app-progress card keeps its own margin. */
+.mdmf-app-progress-list{display:flex;flex-direction:column;gap:4px}
+
+/* sources-landing lot SOURCES follow-up (2026-09-24): the Review screen (task brief item 2). Key chips reuse
+   the vocabulary lot LANDING's own step 3 key chooser is expected to use (task brief: "same chip markup...
+   keep them") - defined here first since this lot landed first; a composite key elsewhere in the wizard
+   should read identically. */
+.mdmf-key-chip{display:inline-block;font-size:11px;font-weight:600;padding:1px 7px;border-radius:999px;background:#eef2ff;border:1px solid #c7d2fe;color:#3730a3;margin:0 1px}
+.mdmf-key-plus{font-size:11px;color:var(--muted);margin:0 1px}
+.mdmf-review-tables{display:flex;flex-direction:column;gap:6px;margin-top:6px}
+.mdmf-review-table-row{border:1px solid var(--line);border-radius:8px;padding:6px 10px;font-size:13px}
+.mdmf-trust-order{list-style:decimal;margin:8px 0 0;padding-left:20px;font-size:13px}
+.mdmf-trust-order li{margin:4px 0}
+.mdmf-stuck-row{font-size:13px;margin:4px 0}
+
+/* sources-landing lot SOURCES, visual pass (2026-09-24): step 2 rebuilt to match the validated mockups'
+   layout/hierarchy (docs/mockups/sources-landing/Main.dc.html, SourcesAdding.dc.html, SourcesReview.dc.html)
+   - main column + right sidebar, a big dashed drop zone as the first way in, the 4-circle pipeline joined by
+   lines, orange only for "needs a person". Every color comes from the SAME tokens factory.css already
+   declares (--accent/--good/--warn/--muted/--line) - "reuse the look of the staging lot's step-4 screens
+   where it overlaps" (coordinator). Prefix mdmf-src2- for everything new here, so it never collides with a
+   class name from another lot/screen. */
+.mdmf-src2-layout{display:flex;gap:26px;align-items:flex-start}
+.mdmf-src2-main{flex:1 1 auto;min-width:0;display:flex;flex-direction:column;gap:16px}
+.mdmf-src2-sidebar{width:300px;flex:none;display:flex;flex-direction:column;gap:16px}
+@media (max-width: 900px){.mdmf-src2-layout{flex-direction:column}.mdmf-src2-sidebar{width:auto}}
+
+/* the big dashed drop zone, first way in (Main.dc.html) - same .mdmf-panel shadow/radius, dashed accent
+   border instead of the plain grey line, applied as a modifier so renderSampleFilesPanel's own markup
+   (ids/data-mdmf-* attributes wizard.js depends on) never has to change, only its outer wrapper class. */
+.mdmf-src2-dropzone{border:2px dashed var(--accent-mid);background:var(--accent-soft)}
+.mdmf-src2-dropzone-icon{width:48px;height:48px;border-radius:12px;background:#fff;color:var(--accent-fg);display:flex;align-items:center;justify-content:center;flex:none;font-size:22px}
+.mdmf-src2-dropzone-row{display:flex;align-items:center;gap:20px}
+.mdmf-src2-dropzone-text{flex:1 1 auto;min-width:0}
+.mdmf-src2-dropzone-text b{font-size:15px}
+
+/* the two smaller cards below the drop zone (catalog-pick / connect-live) */
+.mdmf-src2-waycard{display:flex;flex-direction:column;gap:10px}
+.mdmf-src2-way-head{display:flex;align-items:center;gap:10px}
+.mdmf-src2-way-icon{width:30px;height:30px;border-radius:8px;background:var(--accent-soft);color:var(--accent-fg);display:flex;align-items:center;justify-content:center;flex:none;font-weight:800}
+.mdmf-src2-way-icon-alt{background:var(--info-soft);color:var(--info)}
+
+/* one application's own card (progress or review) - header row with a coloured dot, name, kind chip */
+.mdmf-src2-app-card{display:flex;flex-direction:column;gap:14px}
+.mdmf-src2-app-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.mdmf-src2-app-head b{font-size:15px}
+.mdmf-src2-dot{display:inline-block;width:10px;height:10px;border-radius:50%;flex:none}
+.mdmf-src2-dot-0{background:#1d5fa8}.mdmf-src2-dot-1{background:#b54708}.mdmf-src2-dot-2{background:#0e7c86}
+.mdmf-src2-dot-3{background:#4d7c0f}.mdmf-src2-dot-4{background:var(--accent)}
+
+/* the 4-circle pipeline, joined by lines (SourcesAdding.dc.html) */
+.mdmf-src2-pipe{display:flex;align-items:flex-start}
+.mdmf-src2-pipe-stage{display:flex;flex-direction:column;align-items:center;gap:6px;width:120px;text-align:center}
+.mdmf-src2-pipe-line{flex:1 1 auto;height:2px;background:var(--line);margin-top:13px;min-width:16px}
+.mdmf-src2-pipe-line-done{background:#87c9a3}
+.mdmf-src2-pipe-circle{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;box-sizing:border-box;flex:none;font-size:12px;font-weight:800;border:1.5px solid var(--line)}
+.mdmf-src2-pipe-circle-done{background:var(--good-soft);color:var(--good);border-color:#87c9a3}
+.mdmf-src2-pipe-circle-running{border:3px solid var(--accent-soft);border-top-color:var(--accent-fg)}
+.mdmf-src2-pipe-circle-needs-person{background:var(--warn-soft);color:var(--warn);border-color:#fec84b}
+.mdmf-src2-pipe-circle-waiting{border-style:dashed;color:#98a2b3}
+.mdmf-src2-pipe-label{font-size:12px;font-weight:700;color:var(--ink)}
+.mdmf-src2-pipe-label-waiting{color:#98a2b3}
+.mdmf-src2-pipe-sub{font-size:11px;color:var(--muted);line-height:1.35}
+.mdmf-src2-app-footer{display:flex;align-items:center;gap:12px;border-top:1px solid var(--line);padding-top:12px;font-size:12.5px;color:var(--muted)}
+.mdmf-src2-app-footer-text{flex:1 1 auto}
+
+/* the drop-more-files slim row, once at least one application exists */
+.mdmf-src2-addmore{padding:14px 20px;display:flex;align-items:center;gap:14px;border:1.5px dashed var(--accent-mid);background:var(--accent-soft);font-size:13px;color:var(--muted)}
+
+/* Review screen: one table row (checkbox + icon + name/meta + key info + Columns) */
+.mdmf-src2-table-row{display:flex;align-items:center;gap:14px;padding:12px 14px;background:#f9fafb;border-radius:10px;flex-wrap:wrap}
+.mdmf-src2-table-icon{color:var(--accent-fg)}
+.mdmf-src2-table-meta{flex:1 1 220px;min-width:0}
+.mdmf-src2-table-meta b{font-size:12.5px}
+/* fix/wizard-live-wave1 (2026-09-24, live bug item 5): was flex-direction:column, which stacked the "Key:"
+   label above the chip row instead of reading as one line - row + wrap so the label, the chips and the
+   origin chip flow together and only wrap onto a second line when the row is genuinely too narrow. */
+.mdmf-src2-table-key{font-size:10.5px;color:var(--muted);display:flex;flex-flow:row wrap;align-items:center;justify-content:flex-end;gap:4px 6px}
+.mdmf-src2-stuck-row{display:flex;align-items:center;gap:12px;font-size:12.5px;color:var(--muted);padding:14px 22px}
+
+/* the primary "Continue to the landing" block */
+/* UX lot U2 (2026-10-13): the table list of an application card - bar with the counter and "Select all / none", reasons of a card with no table */
+.mdmf-src2-tablebar{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;margin:4px 0 2px}
+.mdmf-src2-tablebar .mdmf-tick-count{margin-left:auto}
+.mdmf-linkbtn{background:none;border:0;padding:0;color:var(--accent);font:inherit;font-size:12.5px;text-decoration:underline;cursor:pointer}
+.mdmf-combo-option-off{opacity:.55;cursor:not-allowed}
+.mdmf-src2-reasons{margin:4px 0 8px;padding-left:18px;font-size:12.5px;color:var(--muted)}
+.mdmf-src2-reasons b{color:var(--ink)}
+.mdmf-src2-continue{display:flex;flex-wrap:wrap;align-items:center;gap:22px;border-color:var(--accent-line);background:var(--accent-soft)}
+
+/* sidebar: trust order rows, numbered circle + dot + name + up/down */
+.mdmf-src2-trust-row{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--line);border-radius:10px}
+.mdmf-src2-trust-row-first{border-color:var(--accent-line);background:var(--accent-soft)}
+.mdmf-src2-trust-n{width:22px;height:22px;border-radius:50%;background:#eef0f4;color:var(--muted);font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;flex:none}
+.mdmf-src2-trust-n-first{background:var(--accent);color:var(--accent-text)}
+/* fix/wizard-live-wave1 (2026-09-24, live bug item 1): flex:1 1 auto alone still keeps the browser default
+   min-width:auto on this item, which floors it at its own unwrapped text width - a long application name
+   never shrank, so it pushed the up/down buttons off the edge of the row (measured 23px overflow). min-width:0
+   lets it actually shrink; overflow/text-overflow keeps a very long name readable as an ellipsis instead of
+   wrapping the row taller. */
+.mdmf-src2-trust-name{font-size:13px;font-weight:700;flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mdmf-src2-trust-row .mdmf-btn{flex:0 0 auto}
+
+/* sidebar: "Your applications" mini list on the start screen (empty placeholders) and once populated */
+.mdmf-src2-sidebar-empty{display:flex;flex-direction:column;align-items:center;gap:10px;padding:18px 8px;text-align:center}
+.mdmf-src2-sidebar-empty-boxes{display:flex;gap:6px}
+.mdmf-src2-sidebar-empty-box{width:44px;height:30px;border-radius:8px;border:1.5px dashed var(--line)}
+.mdmf-src2-sidebar-app{display:flex;align-items:center;gap:8px;font-size:12.5px;padding:6px 0}
+
+/* sources-landing lot SOURCES, visual pass: sidebar section label, same "eyebrow" treatment the mockups use
+   (small, bold, letter-spaced, muted) - not previously declared anywhere in this module's CSS. */
+.mdmf-eyebrow{font-size:10.5px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:#98a2b3;margin-bottom:8px}
+
+/* visual pass follow-up (2026-09-24): "Connect a live system" card's closed-state stand-in for its own
+   combobox (WizardPage.renderSourceOnboardingPanel) - looks like a plain search input, is really a button
+   (SOURCE_ONBOARD_OPEN) that lazy-loads the connector list on first click, same visual family as
+   .mdmf-combo's own input. */
+.mdmf-field-search-btn{display:flex;align-items:center;width:100%;box-sizing:border-box;border:1px solid #d0d5dd;border-radius:9px;padding:9px 12px;background:#fff;font:inherit;font-size:12.5px;color:#98a2b3;text-align:left;cursor:pointer}
+.mdmf-field-search-btn:hover{border-color:var(--accent-fg);color:var(--accent-fg)}
+
+/* sources+landing redesign, lot LANDING (2026-09-24): the "Prepare the landing" running grid - one cell per
+   table x stage (landing.LandingRunProgress). Same colour tokens as the staging-proposal-run stage list
+   above, plus --warn for WAITING (a table that needs a person, distinct from a plain failure). */
+.mdmf-landing-cell{font-size:12px;vertical-align:top}
+.mdmf-landing-cell-running{background:var(--accent-soft);color:var(--accent-fg)}
+.mdmf-landing-cell-done{background:var(--good-soft);color:var(--good)}
+.mdmf-landing-cell-failed{background:var(--bad-soft);color:var(--bad)}
+.mdmf-landing-cell-waiting{background:var(--warn-soft);color:var(--warn);font-weight:600}
+.mdmf-landing-cell-skipped{opacity:.65}
+
+/* coordinator follow-up (2026-09-24): the real key chooser - candidate cards, the composite builder and the
+   highlighted sample table (WizardPage.renderLandingKeyChooser, wizard.js's live recompute block). */
+.mdmf-key-candidates{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0}
+.mdmf-key-candidate{display:flex;flex-direction:column;gap:6px;text-align:left;border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:#fff;cursor:pointer;font:inherit;min-width:180px}
+.mdmf-key-candidate:hover{border-color:var(--accent-fg)}
+.mdmf-key-candidate-primary{border:2px solid var(--accent-fg);background:var(--accent-soft)}
+.mdmf-key-composite{border:1px dashed var(--line);border-radius:10px;padding:12px;margin:10px 0;display:flex;flex-direction:column;gap:8px}
+.mdmf-key-composite-columns{display:flex;flex-wrap:wrap;gap:4px 10px}
+.mdmf-key-chip-toggle{display:flex;align-items:center;gap:4px;font-size:12px;white-space:nowrap;cursor:pointer}
+.mdmf-key-stats{font-size:12px;min-height:20px}
+.mdmf-key-highlight{background:var(--accent-soft);color:var(--accent-fg);font-weight:600}
+
+/* visual parity pass (coordinator, 2026-09-24): closing the layout/hierarchy gaps against the
+   docs/mockups/sources-landing mockups - the applications strip and the 4-card "what the factory does"
+   row on the intro (Landing.dc.html), a bigger primary call-to-action block, and a small state dot on every
+   running-grid cell (LandingRunning.dc.html). Kept under this file's existing --tokens (factory.css), no new
+   colour introduced. */
+.kplus{font-size:12px;font-weight:800;color:var(--muted)}
+.mono{font-family:ui-monospace,Menlo,Consolas,monospace}
+.mdmf-landing-cards{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0}
+.mdmf-landing-card{flex:1 1 150px;min-width:150px;border:1px solid var(--line);border-radius:10px;padding:12px;display:flex;flex-direction:column;gap:8px;background:#fff}
+.mdmf-landing-card p{margin:0;font-size:12px;color:var(--muted);line-height:1.5}
+.mdmf-landing-card-n{width:26px;height:26px;border-radius:8px;background:var(--accent-soft);color:var(--accent-fg);font-weight:800;font-size:12px;display:flex;align-items:center;justify-content:center}
+.mdmf-landing-cta{border:1px solid var(--accent-line);background:var(--accent-soft)}
+.mdmf-btn-big{padding:12px 20px;font-size:14px;border-radius:11px}
+/* coordinator follow-up round 2 (2026-09-24): the state dot used to be an absolutely-positioned ::before
+   competing with the cell's own td padding (a more specific ".mdmf-table td" rule from factory.css always
+   won the padding, so the dot sat ON TOP of the first letter instead of before it) - a real inline-block
+   circle, in normal text flow with its own right margin, cannot be pushed under the text by ANY other
+   selector's specificity. 20px, one glyph per state (check/alert/ellipsis/dash), not just a coloured dot. */
+.mdmf-landing-cell{vertical-align:top}
+.mdmf-landing-circle{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;margin-right:6px;font-size:11px;font-weight:800;color:#fff;background:var(--muted);vertical-align:middle}
+.mdmf-landing-circle-todo{background:#fff;border:2px solid var(--line);color:var(--muted)}
+.mdmf-landing-circle-running{background:var(--accent)}
+.mdmf-landing-circle-done{background:var(--good)}
+.mdmf-landing-circle-failed{background:var(--bad)}
+.mdmf-landing-circle-waiting{background:var(--warn)}
+.mdmf-landing-circle-skipped{background:#fff;border:2px dashed var(--line);color:var(--muted)}
+/* coordinator follow-up round 3 (2026-09-24): a FLOW/LOAD cell WAITING on its key - passive, same look as
+   SKIPPED (dashed/muted), never the KEY column's own solid orange alert - see WizardPage#renderStateCircle. */
+.mdmf-landing-circle-waiting-passive{background:#fff;border:2px dashed var(--line);color:var(--muted)}
+
+/* coordinator follow-up round 2 (2026-09-24): the intro's local two-column layout (main + sidebar - never
+   the shared wizard shell) and its flow picture (application table -> key -> landing table). */
+.mdmf-landing-layout{display:flex;gap:20px;align-items:flex-start;flex-wrap:wrap}
+.mdmf-landing-main{flex:1 1 420px;min-width:0}
+.mdmf-landing-sidebar{flex:0 0 240px;min-width:200px}
+.mdmf-landing-flowpic{display:flex;flex-direction:column;gap:10px;margin-bottom:14px}
+.mdmf-landing-flow-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.mdmf-landing-flow-card{border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:#fff;min-width:150px;flex:1 1 150px;display:flex;flex-direction:column;gap:4px}
+.mdmf-landing-flow-card-target{border-color:var(--accent-line);background:var(--accent-soft)}
+.mdmf-landing-flow-arrow{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:16px;color:var(--muted)}
+/* fix/wizard-live-wave1 (2026-09-24, live bug item 7): at ~600px, two 150px-min cards plus an arrow no longer
+   fit one row - flex-wrap alone let them wrap mid-row (arrow ending up between a card and the next line, "out
+   of line" per the live report). Below 640px the whole row stacks as a single column instead, and the arrow
+   glyph rotates from pointing right to pointing down so it still reads as "flows into" between the stacked
+   cards. */
+@media(max-width:640px){
+	.mdmf-landing-flow-row{flex-direction:column;align-items:stretch}
+	.mdmf-landing-flow-card{flex:1 1 auto;min-width:0}
+	.mdmf-landing-flow-arrow{flex-direction:row;transform:rotate(90deg)}
+}
+.mdmf-landing-flow-techchips{display:flex;flex-wrap:wrap;gap:4px}
+
+/* coordinator follow-up round 2 (2026-09-24): the done view's per-table list and composite bars. */
+.mdmf-landing-done-row{display:flex;align-items:center;gap:14px;padding:8px 0;border-top:1px solid var(--line);flex-wrap:wrap}
+.mdmf-landing-done-row:first-of-type{border-top:none}
+.mdmf-landing-done-preview{flex-basis:100%}
+.mdmf-composite-bars{display:flex;flex-direction:column;gap:8px;margin:10px 0}
+.mdmf-composite-bar-row{display:grid;grid-template-columns:120px 1fr 140px;align-items:center;gap:8px;font-size:12px}
+.mdmf-composite-bar-track{height:8px;border-radius:4px;background:var(--line);overflow:hidden}
+.mdmf-composite-bar-fill{height:100%;background:var(--warn);border-radius:4px}
+.mdmf-composite-bar-fill-real{background:var(--good)}
+/* wizard-matching-results lot (2026-09-24): com.on.ebx.factory.matching.MatchResultsView - KPI cards, the
+   source band, and the suspect queue (tabs/list/detail). Reuses .mdmf-chip/.mdmf-btn/.mdmf-hint/.mdmf-notice
+   from factory.css/review.css (already linked on this page) wherever they fit - the block below only adds
+   what those do not already cover. */
+.mdmf-match-results{margin:18px 0 4px;padding-top:14px;border-top:1px solid var(--line)}
+.mdmf-match-follows{margin:2px 0 8px}
+.mdmf-match-kpis{display:flex;gap:10px;flex-wrap:wrap;margin:8px 0 14px}
+.mdmf-match-kpi{flex:1 1 140px;border:1px solid var(--line);border-radius:12px;padding:12px 14px;display:flex;flex-direction:column;gap:3px;background:#fff}
+.mdmf-match-kpi-val{font-size:22px;font-weight:800;color:var(--ink);letter-spacing:-.01em}
+.mdmf-match-kpi-lbl{font-size:11px;color:var(--muted);line-height:1.35}
+.mdmf-match-band-block{border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin:0 0 14px;display:flex;flex-direction:column;gap:8px}
+.mdmf-match-band-title{font-size:12.5px;font-weight:700;color:var(--ink)}
+.mdmf-match-band{display:flex;height:24px;border-radius:7px;overflow:hidden}
+.mdmf-match-band span{display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff;white-space:nowrap;overflow:hidden;padding:0 4px}
+.mdmf-match-band-legend{display:flex;gap:14px;flex-wrap:wrap;font-size:11px;color:var(--muted)}
+.mdmf-match-band-legend i{display:inline-block;width:9px;height:9px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+.mdmf-match-queue{border:1px solid var(--line);border-radius:12px;overflow:hidden;display:grid;grid-template-columns:minmax(0,320px) minmax(0,1fr)}
+.mdmf-match-tabs{grid-column:1/-1;display:flex;gap:2px;border-bottom:1px solid var(--line);padding:0 10px;background:#f8fafc}
+.mdmf-match-tab{border:none;background:none;font-family:inherit;font-size:12px;font-weight:700;color:var(--muted);padding:9px 9px 8px;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px}
+.mdmf-match-tab.on{color:var(--ink);border-bottom-color:var(--select)}
+.mdmf-match-tab-n{display:inline-block;margin-left:4px;font-size:10px;background:#eef0f4;color:var(--muted);border-radius:999px;padding:1px 6px}
+.mdmf-match-list{border-right:1px solid var(--line);max-height:520px;overflow:auto}
+.mdmf-match-list[data-mdmf-match-tab=MERGED],.mdmf-match-list[data-mdmf-match-tab=DISTINCT]{grid-column:1/-1;border-right:none;max-height:none}
+.mdmf-match-empty{margin:0;padding:20px 14px;font-size:12px;color:var(--muted)}
+.mdmf-match-pair-item{display:flex;flex-direction:column;gap:4px;width:100%;text-align:left;border:none;border-bottom:1px solid #f2f4f7;background:#fff;padding:9px 12px;cursor:pointer;font-family:inherit}
+.mdmf-match-pair-item:hover{background:#fafbfc}
+.mdmf-match-pair-item.sel{background:var(--accent-soft);box-shadow:inset 3px 0 0 var(--select)}
+.mdmf-match-pair-names{font-size:12px;font-weight:700;color:var(--ink)}
+.mdmf-match-vs{color:var(--muted);font-weight:500;margin:0 3px}
+.mdmf-match-src-tag{display:inline-block;font-size:8.5px;font-weight:800;letter-spacing:.03em;padding:1px 5px;border-radius:5px;color:#fff;background:var(--muted);margin-right:3px}
+.mdmf-match-pair-meta{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--muted)}
+.mdmf-match-strength{font-family:ui-monospace,Menlo,Consolas,monospace;font-weight:700;color:var(--ink)}
+.mdmf-match-more{padding:8px 12px;margin:0}
+.mdmf-match-bulk{padding:10px 12px;border-top:1px solid var(--line)}
+.mdmf-match-pair-detail{padding:14px 16px;display:flex;flex-direction:column;gap:10px}
+.mdmf-match-detail-head{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.mdmf-match-detail-name{font-size:14px;font-weight:800;color:var(--ink)}
+.mdmf-match-path{display:flex;align-items:center;gap:6px;flex-wrap:wrap;font-size:11px;color:var(--muted)}
+.mdmf-match-path-step{background:#f8fafc;border:1px solid var(--line);border-radius:7px;padding:2px 7px}
+.mdmf-match-path-step.last{background:#fffaeb;border-color:#fedf89;color:#b54708;font-weight:700}
+.mdmf-match-arrow{color:var(--muted)}
+.mdmf-match-cmp{border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.mdmf-match-cmp-head{display:grid;grid-template-columns:120px minmax(0,1fr) 84px minmax(0,1fr);gap:8px;padding:0 12px;font-size:10px;font-weight:800;letter-spacing:.03em;color:var(--muted);text-transform:uppercase;background:var(--th-bg);line-height:2.2}
+.mdmf-match-cmp-row{display:grid;grid-template-columns:120px minmax(0,1fr) 84px minmax(0,1fr);gap:8px;align-items:center;padding:6px 12px;border-top:1px solid #f2f4f7;font-size:12px}
+.mdmf-match-cmp-lbl{color:var(--muted);font-weight:600}
+.mdmf-match-cmp-val{color:var(--ink);font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mdmf-match-cmp-val.empty{color:#b0b7c3;font-weight:500;font-style:italic}
+.mdmf-match-verdict{text-align:center;font-size:10px;font-weight:800;border-radius:7px;padding:2px 0}
+.mdmf-match-verdict-eq{background:var(--good-soft);color:var(--good)}
+.mdmf-match-verdict-fuzzy{background:#fffaeb;color:#b54708}
+.mdmf-match-verdict-diff{background:var(--bad-soft);color:var(--bad)}
+.mdmf-match-verdict-missing{background:#f2f4f7;color:var(--muted)}
+.mdmf-match-decide{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.mdmf-match-group-row{padding:10px 14px;border-top:1px solid #f2f4f7;display:flex;flex-direction:column;gap:6px}
+.mdmf-match-group-name{font-weight:800;font-size:13px;display:flex;align-items:center;gap:8px}
+.mdmf-match-group-members{display:flex;gap:5px;flex-wrap:wrap}
+.mdmf-match-distinct-row{display:flex;justify-content:space-between;gap:10px;padding:8px 14px;border-top:1px solid #f2f4f7;font-size:12px}
+/* wizard-summary lot (2026-09-24, step 7 - docs/mockups/wizard-step7-summary.dc.html): the verdict banner,
+   the journey SVG's surrounding panel/legend, the zone-card grid, open points, completeness bars, the
+   "go to production" cards and the last-run journal. Colour tokens from factory.css only, .mdmf-mini-bar
+   reused from review.css (already linked on this screen) for both the completeness and journal bars - no
+   new bar component. */
+.mdmf-summary-banner{border:1px solid var(--line);border-radius:12px;padding:16px 20px;margin:0 0 14px;background:#fff}
+.mdmf-summary-banner h3{margin:0 0 4px;font-size:18px}
+.mdmf-summary-banner p{margin:0 0 10px;color:var(--muted);font-size:13px}
+.mdmf-summary-good{border-color:#b7e3ca;background:var(--good-soft)}
+.mdmf-summary-warn{border-color:#fedf89;background:var(--warn-soft)}
+.mdmf-summary-bad{border-color:#fecaca;background:var(--bad-soft)}
+.mdmf-journey-panel{margin:0 0 14px}
+.mdmf-journey{width:100%;height:auto;max-width:1162px}
+.mdmf-journey-legend{list-style:none;margin:8px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:14px;font-size:11.5px;color:var(--muted)}
+.mdmf-journey-legend li{display:flex;align-items:center;gap:6px}
+.mdmf-journey-legend span{width:10px;height:10px;border-radius:3px;display:inline-block}
+.mdmf-zone-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin:0 0 14px}
+.mdmf-zone-card{padding:14px 16px;display:flex;flex-direction:column;gap:8px}
+.mdmf-zone-top{display:flex;align-items:center;gap:8px;justify-content:space-between}
+.mdmf-zone-name{font-size:13.5px;font-weight:800}
+.mdmf-zone-facts{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:4px;font-size:11.5px;color:var(--muted)}
+.mdmf-mono{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:10.5px;color:var(--muted)}
+.mdmf-summary-lower{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:12px;margin:0 0 14px}
+.mdmf-open-points{padding:0 0 6px}
+.mdmf-open-points .mdmf-eyebrow{display:block;margin:12px 16px 4px}
+.mdmf-open-point{display:grid;grid-template-columns:12px minmax(0,1fr) auto;gap:10px;align-items:center;padding:10px 16px;border-top:1px solid #f2f4f7;font-size:12.5px}
+.mdmf-open-dot{width:10px;height:10px;border-radius:50%}
+.mdmf-open-text{display:flex;flex-direction:column;gap:2px}
+.mdmf-open-text b{font-weight:700}
+.mdmf-open-text span{color:var(--muted);font-size:11.5px}
+.mdmf-completeness{padding:12px 16px 16px}
+.mdmf-completeness-row{display:grid;grid-template-columns:90px minmax(0,1fr) 36px;gap:8px;align-items:center;font-size:12px;color:var(--ink);margin-bottom:6px}
+/* visual pass, step 7 round (2026-09-24): board Summary.dc.html's own bar - 8px, pill-radius, flat accent fill
+   (never the threshold red/amber/green of the older .mdmf-mini-bar, which this side card no longer uses). */
+.mdmf-completeness-bar{height:8px;background:#eef0f4;border-radius:99px;overflow:hidden;display:block}
+.mdmf-completeness-bar i{display:block;height:100%;background:var(--accent)}
+.mdmf-prod-title{font-size:12.5px;font-weight:800;margin:0 0 8px}
+.mdmf-prod-eyebrow{display:block;margin:0 0 8px}
+/* visual pass, step 7 round (2026-09-24): accent-coloured link (never the browser-default blue/underline) for a
+   plain <a> that is not a .mdmf-btn - the zone cards' "open" link when the zone has no wizard step to jump to. */
+.mdmf-link-accent{color:var(--accent-fg);text-decoration:none;font-weight:600;font-size:12px}
+.mdmf-link-accent:hover{text-decoration:underline}
+.mdmf-prod-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin:0 0 14px}
+.mdmf-prod-card{padding:14px 16px;display:flex;flex-direction:column;gap:8px}
+.mdmf-prod-name{font-size:13.5px;font-weight:800}
+.mdmf-prod-card p{margin:0;font-size:12px;color:var(--muted);line-height:1.5}
+.mdmf-journal{overflow:hidden}
+.mdmf-journal>h3{margin:12px 16px 4px}
+.mdmf-journal-row{display:grid;grid-template-columns:120px minmax(0,1fr) 70px 90px;gap:10px;align-items:center;padding:7px 16px;border-top:1px solid #f2f4f7;font-size:11.5px;color:var(--ink)}
+.mdmf-journal .mdmf-mini-bar{width:100%;display:block}
+
+/* ---- shared page grammar (wizard-visual-pass ROUND 1, 2026-09-24, docs/mockups/wizard-flow, board files):
+   the building blocks every step's body will be rewritten on top of - WizardPage.renderPageHead/
+   render2Col{Start,Split,End}/renderSideCard{Open,Close}/renderGlossaryCard/renderPrimaryActionBlock{Open,
+   Close}/renderExplainCard/renderKpiTile/renderStepStateCircle. Documented in docs/WIZARD-VISUAL.md for
+   the two other agents reusing them on steps 2-6's bodies in later rounds. ---- */
+
+/* page head: h1 30px/800 + a 15px muted lead, max-width 740 so a lead never runs the full panel width */
+.mdmf-ph{display:flex;flex-direction:column;gap:10px;margin:0 0 20px}
+.mdmf-ph h1{margin:0;font-size:30px;font-weight:800;letter-spacing:-.01em;color:var(--ink)}
+.mdmf-ph p{margin:0;font-size:15px;line-height:1.6;color:#475467;max-width:740px}
+
+/* two-column layout: a growing main column + a fixed 320px side column, stacking under 900px (the
+   pane's own width, not just the viewport's - EBX_UI_SERVICE_PARAMS panes are narrower than the window).
+   fix/wizard-live-wave1 (2026-09-24, live bug item 1, measured by DOM inspection in a 654px-wide iframe):
+   below the breakpoint .mdmf-2col switches to column direction, but align-items:flex-start (needed in ROW
+   mode so the side card does not stretch to the main column's full height) also applies in COLUMN mode,
+   where the cross axis is horizontal - a flex item with align-items:flex-start never stretches to fill the
+   cross axis, so .mdmf-2col-main sized itself to its own max-content width (854px measured, inside a 562px
+   parent) and cut off its content (step 1's Code/Label card) instead of wrapping/shrinking to fit. The
+   breakpoint is also lowered from 1100 to 900: inside EBX with the perspective's own menu the iframe is
+   almost always under 1100px, so the side column used to be pushed below the content on nearly every real
+   screen. */
+.mdmf-2col{display:flex;gap:28px;align-items:flex-start}
+.mdmf-2col-main{flex-grow:1;display:flex;flex-direction:column;gap:20px;min-width:0}
+.mdmf-2col-side{width:320px;flex-shrink:0;display:flex;flex-direction:column;gap:16px}
+@media(max-width:900px){.mdmf-2col{flex-direction:column;align-items:stretch}.mdmf-2col-side{width:auto}}
+
+/* a side-column card: eyebrow + free-form body (the "What the project will create"/glossary/completeness/
+   last-run cards of the boards all share this shell) */
+.mdmf-side-card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px;display:flex;flex-direction:column;gap:10px;font-size:12.5px;color:#475467;line-height:1.5}
+.mdmf-side-card .mdmf-eyebrow{margin-bottom:0}
+.mdmf-side-card p{margin:0}
+
+/* glossary card ("Words used in this step") - a side card wrapping the existing renderGlossaryTerms lines */
+.mdmf-side-card .mdmf-hint{margin:0}
+
+/* primary action block: the purple-tinted call-to-action card (big button + explanation), e.g. "Create the
+   project", "Propose the staging", "Build the master" */
+.mdmf-primary-block{background:var(--accent-faint);border:1px solid var(--accent-line);border-radius:14px;padding:22px;display:flex;align-items:center;gap:22px;flex-wrap:wrap}
+.mdmf-primary-block .mdmf-primary-text{display:flex;flex-direction:column;gap:6px;font-size:12.5px;color:#475467;line-height:1.5}
+.mdmf-primary-block .mdmf-primary-text b{color:var(--ink)}
+.mdmf-btn-big{white-space:nowrap;padding:13px 22px;font-size:14.5px;border-radius:11px}
+
+/* numbered explanation card: a round accent number badge + a bold title + explanatory text - used where a
+   step walks through what it is about to do, step by step */
+.mdmf-explain-card{display:flex;align-items:flex-start;gap:12px;padding:14px 16px}
+.mdmf-explain-num{width:26px;height:26px;border-radius:50%;background:var(--accent-soft);color:var(--accent-fg);font-weight:800;font-size:12.5px;display:flex;align-items:center;justify-content:center;flex:none}
+.mdmf-explain-body{display:flex;flex-direction:column;gap:3px;font-size:12.5px;color:#475467;line-height:1.5}
+.mdmf-explain-body b{color:var(--ink);font-size:13px}
+
+/* KPI tiles: a row of equal-width number+label cards (results/summary screens) */
+.mdmf-kpi-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px}
+.mdmf-kpi-tile{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;gap:4px}
+.mdmf-kpi-tile b{font-size:22px;font-weight:800;color:var(--ink)}
+.mdmf-kpi-tile span{font-size:11.5px;color:var(--muted)}
+
+/* generic state circle (done / running / waiting / needs a person) - distinct from the landing run's own
+   .mdmf-landing-circle-* (kept as-is, a different vocabulary already wired to LandingRunProgress states) */
+.mdmf-sc{width:20px;height:20px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;flex:none;border:1.5px solid #d0d5dd;background:#fff;color:var(--muted)}
+.mdmf-sc-done{background:var(--good-soft);border-color:#87c9a3;color:var(--good)}
+.mdmf-sc-running{background:var(--accent-soft);border-color:var(--accent-fg);color:var(--accent-fg)}
+.mdmf-sc-waiting{background:#f2f4f7;border-color:#d0d5dd;color:var(--muted)}
+.mdmf-sc-needsPerson{background:var(--warn-soft);border-color:#fedf89;color:var(--warn)}
+
+/* ---- step 7 follow-up (ROUND 1): the data journey's zone cards now sit in a flex row with an arrow glyph
+   between consecutive cards (board: sources -> landing -> staging -> master -> matching), and the verdict
+   banner gets a coloured tint per kind instead of a flat white card ---- */
+.mdmf-zone-grid{display:flex;align-items:stretch;gap:10px}
+.mdmf-zone-grid .mdmf-zone-card{flex:1 1 0;min-width:0}
+.mdmf-zone-arrow{display:flex;align-items:center;color:var(--accent-mid);flex:none}
+/* .mdmf-summary-good/-warn/-bad already declared above (line ~520) - only the layout changes here */
+.mdmf-summary-banner{display:flex;align-items:center;gap:16px}
+.mdmf-summary-banner .mdmf-summary-text{flex-grow:1}
+.mdmf-summary-banner .mdmf-summary-text h3{font-size:20px}
+/* wizard visual pass, step 6 round (2026-09-24): matching results as board MatchingResults.dc.html - a section head,
+   KPI tiles on one row, the band under an eyebrow, one card per pair to decide (chips + three decisions). */
+.mdmf-wiz-panel[data-step="6"] .mdmf-match-results{margin:0 0 20px;padding-top:0;border-top:none}
+.mdmf-match-results-title{margin:0 0 6px;font-size:22px;font-weight:800;color:var(--ink);letter-spacing:-.01em}
+.mdmf-match-results-lead{margin:0 0 14px;font-size:14px;line-height:1.55;color:#475467;max-width:740px}
+.mdmf-match-kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px}
+.mdmf-match-kpi{border-radius:14px;padding:16px 18px}
+.mdmf-match-kpi-val{font-size:26px}
+.mdmf-match-kpi-lbl{font-size:12px}
+.mdmf-match-band-block{background:#fff;border-radius:14px;padding:16px 18px}
+.mdmf-match-band-title.mdmf-eyebrow{font-size:10.5px;font-weight:800;color:#98a2b3;margin:0}
+.mdmf-match-queue{display:block;border:none;overflow:visible}
+.mdmf-match-tabs{background:none;padding:0;margin:0 0 12px;border-bottom:1px solid var(--line)}
+.mdmf-match-list,.mdmf-match-list[data-mdmf-match-tab=MERGED],.mdmf-match-list[data-mdmf-match-tab=DISTINCT]{border-right:none;max-height:none;overflow:visible;display:flex;flex-direction:column;gap:12px}
+.mdmf-match-list[style*="none"]{display:none!important}
+.mdmf-match-pair-card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px 20px;display:flex;flex-direction:column;gap:12px}
+.mdmf-match-pair-head{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:14px;color:var(--ink)}
+.mdmf-match-dot{display:inline-block;width:8px;height:8px;border-radius:50%;flex:none}
+.mdmf-match-and{font-size:12px;color:var(--muted)}
+.mdmf-match-pair-head .mdmf-chip{margin-left:auto}
+.mdmf-match-pair-chips{display:flex;gap:6px;flex-wrap:wrap}
+.mdmf-match-origin{font-size:12px;color:var(--muted);font-weight:400}
+.mdmf-match-glance{width:100%;border-collapse:collapse;font-size:12px;table-layout:fixed}
+.mdmf-match-glance th,.mdmf-match-glance td{padding:4px 10px;text-align:left;border-top:1px solid #f2f4f7;vertical-align:top;word-break:break-word}
+.mdmf-match-glance thead th{border-top:none;font-size:11px;font-weight:700;color:var(--muted);padding-top:0}
+.mdmf-match-glance tbody th{width:22%;font-weight:600;color:var(--muted)}
+.mdmf-match-glance td small{display:block;font-size:11px;color:var(--muted)}
+.mdmf-match-glance .mdmf-match-none{color:var(--muted)}
+.mdmf-match-glance-eq td:not(.mdmf-match-cell-diff){color:var(--good)}
+.mdmf-match-cell-diff{background:var(--bad-soft);color:var(--bad);font-weight:600}
+.mdmf-match-glance thead th{vertical-align:bottom}
+.mdmf-match-excl-label{display:block;font-weight:400;font-size:11px;color:var(--muted);margin-top:2px}
+.mdmf-match-pager{display:flex;align-items:center;gap:10px;justify-content:flex-end;font-size:12px;color:var(--muted)}
+.mdmf-match-counts{margin:0 0 4px}
+.mdmf-match-glance-missing td{color:var(--muted)}
+.mdmf-match-why{margin:0;font-size:12px;color:var(--ink)}
+.mdmf-match-why-none{color:var(--muted)}
+/* lot M12: the golden record is the survivor - first column, tinted; its key under the name, smaller; a folded key under the raw value, lighter */
+.mdmf-match-glance .mdmf-match-col-golden{background:var(--accent-soft);border-left:2px solid var(--select)}
+.mdmf-match-glance .mdmf-match-cell-diff.mdmf-match-col-golden{background:var(--bad-soft)}
+.mdmf-match-glance thead th.mdmf-match-col-golden b{display:inline-block;font-size:12px;color:var(--ink)}
+.mdmf-match-glance small.mdmf-match-id{display:block;font-size:10px;font-weight:400;color:var(--muted);margin-top:1px}
+.mdmf-match-glance td small.mdmf-match-key{font-size:10px;color:#98a2b3;font-style:italic}
+.mdmf-match-why-none{color:var(--muted)}
+/* lot M12: the golden record is the survivor - first column, tinted; its key under the name, smaller; a folded key under the raw value, lighter */
+.mdmf-match-glance .mdmf-match-col-golden{background:var(--accent-soft,#fff8e5);border-left:2px solid var(--accent,#f5a623)}
+.mdmf-match-glance thead th.mdmf-match-col-golden b{display:inline-block;font-size:12px;color:var(--ink)}
+.mdmf-match-glance small.mdmf-match-id{display:block;font-size:10px;font-weight:400;color:var(--muted);margin-top:1px}
+.mdmf-match-glance td small.mdmf-match-key{font-size:10px;color:#98a2b3;font-style:italic}
+.mdmf-match-raw{color:var(--muted);font-size:11px}
+.mdmf-match-pair-card .mdmf-match-decide{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:0}
+.mdmf-match-pair-more>summary{cursor:pointer;font-size:12px;font-weight:700;color:var(--muted)}
+.mdmf-match-pair-more>summary:hover{color:var(--accent-fg)}
+.mdmf-match-bulk{display:flex;align-items:center;gap:12px;padding:0}
+.mdmf-match-group-row,.mdmf-match-distinct-row{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px 18px}
+.mdmf-match-band span{text-overflow:ellipsis;display:block;line-height:24px;text-align:center}
+.mdmf-match-plan-decide:empty{display:none}
+/* step 7 round 2 (2026-09-24): side-card titles as eyebrows, a % column wide enough for "100 %", and an <a> styled as
+   a button never keeps the browser's underline. */
+.mdmf-completeness .mdmf-eyebrow{display:block;margin:0 0 10px}
+.mdmf-completeness-row{grid-template-columns:90px minmax(0,1fr) 44px}
+.mdmf-completeness-row b{text-align:right;white-space:nowrap}
+.mdmf-journal .mdmf-eyebrow{display:block;margin:0 0 6px}
+.mdmf-journal>p.mdmf-hint{margin:0}
+.mdmf-wizard a.mdmf-btn,.mdmf-wizard a.mdmf-btn:hover{text-decoration:none}
+/* the plan card sits in the 2-column main column (narrower than the review screen): the tree takes the full card
+   width - it is the card's main element - and the selected node's detail panel goes under it. */
+.mdmf-wiz-panel[data-step="6"] .mdmf-match-plan .mdmf-tree-layout{grid-template-columns:minmax(0,1fr)}
+
+
+/* ---- wizard-visual-pass lot (2026-09-24): step 4e/5's "business object x column" grid
+   (docs/mockups/wizard-flow/StagingLoad.dc.html, MasterDone.dc.html) - one row per business object, one
+   column per application/build stage, each cell a state circle + two lines of text ---- */
+/* fix/wizard-live-wave1 (2026-09-24, live bug item 1): overflow:hidden silently cropped rows/columns of a
+   wide grid (measured 750-961px against a 654px pane) instead of ever letting the person reach them -
+   overflow-x:auto adds a horizontal scrollbar instead (overflow-y stays hidden so the panel's own rounded
+   corners keep clipping the table the way overflow:hidden used to). */
+.mdmf-run-grid-wrap{overflow-x:auto;overflow-y:hidden;padding:0}
+.mdmf-run-grid{border-collapse:collapse;width:100%;font-size:12px}
+.mdmf-run-grid th{text-align:left;padding:12px 14px;font-size:10.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.mdmf-run-grid td{padding:14px;border-top:1px solid var(--line);vertical-align:top}
+.mdmf-run-grid-label{font-size:13px;font-weight:800;color:var(--ink)}
+.mdmf-run-grid-cell{display:flex;align-items:center;gap:10px}
+.mdmf-run-grid-primary{font-size:12.5px;font-weight:700;color:var(--ink)}
+
+/* one-click run stage list, e.g. "Building the staging model" / "Loading the applications" - the same
+   .mdmf-proposal-stage* rules already draw for STAGING_PROPOSAL_RUN (ProposalProgress) reused verbatim for
+   the smaller staging-load/master-build runs (RunProgress): no visual difference, only fewer stages. */
+
+/* ---- background-jobs banner (lot C2, 2026-09-24): WizardPage.renderJobsBanner, filled by wizard.js */
+.mdmf-jobs{position:sticky;top:0;z-index:50;margin:0 0 12px;padding:8px 12px;border:1px solid #c9d7ea;border-radius:6px;background:#f1f6fd;
+	display:flex;flex-direction:column;gap:6px;font-size:13px}
+.mdmf-jobs-row{display:flex;align-items:center;flex-wrap:wrap;gap:10px}
+.mdmf-jobs-state{color:#44546a}
+.mdmf-jobs-message{flex:1 1 240px;min-width:0;color:#5f6b7a;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mdmf-jobs-queued .mdmf-jobs-state{font-style:italic}
+.mdmf-jobs-result{border-top:1px solid #dbe4f0;padding-top:6px}
+.mdmf-jobs-result .mdmf-jobs-message-full{white-space:normal}
+.mdmf-jobs-done .mdmf-jobs-state{color:#1e7a3b}
+.mdmf-jobs-failed .mdmf-jobs-state,.mdmf-jobs-interrupted .mdmf-jobs-state{color:#b3261e}
+.mdmf-jobs-cancelled .mdmf-jobs-state{color:#8a5a00}
+
+/* live-progress lot (2026-09-26, docs/mockups/landing-live/): the landing run's live panel - one header saying what
+   runs now, a bar that moves inside a stage, a heartbeat, running cells that spin and count, the run's journal */
+.mdmf-lr-head{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.mdmf-lr-spinner{width:30px;height:30px;box-sizing:border-box;border-radius:50%;border:3px solid var(--accent-soft);border-top-color:var(--accent-fg);animation:mdmfLrSpin .9s linear infinite;flex:none}
+.mdmf-lr-spinner-off{animation:none;border-color:var(--warn-soft);border-top-color:var(--warn)}
+.mdmf-lr-headtext{flex:1 1 320px;min-width:0;display:flex;flex-direction:column;gap:3px}
+.mdmf-lr-title{font-size:17px;font-weight:800;color:var(--ink)}
+.mdmf-lr-now{font-size:13px;color:var(--muted);line-height:1.45}
+.mdmf-lr-now b{color:var(--ink)}
+.mdmf-lr-clock{display:flex;flex-direction:column;align-items:flex-end;gap:2px}
+.mdmf-lr-elapsed{font-size:20px;font-weight:800;color:var(--ink);font-variant-numeric:tabular-nums}
+.mdmf-lr-left{font-size:11.5px;color:var(--muted)}
+.mdmf-lr-barrow{display:flex;align-items:center;gap:12px}
+.mdmf-lr-barrow .mdmf-proposal-bar{flex:1 1 auto;margin:12px 0 8px}
+.mdmf-lr-stages{font-size:12px;font-weight:700;color:var(--ink);white-space:nowrap}
+.mdmf-lr-fill-live{background-image:repeating-linear-gradient(45deg,rgba(255,255,255,.22) 0 6px,transparent 6px 12px);background-size:24px 6px;animation:mdmfLrStripe 1s linear infinite}
+.mdmf-lr-beat{display:flex;align-items:center;gap:8px;font-size:11.5px;color:var(--muted);margin-bottom:10px}
+.mdmf-lr-dot{width:7px;height:7px;border-radius:50%;background:var(--good);flex:none;animation:mdmfLrPulse 1.6s ease-out infinite}
+.mdmf-lr-beat-stale{color:var(--warn)}
+.mdmf-lr-beat-stale .mdmf-lr-dot{background:var(--warn);animation:none}
+.mdmf-lr-grid .mdmf-landing-circle-running{background:transparent;border:3px solid var(--accent-line);border-top-color:var(--accent-fg);color:transparent;box-sizing:border-box;animation:mdmfLrSpin 1s linear infinite}
+.mdmf-lr-label{font-weight:600}
+.mdmf-lr-grid .mdmf-landing-cell-todo .mdmf-lr-label{color:var(--muted);font-weight:500}
+.mdmf-lr-timer{font-variant-numeric:tabular-nums}
+.mdmf-lr-journal{margin-top:14px;border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+.mdmf-lr-journal-title{font-size:13px;font-weight:800;color:var(--ink);margin-bottom:8px}
+.mdmf-lr-journal ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.mdmf-lr-journal li{display:flex;gap:12px;align-items:baseline;font-size:12.5px;color:var(--muted);line-height:1.45}
+.mdmf-lr-journal li time{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:11.5px;flex:none;width:64px}
+.mdmf-lr-journal li.mdmf-lr-journal-live{color:var(--ink);font-weight:600}
+.mdmf-lr-journal-empty{font-style:italic}
+@keyframes mdmfLrSpin{to{transform:rotate(360deg)}}
+@keyframes mdmfLrStripe{to{background-position:24px 0}}
+@keyframes mdmfLrPulse{0%{box-shadow:0 0 0 0 rgba(8,116,67,.45)}70%{box-shadow:0 0 0 6px rgba(8,116,67,0)}100%{box-shadow:0 0 0 0 rgba(8,116,67,0)}}
+@media (prefers-reduced-motion:reduce){.mdmf-lr-spinner,.mdmf-lr-fill-live,.mdmf-lr-dot,.mdmf-lr-grid .mdmf-landing-circle-running{animation:none}}
+
+/* staging-still-to-decide lot (2026-09-27): step 4's "N decisions left" card, above the build button - one list per
+   nature, each item a two-column row (what it is, then its own decision controls) - plus the build note and the
+   right rail's accepted/left tally. */
+.mdmf-still{border-left:4px solid var(--warn)}
+.mdmf-still-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.mdmf-still-group{margin-top:14px}
+.mdmf-still-group-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:6px}
+.mdmf-still-group-title{margin:0;font-size:13.5px;font-weight:800;color:var(--ink);display:flex;align-items:center;gap:6px}
+.mdmf-still-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.mdmf-still-item{display:flex;gap:14px;align-items:flex-start;justify-content:space-between;border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.mdmf-still-main{flex:1 1 auto;min-width:0;display:flex;flex-direction:column;gap:5px}
+.mdmf-still-title{font-size:13px;color:var(--ink);line-height:1.45;overflow-wrap:anywhere}
+.mdmf-still-title code{font-size:12px;color:var(--muted)}
+.mdmf-still-why{font-size:12.5px;color:var(--muted);line-height:1.45}
+.mdmf-still-chips{display:flex;flex-wrap:wrap;gap:6px}
+.mdmf-still-actions{flex:none;display:flex;flex-wrap:wrap;gap:6px;align-items:center;justify-content:flex-end;max-width:45%}
+/* lot P1 (2026-10-04): a script derivation's parameters in step 4's "To apply" list */
+.mdmf-param-box{display:flex;flex-direction:column;gap:6px;margin-top:4px}
+.mdmf-param-row{display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+.mdmf-param-input{font:inherit;font-size:12.5px;border:1px solid #d0d5dd;border-radius:6px;padding:3px 6px;min-width:12em}
+.mdmf-still-build-note{color:var(--ink)}
+.mdmf-still-tally{list-style:none;margin:8px 0 0;padding:0;display:flex;flex-direction:column;gap:5px;font-size:12.5px}
+.mdmf-still-tally a.mdmf-chip{text-decoration:none}
+@media (max-width:640px){.mdmf-still-item{flex-direction:column}.mdmf-still-actions{max-width:none;justify-content:flex-start}}
+/* staging-live lot (2026-09-27, docs/mockups/staging-live/): step 4's build panel reuses the landing live panel's
+   .mdmf-lr-* rules; only its stage chips and the per-cell mini bar are its own */
+.mdmf-sl-chips{display:flex;gap:6px;flex:none;flex-wrap:wrap}
+.mdmf-sl-chip-run{background:var(--accent-soft);color:var(--accent-fg);border-color:var(--accent-line)}
+.mdmf-sl-mini{display:block;width:140px;max-width:100%;height:5px;border-radius:99px;background:var(--accent-tint);overflow:hidden;margin-top:4px}
+.mdmf-sl-mini span{display:block;height:5px;background:var(--accent)}
+
+/* matching-live lot (2026-09-27): step 6's last matching action under its buttons - reuses the .mdmf-lr-* live panel rules */
+.mdmf-ma{margin-top:12px}
+.mdmf-ma-table td{vertical-align:top}
+.mdmf-ma-error{color:var(--bad)}
+/* UX lot U1 (2026-10-13): the results row says what happened in one sentence; the engine text and the volume notes sit under a "Details" fold */
+.mdmf-ma-sentence{margin-top:4px;font-size:12.5px;color:var(--ink)}
+.mdmf-ma-details{margin-top:4px}
+.mdmf-ma-details>summary,.mdmf-tree-volume-fold>summary,.mdmf-candidate-search-fold>summary,.mdmf-step6-advanced>summary{cursor:pointer;font-size:12px;font-weight:700;color:var(--muted)}
+.mdmf-tree-volume-fold,.mdmf-candidate-search-fold{margin:0 0 8px}
+.mdmf-step6-advanced{margin-top:2px}
+.mdmf-match-plan-none{border-style:dashed}
+
+/* master-live lot (2026-09-27): the last build's stages and journal under step 5's built view */
+.mdmf-lr-trace .mdmf-lr-barrow{margin-bottom:4px}
+
+/* automatic-intake wizard lot (2026-10-05, docs/AUTOMATIC-INTAKE.md "The screens", mockups docs/mockups/automatic-intake): the intake block of the Summary card,
+   the set-up screen and the running screen. Only what the existing vocabulary (mdmf-panel, mdmf-chip, mdmf-eyebrow, mdmf-btn, mdmf-zone-grid, mdmf-table, mdmf-notice,
+   mdmf-side-card) does not already give. */
+.mdmf-intake-card{border-top:1px solid #eef0f4;padding-top:10px;display:flex;flex-direction:column;gap:6px}
+.mdmf-intake-card .mdmf-actions{margin:0}
+.mdmf-intake-error{color:var(--bad)}
+.mdmf-intake-src{padding:16px 18px;display:flex;flex-direction:column;gap:12px}
+.mdmf-intake-src-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.mdmf-intake-src-name{font-size:14px;font-weight:800;color:var(--ink);flex:1 1 auto}
+.mdmf-intake-src p.mdmf-hint,.mdmf-intake-src .mdmf-hint{margin:0}
+.mdmf-intake-fields{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.mdmf-intake-fields .mdmf-field{margin:0}
+.mdmf-intake-batch{display:flex;flex-direction:column;gap:4px;border-top:1px solid #eef0f4;padding-top:10px}
+.mdmf-intake-batch label{display:flex;align-items:center;gap:6px}
+.mdmf-intake-options{display:flex;flex-direction:column;gap:10px}
+.mdmf-intake-opt{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.mdmf-intake-opt label{display:inline-flex;align-items:center;gap:6px}
+.mdmf-intake-num{width:72px;box-sizing:border-box;font:inherit;font-size:13px;border:1px solid #d0d5dd;border-radius:9px;padding:5px 8px;color:var(--ink);background:#fff}
+.mdmf-intake-flow .mdmf-zone-card{min-width:0}
+.mdmf-intake-ready{display:flex;align-items:flex-start;gap:8px;font-size:12.5px;color:#344054;line-height:1.45}
+.mdmf-intake-ready b{flex:none;width:16px;text-align:center}
+.mdmf-intake-ready-ok b{color:var(--good)}
+.mdmf-intake-ready-blocking b{color:var(--warn)}
+.mdmf-intake-ready-info b{color:var(--muted)}
+.mdmf-intake-footer{justify-content:flex-start;margin-top:14px}
+.mdmf-intake-footer .mdmf-hint{flex:1 1 auto}
+.mdmf-intake-blocker{margin:-8px 0 0;color:var(--warn)}
+.mdmf-intake-head{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:14px}
+.mdmf-intake-head .mdmf-actions{margin:0}
+.mdmf-intake-headtext{flex:1 1 320px;min-width:0;display:flex;flex-direction:column;gap:4px}
+.mdmf-intake-title{font-size:20px;font-weight:800;color:var(--ink);display:flex;align-items:center;gap:10px}
+.mdmf-intake-process{margin:0 0 12px}
+.mdmf-intake-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:14px;margin:0 0 14px}
+.mdmf-intake-body{display:flex;flex-direction:column;gap:8px}
+.mdmf-intake-count{display:flex;align-items:baseline;gap:8px;font-size:13px;color:var(--muted)}
+.mdmf-intake-n{font-size:34px;font-weight:800;color:var(--ink);font-variant-numeric:tabular-nums;line-height:1}
+.mdmf-intake-arriving{font-size:15px;font-weight:700;color:var(--ink)}
+.mdmf-intake-line{display:flex;justify-content:space-between;gap:12px;font-size:12px;color:var(--muted);flex-wrap:wrap}
+.mdmf-intake-bar{height:6px;border-radius:99px;background:var(--line);overflow:hidden}
+.mdmf-intake-bar i{display:block;height:100%;background:var(--accent);border-radius:99px;transition:width .6s linear}
+.mdmf-intake-chains{margin:0 0 14px}
+.mdmf-intake-chains-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:6px}
+.mdmf-intake-chains-head .mdmf-eyebrow{margin-bottom:0}
+.mdmf-intake-chains td.num{text-align:right}
+.mdmf-intake-empty,.mdmf-intake-held{margin:6px 0 0}
+.mdmf-intake-stale{color:var(--warn)}
+.mdmf-intake-settings{margin:0 0 14px;display:flex;flex-direction:column;gap:12px}
+@media (max-width:900px){.mdmf-intake-fields{grid-template-columns:1fr}}
+.mdmf-intake-stale[hidden],.mdmf-intake-empty[hidden]{display:none}
+
+/* UX lot U4 (2026-10-13): one primary button per step ----------------------------------------------------------------- */
+/* step rail: a step that is not open yet takes no pointer event on its disabled button, so the <li> carries the hover title and the click (wizard.js railNote) */
+.mdmf-wiz-steps li.blocked{cursor:not-allowed}
+.mdmf-wiz-steps li.blocked button{pointer-events:none}
+.mdmf-rail-note{margin:8px 0 0;font-size:12.5px;color:var(--warn);line-height:1.4}
+.mdmf-rail-note[hidden]{display:none}
+/* step 1: two real style cards side by side, the facts folded; the three "coming later" ones behind one small line */
+.mdmf-style-cards-main{grid-template-columns:repeat(2,minmax(0,1fr))}
+@media(max-width:700px){.mdmf-style-cards-main{grid-template-columns:1fr}}
+.mdmf-style-cards-main .mdmf-style-diagram{max-height:96px;width:auto;align-self:center}
+.mdmf-style-more{margin:4px 0 0}
+.mdmf-style-more>summary{cursor:pointer;font-size:11.5px;color:var(--accent-fg);font-weight:600}
+.mdmf-style-later{margin:2px 0 10px}
+.mdmf-style-later>summary{font-size:12px;color:var(--muted);font-weight:600}
+.mdmf-step1-defaults{margin:12px 0 4px}
+.mdmf-step1-advanced{margin-top:2px}
+.mdmf-wiz-panel[data-step="1"] .mdmf-primary-block{margin:0 0 6px}
+/* the primary block's folds take the whole width under the button and its sentence */
+.mdmf-primary-extra{flex:1 0 100%}
+.mdmf-primary-extra:empty{display:none}
+.mdmf-primary-extra .mdmf-disclosure{margin:2px 0 0}
+.mdmf-wiz-panel[data-step="4"] .mdmf-primary-block{margin:0 0 16px;flex-wrap:wrap;align-items:flex-start}
+.mdmf-wiz-panel[data-step="4"] .mdmf-primary-block .mdmf-primary-text{flex:1 1 280px;min-width:0}
+/* an item-level "Accept" / "Apply" is secondary (outlined green): the step's only solid green button is its primary one */
+.mdmf-btn-accept{background:#fff;color:var(--good);border:1px solid var(--good)}
+.mdmf-btn-accept:hover{background:var(--good-soft);color:var(--good);border-color:var(--good)}
+.mdmf-btn-accept:disabled{opacity:.5;cursor:not-allowed}
+/* "Clean this step and the following ones": at the bottom of the step, red outline */
+.mdmf-step-reset{margin:24px 0 0;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.mdmf-step-reset .mdmf-btn-danger{border-color:var(--bad)}
+
+/* UX lot C3 (2026-10-14): step 1 above the fold at 1440x900 - description folded, drawing and axis under each card's Details, the consequence beside the button */
+.mdmf-step1-desc{margin:6px 0 0}
+.mdmf-step1-desc>summary{font-size:12px;color:var(--muted);font-weight:600}
+.mdmf-step1-desc .mdmf-field{margin:8px 0 0}
+.mdmf-style-cards-main .mdmf-style-axis{margin:6px 0 8px;font-size:11.5px}
+.mdmf-primary-text .mdmf-style-consequence{background:none;border:0;border-radius:0;padding:0;margin:0;font-size:12.5px;color:#475467;line-height:1.5}
+.mdmf-wiz-panel[data-step="1"] .mdmf-style-cards-main{margin:4px 0 4px}
+.mdmf-wiz-panel[data-step="4"] .mdmf-review-note{font-weight:600;color:var(--ink)}
+.mdmf-wiz-panel[data-step="1"] .mdmf-2col-main{gap:12px}
+.mdmf-wiz-panel[data-step="1"] .mdmf-style-later{margin:0}
+
+/* UX lot D (2026-10-14): partial failures - the list of what was not loaded / refused, and the line that says what the next step will leave out */
+.mdmf-partial .mdmf-partial-list { margin: 6px 0 8px 18px; padding: 0; }
+.mdmf-partial .mdmf-partial-list li { margin: 2px 0; }
+.mdmf-partial-warning { display: block; margin-top: 6px; }
+
+/* Landing-walkthrough lot (2026-10-16): step 3 as a walkthrough - sub-rail, one page per application, launch page (docs/mockups/landing-walkthrough/) */
+.mdmf-walk-rail ol { display: flex; align-items: center; gap: 14px; list-style: none; margin: 10px 0 14px; padding: 12px 18px; border: 1.5px solid var(--accent-line); border-radius: 14px; background: #fff; flex-wrap: wrap; }
+.mdmf-walk-step { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: var(--muted); }
+.mdmf-walk-step + .mdmf-walk-step::before { content: ""; display: inline-block; width: 28px; height: 1.5px; background: #d0d5dd; margin-right: 6px; }
+.mdmf-walk-step.done + .mdmf-walk-step::before { background: #87c9a3; }
+.mdmf-walk-step .mdmf-linkbtn { display: flex; align-items: center; gap: 8px; text-decoration: none; font-weight: 600; color: inherit; font-size: 13px; }
+.mdmf-walk-step.done { color: var(--good); }
+.mdmf-walk-step.current { color: #172033; font-weight: 800; }
+.mdmf-walk-n { width: 22px; height: 22px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 800; border: 1.5px solid #d0d5dd; background: #fff; color: var(--muted); }
+.mdmf-walk-step.done .mdmf-walk-n { background: var(--good-soft); border-color: #87c9a3; color: var(--good); }
+.mdmf-walk-step.current .mdmf-walk-n { background: var(--accent); border-color: var(--accent); color: #fff; }
+.mdmf-walk-head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.mdmf-walk-title { margin: 0; font-size: 20px; font-weight: 800; }
+.mdmf-walk-head .mdmf-chip { margin-left: auto; }
+.mdmf-walk-suggestion { margin: 10px 0; line-height: 1.55; }
+.mdmf-walk-table .mdmf-walk-sub td { font-size: 10.5px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); background: #f9fafb; }
+.mdmf-walk-keyactions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 6px; }
+.mdmf-walk-keybox { margin-top: 8px; padding: 10px 12px; border: 1.5px solid #fecaca; border-radius: 10px; background: #fffafa; }
+.mdmf-walk-keybox .mdmf-key-picker { display: flex; flex-wrap: wrap; gap: 8px 14px; }
+.mdmf-walk-empties { margin: 8px 0; }
+.mdmf-walk-code { font-size: 12px; color: #6b7280; font-weight: 600; letter-spacing: .02em; }
+.mdmf-walk-llm { margin: 14px 0; border: 1px solid #e4e7ec; border-radius: 11px; padding: 12px 16px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.mdmf-walk-llm legend { padding: 0 6px; }
+.mdmf-walk-opt { display: flex; gap: 8px; align-items: flex-start; border: 1px solid #d0d5dd; border-radius: 9px; padding: 10px 12px; font-size: 13px; cursor: pointer; }
+.mdmf-walk-footer { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding-top: 10px; margin-top: 12px; border-top: 1px solid #eef0f4; }
+.mdmf-walk-spacer { flex-grow: 1; }
+.mdmf-walk-reason { color: var(--bad); }
+.mdmf-walk-aside { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; margin-top: 14px; padding-top: 10px; border-top: 1px solid #eef0f4; }
+.mdmf-walk-launch .mdmf-walk-launch-text { display: inline-block; margin-left: 18px; }
+.mdmf-walk-modify { text-align: right; }
+.mdmf-btn-quiet { border-color: transparent; background: transparent; color: var(--muted); }
+
+/* landing test fixes (2026-10-17): the landing run's live grid fits its panel (fixed layout, cells wrap) and, when a window is narrower still, scrolls inside its own box */
+.mdmf-lr-grid{table-layout:fixed;width:100%}
+.mdmf-lr-grid th:first-child,.mdmf-lr-grid td:first-child{width:22%}
+.mdmf-lr-grid th,.mdmf-lr-grid td{padding-left:8px;padding-right:8px;overflow-wrap:anywhere;vertical-align:top}
+.mdmf-table-wrap{scrollbar-width:thin}
+/* step 1: the primary action stays reachable above the frame's bottom bar while the page scrolls */
+.mdmf-wiz-panel[data-step="1"] .mdmf-primary-block{position:sticky;bottom:64px;z-index:4}
+
+/* landing leftovers (2026-10-17): step 1 reads form, style, button. The style cards are compact (two side by side, facts folded) and the button's block, now below them,
+   is pinned above the frame's bottom bar (64px) while the page scrolls, so it is visible at 1280x900 whatever the cards' height; compact so it hides little of them */
+.mdmf-wiz-panel[data-step="1"] .mdmf-primary-block{padding:12px 18px;gap:16px;box-shadow:0 -6px 14px rgba(16,24,40,.08)}
+.mdmf-wiz-panel[data-step="1"] .mdmf-primary-block .mdmf-primary-text{font-size:12px;gap:2px}
+.mdmf-wiz-panel[data-step="1"] .mdmf-style-cards-main{margin:4px 0 4px}
+.mdmf-wiz-panel[data-step="1"] .mdmf-style-cards-main .mdmf-choice-card{padding:10px 12px}
+.mdmf-wiz-panel[data-step="1"] .mdmf-style-card-headline{font-size:12px;margin:2px 0 0}
+
+/* landing leftovers (2026-10-17): the walkthrough's table has a fixed layout, so a wide panel in a colspan row (the key chooser's sample table) cannot stretch it past its box
+   and cut the "Key" column; such a panel sits in its own scrolling wrapper. Below 640px the box scrolls instead of crushing the columns. */
+.mdmf-walk-fixed{table-layout:fixed;width:100%;min-width:640px}
+/* walkthrough column width (2026-10-17): the "Load" column is a fixed 88px (the header "CHARGER"/"LOAD", 11px bold uppercase with letter-spacing, plus padding, no longer runs into "TABLE"); the other columns share the rest */
+.mdmf-walk-col-load{width:88px}
+.mdmf-walk-col-table{width:22%}
+.mdmf-walk-col-rows{width:11%}
+.mdmf-walk-col-key{width:38%}
+.mdmf-walk-col-why{width:29%}
+.mdmf-walk-fixed th{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mdmf-walk-fixed td{overflow-wrap:anywhere;vertical-align:top}
+.mdmf-walk-fixed .mdmf-walk-panel-row>td{padding:0;overflow-wrap:normal}
+.mdmf-walk-panel{padding:10px 12px;max-width:100%;box-sizing:border-box}
+
+/* step-1 sticky compact (2026-10-17): the pinned step-1 block is one horizontal row (button left, small explanatory text right, clamped to 2 lines, full text stays in the DOM),
+   about 60px tall, so it no longer covers the style cards above it. Below 760px the text wraps under the button and the block is no longer sticky. */
+.mdmf-wiz-panel[data-step="1"] .mdmf-primary-block{padding:8px 14px;gap:14px;flex-wrap:nowrap;align-items:center}
+.mdmf-wiz-panel[data-step="1"] .mdmf-primary-block .mdmf-btn{flex:0 0 auto;white-space:nowrap}
+.mdmf-wiz-panel[data-step="1"] .mdmf-primary-block .mdmf-primary-text{flex:1 1 auto;min-width:0;display:block;font-size:11.5px;line-height:1.35;max-height:calc(2 * 1.35em);overflow:hidden}
+.mdmf-wiz-panel[data-step="1"] .mdmf-primary-block .mdmf-primary-text>*{display:inline;margin:0}
+.mdmf-wiz-panel[data-step="1"] .mdmf-primary-block .mdmf-primary-text>*+*::before{content:" "}
+@media (max-width:759px){
+	.mdmf-wiz-panel[data-step="1"] .mdmf-primary-block{position:static;flex-wrap:wrap}
+	.mdmf-wiz-panel[data-step="1"] .mdmf-primary-block .mdmf-primary-text{flex:1 1 100%;max-height:none}
+}
+
+/* staging screens (2026-10-17): the "business objects x applications" grid of step 4 (and 5) has a fixed layout and wrapping cells, so it fits its panel whatever the number of
+   applications; the first column keeps a share, the rest split the remainder; narrower than 640px the panel's own box scrolls instead of cutting the right-hand columns */
+.mdmf-run-grid-fixed{table-layout:fixed;min-width:640px}
+.mdmf-run-grid-fixed th:first-child,.mdmf-run-grid-fixed td:first-child{width:22%}
+.mdmf-run-grid-fixed th,.mdmf-run-grid-fixed td{padding-left:10px;padding-right:10px;overflow-wrap:anywhere}
+.mdmf-run-grid-fixed .mdmf-run-grid-cell{min-width:0}
+.mdmf-step4-rejects{margin:0 0 14px}
+/* staging preflight lot H1 (2026-10-17): the check before the build, at the top of step 4 */
+.mdmf-step4-preflight{margin:0 0 14px}
+.mdmf-step4-preflight .mdmf-preflight-entity{margin-top:8px}
+.mdmf-step4-preflight .mdmf-preflight-list{margin:4px 0 0 18px;padding:0}
+.mdmf-step4-preflight .mdmf-preflight-list li{margin:6px 0}
+.mdmf-step4-preflight .mdmf-preflight-block{font-weight:600}
+.mdmf-step4-preflight .mdmf-preflight-fix{font-weight:400;color:var(--muted)}
+.mdmf-step4-preflight .mdmf-preflight-links{white-space:nowrap}
+.mdmf-step4-preflight .mdmf-preflight-actions{margin-top:10px}
+.mdmf-step4-rejects b{display:block;margin-bottom:2px}
+.mdmf-step4-optional,.mdmf-step4-rejects-note{color:var(--muted);font-size:12px}
+/* lot G1 (2026-10-17): the block of step 4's primary card that asks for the parameter of an accepted derivation (next to Build and load) */
+.mdmf-primary-params{flex:1 0 100%;display:flex;flex-direction:column;gap:8px;padding:10px 12px;border:1px solid var(--accent-line);border-radius:10px;background:#fff}
+.mdmf-primary-param-item{display:flex;flex-direction:column;gap:4px}
+.mdmf-step4-param-waiting{color:var(--ink);font-weight:600}

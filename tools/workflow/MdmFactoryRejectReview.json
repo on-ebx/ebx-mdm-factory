@@ -1,0 +1,59 @@
+{
+	"model": {
+		"name": "MdmFactoryRejectReview",
+		"startNodeId": 1,
+		"label": {
+			"en_US": "MDM Factory: review the rows held back",
+			"fr_FR": "MDM Factory : revoir les lignes retenues"
+		},
+		"description": {
+			"en_US": "Opens one task for the data steward to review the landing-to-staging rows held back for a project. Launched by the automatic intake; never blocks a chain.",
+			"fr_FR": "Ouvre une tâche pour que le data steward revoie les lignes retenues entre le landing et le staging d'un projet. Lancé par la prise en charge automatique, sans bloquer."
+		},
+		"owner": "Badministrator",
+		"launching": { "quick": false, "synchronous": false },
+		"moduleName": "ebx-mdm-factory",
+		"permissionsOnInstances": {
+			"create": "Badministrator",
+			"administrate": "Badministrator",
+			"view": "Badministrator",
+			"agentAccessForAdmin": "Badministrator",
+			"agentAccessForInbox": "Badministrator",
+			"creatorIsViewer": false
+		},
+		"modelOrientation": 0
+	},
+	"dataContext": {
+		"variables": [
+			{ "name": "projectCode", "direction": "in" }
+		]
+	},
+	"nodes": [
+		{
+			"nodeId": 1,
+			"kind": "userTask",
+			"label": "Review the rows held back",
+			"description": "Review the landing-to-staging transfer rejects of this project. The automatic intake carries on with the other rows meanwhile.",
+			"hiddenInGraphicalView": false,
+			"userTaskVersion": 2,
+			"agentAccess": "blocked",
+			"serviceDeclarationKey": "ebx-root-1.0@default",
+			"profiles": ["Badministrator"],
+			"offeredToProfiles": ["Badministrator"],
+			"input": {
+				"parameters": [
+					{ "name": "branch", "value": "MdmFactory" },
+					{ "name": "instance", "value": "MdmFactory" },
+					{ "name": "xpath", "value": "/root/TransferReject[./project='${projectCode}' and ./stage='STAGING']" },
+					{ "name": "firstCallDisplay", "value": "view" }
+				]
+			},
+			"enableReject": false,
+			"enableConfirmationRequest": false,
+			"enableComment": true,
+			"customizedAcceptLabel": { "en_US": "Reviewed", "fr_FR": "Revu" },
+			"termination": { "completionStrategy": "allWorkItemsCompleted", "rejectionThreshold": 0 }
+		}
+	],
+	"links": []
+}

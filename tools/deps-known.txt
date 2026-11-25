@@ -1,0 +1,4 @@
+# Advisories accepted for an embedded jar (X3-08, tools/deps_check.py). EMPTY today: no embedded jar carries an advisory at the time of 1.4.1 (OSV, 2026-11-12).
+# One line per accepted advisory, nothing else counts:
+#   <jar name as pinned in tools/embedded-jars.sha256>  <advisory id (GHSA-..., or the OSV id)>  <date accepted YYYY-MM-DD>  <reason: why the module is not exposed, or why the risk is taken>
+# An advisory that is not listed here makes tools/deps_check.py exit 1 and tools/package.sh refuse to build the package.

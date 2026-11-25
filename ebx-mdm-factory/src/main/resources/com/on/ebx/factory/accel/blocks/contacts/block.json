@@ -1,0 +1,19 @@
+{"key": "contacts", "version": "1.0.0",
+ "label": {"en-US": "Contact channels", "fr-FR": "Canaux de contact"},
+ "description": {"en-US": "Phone, e-mail and website with their checks from the published libraries.", "fr-FR": "Téléphone, e-mail et site web avec leurs contrôles par les librairies publiées."},
+ "placement": "table",
+ "group": "Contact",
+ "fields": [
+  {"name": "phone", "type": "string", "maxLength": 40, "label": {"en-US": "Phone", "fr-FR": "Téléphone"}},
+  {"name": "email", "type": "email", "maxLength": 255, "label": {"en-US": "E-mail", "fr-FR": "E-mail"}},
+  {"name": "website", "type": "anyURI", "maxLength": 255, "label": {"en-US": "Website", "fr-FR": "Site web"}}
+ ],
+ "scripts": [
+  {"kind": "constraint", "type": "ConstraintOnNode", "field": "phone", "name": "PhoneCheck", "body": "scripts/phone.ebx", "uses": ["Fasttrack.lib.phone"]},
+  {"kind": "constraint", "type": "ConstraintOnNode", "field": "email", "name": "EmailCheck", "body": "scripts/email.ebx", "uses": ["Fasttrack.lib.validator.email"]},
+  {"kind": "constraint", "type": "ConstraintOnNode", "field": "website", "name": "WebsiteCheck", "body": "scripts/website.ebx", "uses": ["Fasttrack.lib.validator.url"]}
+ ],
+ "libraries": {"Fasttrack.lib.phone": ["isValid(phone: string): boolean", "toE164(phone: string, country: string): string"],
+               "Fasttrack.lib.validator.email": ["isValid(s: string): boolean"],
+               "Fasttrack.lib.validator.url": ["isValid(s: string): boolean"]}
+}

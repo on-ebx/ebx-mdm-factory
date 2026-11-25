@@ -1,0 +1,12 @@
+uses core.message as messageContext;
+uses core.validation as validationContext;
+import Fasttrack.lib.validator.email as email;
+export procedure check(record : .${table})
+begin
+  if isNull(record.${group}.email) then return;
+  if not email.isValid('' | record.${group}.email) then
+    messageContext.addError('The e-mail address is not valid.');
+end
+export procedure setup()
+begin
+end

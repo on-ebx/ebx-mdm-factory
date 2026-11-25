@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Summary delta</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:'Inter',system-ui,sans-serif;background:#f4f5f8;color:#172033}
+a{color:#684bc0;text-decoration:none}a:hover{text-decoration:underline}
+.chip{display:inline-flex;align-items:center;gap:4px;font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:999px;border:1px solid;white-space:nowrap}
+.good{background:#ecfdf3;color:#087443;border-color:#b7e3ca}
+.warn{background:#fffaeb;color:#93370d;border-color:#fedf89}
+.bad{background:#fef2f2;color:#b42318;border-color:#fecaca}
+.muted{background:#f2f4f7;color:#475467;border-color:#d0d5dd}
+.acc{background:#f0eefa;color:#684bc0;border-color:#d9d2f2}
+.btn{display:inline-flex;align-items:center;gap:6px;border:1px solid #d0d5dd;background:#fff;color:#344054;border-radius:9px;padding:8px 14px;font-size:12.5px;font-weight:700;cursor:pointer;font-family:inherit;text-decoration:none}
+.btn:hover{border-color:#684bc0;color:#684bc0;text-decoration:none}
+.pri{background:#684bc0;border-color:#684bc0;color:#fff}
+.pri:hover{background:#5a3fae;color:#fff}
+.big{white-space:nowrap;padding:13px 22px;font-size:14.5px;border-radius:11px}
+.quiet{background:transparent;border-color:transparent;color:#667085}
+.card{background:#fff;border:1px solid #e4e7ec;border-radius:14px}
+.eyebrow{font-size:10.5px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:#98a2b3}
+.mono{font-family:ui-monospace,Menlo,Consolas,monospace}
+.sf{background:#1d5fa8}.sap{background:#b54708}.live{background:#0e7c86}.ebx{background:#4d7c0f}
+.kc{display:inline-flex;align-items:center;gap:5px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:11.5px;font-weight:700;padding:3px 8px;border-radius:6px;background:#f0eefa;color:#4b2f9e;border:1px solid #d9d2f2;white-space:nowrap}
+.kplus{font-size:12px;font-weight:800;color:#98a2b3}
+.srcDot{display:inline-block;width:8px;height:8px;border-radius:50%;flex:none}
+.step{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:600;color:#667085}
+.step .n{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;border:1.5px solid #d0d5dd;background:#fff}
+.step.done .n{background:#ecfdf3;border-color:#87c9a3;color:#087443}
+.step.cur{color:#172033}.step.cur .n{background:#684bc0;border-color:#684bc0;color:#fff}
+.term{border-bottom:1px dotted #684bc0;color:#172033;font-weight:600}
+.inp{display:flex;align-items:center;gap:8px;border:1px solid #d0d5dd;border-radius:9px;padding:9px 12px;background:#fff;font-size:12.5px;color:#98a2b3}
+.inp input{border:0;outline:0;font:inherit;color:#172033;flex-grow:1;background:transparent}
+table.t{border-collapse:collapse;width:100%;font-size:12px}
+table.t th{font-size:10.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:#98a2b3;text-align:left;padding:8px 10px;border-bottom:1px solid #eef0f4}
+table.t td{padding:8px 10px;border-bottom:1px solid #f2f4f7;color:#344054;white-space:nowrap}
+table.t td.k,table.t th.k{background:#f5f2fd;color:#4b2f9e}
+
+.new{display:inline-flex;align-items:center;font-size:9.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:2px 7px;border-radius:5px;background:#fff3d6;color:#8a4b00;border:1px dashed #e0a93b}
+.deltaBox{outline:2px dashed #e0a93b;outline-offset:4px;border-radius:14px}
+.opt{display:flex;gap:12px;align-items:flex-start;padding:14px;border:1.5px solid #e4e7ec;border-radius:12px;background:#fff}
+.opt.sel{border-color:#684bc0;background:#faf8ff}
+.radio{width:16px;height:16px;border-radius:50%;border:1.5px solid #98a2b3;flex:none;margin-top:2px;box-sizing:border-box}
+.opt.sel .radio{border:5px solid #684bc0}
+.cb{width:15px;height:15px;border-radius:4px;border:1.5px solid #98a2b3;flex:none;box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center}
+.cb.on{background:#684bc0;border-color:#684bc0;color:#fff}
+.gate{display:flex;align-items:center;gap:8px;font-size:12px;color:#344054}
+.ok{color:#087443}.pend{color:#93370d}
+.sfb{background:#1d5fa8}.kafka{background:#231f20}.snow{background:#29b5e8}.dbx{background:#ff3621}
+.logo{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:800;flex:none}
+.sel2{display:flex;align-items:center;justify-content:space-between;border:1px solid #d0d5dd;border-radius:9px;padding:8px 12px;background:#fff;font-size:12.5px;color:#172033}
+</style>
+</helmet>
+<div style="width: 1280px; height: 640px; box-sizing: border-box; display: flex; flex-direction: column; background: #f4f5f8">
+<div style="display: flex; align-items: center; justify-content: space-between; padding: 18px 32px; background: #fff; border-bottom: 1px solid #e4e7ec"><div style="display: flex; flex-direction: column; gap: 3px"><div class="eyebrow">MDM Factory · Project Personnes</div><div style="font-size: 13px; color: #475467">Step 8 of 8 · 2 open points</div></div><div style="display: flex; align-items: center; gap: 6px"><div class="step done"><span class="n"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg></span>Project</div><div style="width: 14px; height: 1.5px; background: #d0d5dd"></div><div class="step done"><span class="n"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg></span>Sources</div><div style="width: 14px; height: 1.5px; background: #d0d5dd"></div><div class="step done"><span class="n"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg></span>Landing</div><div style="width: 14px; height: 1.5px; background: #d0d5dd"></div><div class="step done"><span class="n"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg></span>Staging</div><div style="width: 14px; height: 1.5px; background: #d0d5dd"></div><div class="step done"><span class="n"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg></span>Master</div><div style="width: 14px; height: 1.5px; background: #d0d5dd"></div><div class="step done"><span class="n"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg></span>Matching</div><div style="width: 14px; height: 1.5px; background: #d0d5dd"></div><div class="step done"><span class="n"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg></span>Distribution <span class="new">new</span></div><div style="width: 14px; height: 1.5px; background: #d0d5dd"></div><div class="step cur"><span class="n">8</span>Summary</div></div></div>
+<div style="flex-grow: 1; display: flex; flex-direction: column; gap: 18px; padding: 26px 32px">
+<div style="font-size: 13px; color: #475467">Only the changed parts of the validated Summary are drawn; the journey, open points and completeness blocks stay as they are.</div>
+<div style="display: flex; flex-direction: column; gap: 10px"><div class="eyebrow">Open points</div>
+<div class="card" style="padding: 6px 18px">
+<div style="display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid #f2f4f7; font-size: 12.5px; color: #475467"><span class="chip warn">12 pairs to decide</span>— the plan does not decide alone.<a class="btn" style="margin-left: auto; padding: 6px 11px" href="#">Decide</a></div>
+<div class="deltaBox" style="display: flex; align-items: center; gap: 12px; padding: 12px 8px; font-size: 12.5px; color: #475467; margin: 6px 0"><span class="new">new</span><span class="chip warn">Salesforce not armed</span>— real time starts after the first full send.<a class="btn" style="margin-left: auto; padding: 6px 11px" href="Modes.dc.html">Run it</a></div>
+</div></div>
+<div style="display: flex; flex-direction: column; gap: 10px"><div class="eyebrow">Go to production</div>
+<div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px">
+<div class="card" style="padding: 16px; display: flex; flex-direction: column; gap: 6px; font-size: 12px; color: #475467"><b style="color: #172033; font-size: 13px">Chain the loads</b>A workflow runs landing, staging, master and matching.<a href="#" style="font-weight: 700">Launch now · Schedule…</a></div>
+<div class="card deltaBox" style="padding: 16px; display: flex; flex-direction: column; gap: 8px; font-size: 12px; color: #475467"><div style="display: flex; align-items: center; gap: 8px"><b style="color: #172033; font-size: 13px">Distribute</b><span class="new">new</span></div>
+<div style="display: flex; justify-content: space-between"><span>Salesforce CRM</span><span class="chip warn">Real time · waiting</span></div>
+<div style="display: flex; justify-content: space-between"><span>Kafka</span><span class="chip good">Daily 02:00</span></div>
+<div style="display: flex; justify-content: space-between"><span>Person 360 · Snowflake</span><span class="chip good">Daily · product</span></div>
+<a href="Main.dc.html" style="font-weight: 700">Change</a></div>
+<div class="card" style="padding: 16px; display: flex; flex-direction: column; gap: 6px; font-size: 12px; color: #475467"><b style="color: #172033; font-size: 13px">Deliver</b>One archive carries models, datasets, flows, scripts, the matching setup <span style="background: #fff3d6">and the distribution</span>.<a href="#" style="font-weight: 700">Check the delivery</a></div>
+<div class="card" style="padding: 16px; display: flex; flex-direction: column; gap: 6px; font-size: 12px; color: #475467"><b style="color: #172033; font-size: 13px">Follow and explain</b>The Cockpit shows every step <span style="background: #fff3d6">and every send</span>; record lineage says where each value came from.<a href="#" style="font-weight: 700">Cockpit · Record lineage</a></div>
+</div></div>
+</div>
+<div style="margin-top: auto; display: flex; align-items: center; justify-content: space-between; padding: 16px 32px; background: #fff; border-top: 1px solid #e4e7ec"><a class="btn quiet" href="Main.dc.html"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="11 6 5 12 11 18"></polyline></svg> Back</a><div style="display: flex; align-items: center; gap: 14px"><span style="font-size: 12px; color: #667085"></span><a class="btn pri big" href="#">Close <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="13 6 19 12 13 18"></polyline></svg></a></div></div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview": {"width": 1280, "height": 640}}'>
+class Component extends DCLogic {
+renderVals(){return {};}
+}
+</script>
+</body>
+</html>

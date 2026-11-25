@@ -1,0 +1,875 @@
+{
+ "format": "accelerator-pack-core/1",
+ "ops": [
+  {
+   "op": "create_table",
+   "arguments": {
+    "table_path": "/root/Company"
+   }
+  },
+  {
+   "op": "create_field",
+   "arguments": {
+    "field_path": "/root/Company/id",
+    "field_type": "int",
+    "is_primary_key": true
+   }
+  },
+  {
+   "op": "set_element_property",
+   "arguments": {
+    "element_path": "/root/Company/id",
+    "property": "autoIncrementStart",
+    "value": "1"
+   }
+  },
+  {
+   "op": "create_group",
+   "arguments": {
+    "table_path": "/root/Company",
+    "group_name": "Identification"
+   }
+  },
+  {
+   "op": "create_field",
+   "arguments": {
+    "field_path": "/root/Company/Identification/name",
+    "field_type": "string"
+   }
+  },
+  {
+   "op": "set_element_property",
+   "arguments": {
+    "element_path": "/root/Company/Identification/name",
+    "property": "maxLength",
+    "value": "120"
+   }
+  },
+  {
+   "op": "set_element_property",
+   "arguments": {
+    "element_path": "/root/Company/Identification/name",
+    "property": "mandatory",
+    "value": "true"
+   }
+  },
+  {
+   "op": "set_element_property",
+   "arguments": {
+    "element_path": "/root/Company/Identification/name",
+    "property": "minOccurs",
+    "value": "1"
+   }
+  },
+  {
+   "op": "create_field",
+   "arguments": {
+    "field_path": "/root/Company/Identification/legalName",
+    "field_type": "string"
+   }
+  },
+  {
+   "op": "set_element_property",
+   "arguments": {
+    "element_path": "/root/Company/Identification/legalName",
+    "property": "maxLength",
+    "value": "255"
+   }
+  },
+  {
+   "op": "create_field",
+   "arguments": {
+    "field_path": "/root/Company/Identification/description",
+    "field_type": "text"
+   }
+  },
+  {
+   "op": "create_group",
+   "arguments": {
+    "table_path": "/root/Company",
+    "group_name": "Legal"
+   }
+  },
+  {
+   "op": "create_field",
+   "arguments": {
+    "field_path": "/root/Company/Legal/legalForm",
+    "field_type": "string"
+   }
+  },
+  {
+   "op": "add_foreign_key",
+   "arguments": {
+    "field_path": "/root/Company/Legal/legalForm",
+    "target_table_path": "/root/ReferenceData/LegalForm"
+   }
+  },
+  {
+   "op": "create_field",
+   "arguments": {
+    "field_path": "/root/Company/Legal/jurisdiction",
+    "field_type": "string"
+   }
+  },
+  {
+   "op": "add_foreign_key",
+   "arguments": {
+    "field_path": "/root/Company/Legal/jurisdiction",
+    "target_table_path": "/root/ReferenceData/Country"
+   }
+  },
+  {
+   "op": "create_field",
+   "arguments": {
+    "field_path": "/root/Company/Legal/registrationNumber",
+    "field_type": "string"
+   }
+  },
+  {
+   "op": "set_element_property",
+   "arguments": {
+    "element_path": "/root/Company/Legal/registrationNumber",
+    "property": "maxLength",
+    "value": "80"
+   }
+  },
+  {
+   "op": "create_field",
+   "arguments": {
+    "field_path": "/root/Company/Legal/incorporationDate",
+    "field_type": "date"
+   }
+  },
+  {
+   "op": "create_field",
+   "arguments": {
+    "field_path": "/root/Company/Legal/shareCapital",
+    "field_type": "decimal"
+   }
+  },
+  {
+   "op": "create_field",
+   "arguments": {
+    "field_path": "/root/Company/Legal/capitalCurrency",
+    "field_type": "string"
+   }
+  },
+  {
+   "op": "add_foreign_key",
+   "arguments": {
+    "field_path": "/root/Company/Legal/capitalCurrency",
+    "target_table_path": "/root/ReferenceData/Currency"
+   }
+  },
+  {
+   "op": "create_field",
+   "arguments": {
+    "field_path": "/root/Company/Legal/employeesCount",
+    "field_type": "int"
+   }
+  },
+  {
+   "op": "create_field",
+   "arguments": {
+    "field_path": "/root/Company/Legal/sizeCategory",
+    "field_type": "string"
+   }
+  },
+  {
+   "op": "set_element_property",
+   "arguments": {
+    "element_path": "/root/Company/Legal/sizeCategory",
+    "property": "enumeration",
+    "value": "GE,ETI,PME,TPE"
+   }
+  },
+  {
+   "op": "create_group",
+   "arguments": {
+    "table_path": "/root/Company",
+    "group_name": "Classification"
+   }
+  },
+  {
+   "op": "create_field",
+   "arguments": {
+    "field_path": "/root/Company/Classification/activitySector",
+    "field_type": "string"
+   }
+  },
+  {
+   "op": "add_foreign_key",
+   "arguments": {
+    "field_path": "/root/Company/Classification/activitySector",
+    "target_table_path": "/root/ReferenceData/ActivitySector"
+   }
+  },
+  {
+   "op": "create_field",
+   "arguments": {
+    "field_path": "/root/Company/Classification/naceCode",
+    "field_type": "string"
+   }
+  },
+  {
+   "op": "set_element_property",
+   "arguments": {
+    "element_path": "/root/Company/Classification/naceCode",
+    "property": "maxLength",
+    "value": "10"
+   }
+  },
+  {
+   "op": "create_group",
+   "arguments": {
+    "table_path": "/root/Company",
+    "group_name": "HeadOffice"
+   }
+  },
+  {
+   "op": "create_field",
+   "arguments": {
+    "field_path": "/root/Company/HeadOffice/street",
+    "field_type": "string"
+   }
+  },
+  {
+   "op": "set_element_property",
+   "arguments": {
+    "element_path": "/root/Company/HeadOffice/street",
+    "property": "maxLength",
+    "value": "255"
+   }
+  },
+  {
+   "op": "create_field",
+   "arguments": {
+    "field_path": "/root/Company/HeadOffice/postcode",
+    "field_type": "string"
+   }
+  },
+  {
+   "op": "set_element_property",
+   "arguments": {
+    "element_path": "/root/Company/HeadOffice/postcode",
+    "property": "maxLength",
+    "value": "20"
+   }
+  },
+  {
+   "op": "create_field",
+   "arguments": {
+    "field_path": "/root/Company/HeadOffice/city",
+    "field_type": "string"
+   }
+  },
+  {
+   "op": "set_element_property",
+   "arguments": {
+    "element_path": "/root/Company/HeadOffice/city",
+    "property": "maxLength",
+    "value": "120"
+   }
+  },
+  {
+   "op": "create_field",
+   "arguments": {
+    "field_path": "/root/Company/HeadOffice/country",
+    "field_type": "string"
+   }
+  },
+  {
+   "op": "add_foreign_key",
+   "arguments": {
+    "field_path": "/root/Company/HeadOffice/country",
+    "target_table_path": "/root/ReferenceData/Country"
+   }
+  },
+  {
+   "op": "create_group",
+   "arguments": {
+    "table_path": "/root/Company",
+    "group_name": "Lifecycle"
+   }
+  },
+  {
+   "op": "create_field",
+   "arguments": {
+    "field_path": "/root/Company/Lifecycle/status",
+    "field_type": "string"
+   }
+  },
+  {
+   "op": "set_element_property",
+   "arguments": {
+    "element_path": "/root/Company/Lifecycle/status",
+    "property": "enumeration",
+    "value": "DRAFT,IN_REVIEW,ACTIVE,BLOCKED,ARCHIVED"
+   }
+  },
+  {
+   "op": "set_element_property",
+   "arguments": {
+    "element_path": "/root/Company/Lifecycle/status",
+    "property": "defaultValue",
+    "value": "DRAFT"
+   }
+  },
+  {
+   "op": "create_field",
+   "arguments": {
+    "field_path": "/root/Company/Lifecycle/statusDate",
+    "field_type": "date"
+   }
+  },
+  {
+   "op": "create_field",
+   "arguments": {
+    "field_path": "/root/Company/Lifecycle/blockingReason",
+    "field_type": "string"
+   }
+  },
+  {
+   "op": "set_element_property",
+   "arguments": {
+    "element_path": "/root/Company/Lifecycle/blockingReason",
+    "property": "maxLength",
+    "value": "255"
+   }
+  },
+  {
+   "op": "create_table",
+   "arguments": {
+    "table_path": "/root/CompanyIdentifier"
+   }
+  },
+  {
+   "op": "create_field",
+   "arguments": {
+    "field_path": "/root/CompanyIdentifier/id",
+    "field_type": "int",
+    "is_primary_key": true
+   }
+  },
+  {
+   "op": "set_element_property",
+   "arguments": {
+    "element_path": "/root/CompanyIdentifier/id",
+    "property": "autoIncrementStart",
+    "value": "1"
+   }
+  },
+  {
+   "op": "create_field",
+   "arguments": {
+    "field_path": "/root/CompanyIdentifier/company",
+    "field_type": "string"
+   }
+  },
+  {
+   "op": "add_foreign_key",
+   "arguments": {
+    "field_path": "/root/CompanyIdentifier/company",
+    "target_table_path": "/root/Company"
+   }
+  },
+  {
+   "op": "set_element_property",
+   "arguments": {
+    "element_path": "/root/CompanyIdentifier/company",
+    "property": "mandatory",
+    "value": "true"
+   }
+  },
+  {
+   "op": "set_element_property",
+   "arguments": {
+    "element_path": "/root/CompanyIdentifier/company",
+    "property": "minOccurs",
+    "value": "1"
+   }
+  },
+  {
+   "op": "create_field",
+   "arguments": {
+    "field_path": "/root/CompanyIdentifier/type",
+    "field_type": "string"
+   }
+  },
+  {
+   "op": "add_foreign_key",
+   "arguments": {
+    "field_path": "/root/CompanyIdentifier/type",
+    "target_table_path": "/root/ReferenceData/IdentifierType"
+   }
+  },
+  {
+   "op": "set_element_property",
+   "arguments": {
+    "element_path": "/root/CompanyIdentifier/type",
+    "property": "mandatory",
+    "value": "true"
+   }
+  },
+  {
+   "op": "set_element_property",
+   "arguments": {
+    "element_path": "/root/CompanyIdentifier/type",
+    "property": "minOccurs",
+    "value": "1"
+   }
+  },
+  {
+   "op": "create_field",
+   "arguments": {
+    "field_path": "/root/CompanyIdentifier/value",
+    "field_type": "string"
+   }
+  },
+  {
+   "op": "set_element_property",
+   "arguments": {
+    "element_path": "/root/CompanyIdentifier/value",
+    "property": "maxLength",
+    "value": "80"
+   }
+  },
+  {
+   "op": "set_element_property",
+   "arguments": {
+    "element_path": "/root/CompanyIdentifier/value",
+    "property": "mandatory",
+    "value": "true"
+   }
+  },
+  {
+   "op": "set_element_property",
+   "arguments": {
+    "element_path": "/root/CompanyIdentifier/value",
+    "property": "minOccurs",
+    "value": "1"
+   }
+  },
+  {
+   "op": "create_field",
+   "arguments": {
+    "field_path": "/root/CompanyIdentifier/issuer",
+    "field_type": "string"
+   }
+  },
+  {
+   "op": "set_element_property",
+   "arguments": {
+    "element_path": "/root/CompanyIdentifier/issuer",
+    "property": "maxLength",
+    "value": "255"
+   }
+  },
+  {
+   "op": "create_field",
+   "arguments": {
+    "field_path": "/root/CompanyIdentifier/validFrom",
+    "field_type": "date"
+   }
+  },
+  {
+   "op": "create_field",
+   "arguments": {
+    "field_path": "/root/CompanyIdentifier/validTo",
+    "field_type": "date"
+   }
+  },
+  {
+   "op": "create_field",
+   "arguments": {
+    "field_path": "/root/Company/identifiers",
+    "field_type": "string"
+   }
+  },
+  {
+   "op": "set_association",
+   "arguments": {
+    "field_path": "/root/Company/identifiers",
+    "mode": "tableRefInverse",
+    "fk_field_path": "/root/CompanyIdentifier/company"
+   }
+  },
+  {
+   "op": "create_table",
+   "arguments": {
+    "table_path": "/root/CompanyAddress"
+   }
+  },
+  {
+   "op": "create_field",
+   "arguments": {
+    "field_path": "/root/CompanyAddress/id",
+    "field_type": "int",
+    "is_primary_key": true
+   }
+  },
+  {
+   "op": "set_element_property",
+   "arguments": {
+    "element_path": "/root/CompanyAddress/id",
+    "property": "autoIncrementStart",
+    "value": "1"
+   }
+  },
+  {
+   "op": "create_field",
+   "arguments": {
+    "field_path": "/root/CompanyAddress/company",
+    "field_type": "string"
+   }
+  },
+  {
+   "op": "add_foreign_key",
+   "arguments": {
+    "field_path": "/root/CompanyAddress/company",
+    "target_table_path": "/root/Company"
+   }
+  },
+  {
+   "op": "set_element_property",
+   "arguments": {
+    "element_path": "/root/CompanyAddress/company",
+    "property": "mandatory",
+    "value": "true"
+   }
+  },
+  {
+   "op": "set_element_property",
+   "arguments": {
+    "element_path": "/root/CompanyAddress/company",
+    "property": "minOccurs",
+    "value": "1"
+   }
+  },
+  {
+   "op": "create_field",
+   "arguments": {
+    "field_path": "/root/CompanyAddress/type",
+    "field_type": "string"
+   }
+  },
+  {
+   "op": "set_element_property",
+   "arguments": {
+    "element_path": "/root/CompanyAddress/type",
+    "property": "enumeration",
+    "value": "HEAD_OFFICE,BILLING,DELIVERY,OTHER"
+   }
+  },
+  {
+   "op": "create_field",
+   "arguments": {
+    "field_path": "/root/CompanyAddress/street",
+    "field_type": "string"
+   }
+  },
+  {
+   "op": "set_element_property",
+   "arguments": {
+    "element_path": "/root/CompanyAddress/street",
+    "property": "maxLength",
+    "value": "255"
+   }
+  },
+  {
+   "op": "create_field",
+   "arguments": {
+    "field_path": "/root/CompanyAddress/street2",
+    "field_type": "string"
+   }
+  },
+  {
+   "op": "set_element_property",
+   "arguments": {
+    "element_path": "/root/CompanyAddress/street2",
+    "property": "maxLength",
+    "value": "255"
+   }
+  },
+  {
+   "op": "create_field",
+   "arguments": {
+    "field_path": "/root/CompanyAddress/postcode",
+    "field_type": "string"
+   }
+  },
+  {
+   "op": "set_element_property",
+   "arguments": {
+    "element_path": "/root/CompanyAddress/postcode",
+    "property": "maxLength",
+    "value": "20"
+   }
+  },
+  {
+   "op": "create_field",
+   "arguments": {
+    "field_path": "/root/CompanyAddress/city",
+    "field_type": "string"
+   }
+  },
+  {
+   "op": "set_element_property",
+   "arguments": {
+    "element_path": "/root/CompanyAddress/city",
+    "property": "maxLength",
+    "value": "120"
+   }
+  },
+  {
+   "op": "create_field",
+   "arguments": {
+    "field_path": "/root/CompanyAddress/country",
+    "field_type": "string"
+   }
+  },
+  {
+   "op": "add_foreign_key",
+   "arguments": {
+    "field_path": "/root/CompanyAddress/country",
+    "target_table_path": "/root/ReferenceData/Country"
+   }
+  },
+  {
+   "op": "create_field",
+   "arguments": {
+    "field_path": "/root/CompanyAddress/validFrom",
+    "field_type": "date"
+   }
+  },
+  {
+   "op": "create_field",
+   "arguments": {
+    "field_path": "/root/CompanyAddress/validTo",
+    "field_type": "date"
+   }
+  },
+  {
+   "op": "create_field",
+   "arguments": {
+    "field_path": "/root/Company/addresses",
+    "field_type": "string"
+   }
+  },
+  {
+   "op": "set_association",
+   "arguments": {
+    "field_path": "/root/Company/addresses",
+    "mode": "tableRefInverse",
+    "fk_field_path": "/root/CompanyAddress/company"
+   }
+  },
+  {
+   "op": "create_table",
+   "arguments": {
+    "table_path": "/root/Contact"
+   }
+  },
+  {
+   "op": "create_field",
+   "arguments": {
+    "field_path": "/root/Contact/id",
+    "field_type": "int",
+    "is_primary_key": true
+   }
+  },
+  {
+   "op": "set_element_property",
+   "arguments": {
+    "element_path": "/root/Contact/id",
+    "property": "autoIncrementStart",
+    "value": "1"
+   }
+  },
+  {
+   "op": "create_field",
+   "arguments": {
+    "field_path": "/root/Contact/company",
+    "field_type": "string"
+   }
+  },
+  {
+   "op": "add_foreign_key",
+   "arguments": {
+    "field_path": "/root/Contact/company",
+    "target_table_path": "/root/Company"
+   }
+  },
+  {
+   "op": "set_element_property",
+   "arguments": {
+    "element_path": "/root/Contact/company",
+    "property": "mandatory",
+    "value": "true"
+   }
+  },
+  {
+   "op": "set_element_property",
+   "arguments": {
+    "element_path": "/root/Contact/company",
+    "property": "minOccurs",
+    "value": "1"
+   }
+  },
+  {
+   "op": "create_field",
+   "arguments": {
+    "field_path": "/root/Contact/firstName",
+    "field_type": "string"
+   }
+  },
+  {
+   "op": "set_element_property",
+   "arguments": {
+    "element_path": "/root/Contact/firstName",
+    "property": "maxLength",
+    "value": "80"
+   }
+  },
+  {
+   "op": "create_field",
+   "arguments": {
+    "field_path": "/root/Contact/lastName",
+    "field_type": "string"
+   }
+  },
+  {
+   "op": "set_element_property",
+   "arguments": {
+    "element_path": "/root/Contact/lastName",
+    "property": "maxLength",
+    "value": "80"
+   }
+  },
+  {
+   "op": "set_element_property",
+   "arguments": {
+    "element_path": "/root/Contact/lastName",
+    "property": "mandatory",
+    "value": "true"
+   }
+  },
+  {
+   "op": "set_element_property",
+   "arguments": {
+    "element_path": "/root/Contact/lastName",
+    "property": "minOccurs",
+    "value": "1"
+   }
+  },
+  {
+   "op": "create_field",
+   "arguments": {
+    "field_path": "/root/Contact/jobTitle",
+    "field_type": "string"
+   }
+  },
+  {
+   "op": "set_element_property",
+   "arguments": {
+    "element_path": "/root/Contact/jobTitle",
+    "property": "maxLength",
+    "value": "120"
+   }
+  },
+  {
+   "op": "create_field",
+   "arguments": {
+    "field_path": "/root/Contact/isPrimary",
+    "field_type": "boolean"
+   }
+  },
+  {
+   "op": "create_field",
+   "arguments": {
+    "field_path": "/root/Company/contacts",
+    "field_type": "string"
+   }
+  },
+  {
+   "op": "set_association",
+   "arguments": {
+    "field_path": "/root/Company/contacts",
+    "mode": "tableRefInverse",
+    "fk_field_path": "/root/Contact/company"
+   }
+  }
+ ],
+ "blockPlacements": [
+  {
+   "block": "audit",
+   "table": "/root/Company"
+  },
+  {
+   "block": "audit",
+   "table": "/root/CompanyIdentifier"
+  },
+  {
+   "block": "audit",
+   "table": "/root/CompanyAddress"
+  },
+  {
+   "block": "audit",
+   "table": "/root/Contact"
+  },
+  {
+   "block": "contacts",
+   "table": "/root/Company",
+   "group": "Contact"
+  },
+  {
+   "block": "contacts",
+   "table": "/root/Contact",
+   "group": "Contact"
+  }
+ ],
+ "labels": {
+  "/root/Company": {
+   "en-US": "Company",
+   "fr-FR": "Société"
+  },
+  "/root/Company/Identification": {
+   "en-US": "Identification",
+   "fr-FR": "Identification"
+  },
+  "/root/Company/Legal": {
+   "en-US": "Legal information",
+   "fr-FR": "Informations légales"
+  },
+  "/root/Company/Classification": {
+   "en-US": "Classification",
+   "fr-FR": "Classification"
+  },
+  "/root/Company/HeadOffice": {
+   "en-US": "Head office",
+   "fr-FR": "Siège"
+  },
+  "/root/Company/Lifecycle": {
+   "en-US": "Lifecycle",
+   "fr-FR": "Cycle de vie"
+  },
+  "/root/CompanyIdentifier": {
+   "en-US": "Company identifiers",
+   "fr-FR": "Identifiants"
+  },
+  "/root/CompanyAddress": {
+   "en-US": "Company addresses",
+   "fr-FR": "Adresses"
+  },
+  "/root/Contact": {
+   "en-US": "Contacts",
+   "fr-FR": "Contacts"
+  }
+ },
+ "defaultLabels": {
+  "/root/Company": "${./Identification/name}",
+  "/root/CompanyIdentifier": "${./type} ${./value}",
+  "/root/CompanyAddress": "${./type} ${./city}",
+  "/root/Contact": "${./firstName} ${./lastName}"
+ }
+}

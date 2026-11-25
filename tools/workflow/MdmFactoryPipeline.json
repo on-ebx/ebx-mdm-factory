@@ -1,0 +1,260 @@
+{
+	"model": {
+		"name": "MdmFactoryPipeline",
+		"startNodeId": 1,
+		"label": {
+			"en_US": "MDM Factory: pipeline (landing, staging, master, matching)",
+			"fr_FR": "MDM Factory : pipeline (landing, staging, MDM, rapprochement)"
+		},
+		"description": {
+			"en_US": "Runs the MDM Factory pipeline for one project: loads the landing, transfers to staging, reviews rejects, loads the master zone, then runs matching.",
+			"fr_FR": "Exécute le pipeline MDM Factory d'un projet : charge le landing, transfère vers le staging, revoit les rejets, charge la zone MDM, puis lance le rapprochement."
+		},
+		"owner": "Badministrator",
+		"launching": { "quick": false, "synchronous": false },
+		"moduleName": "ebx-mdm-factory",
+		"permissionsOnInstances": {
+			"create": "Badministrator",
+			"administrate": "Badministrator",
+			"view": "Badministrator",
+			"agentAccessForAdmin": "Badministrator",
+			"agentAccessForInbox": "Badministrator",
+			"creatorIsViewer": false
+		},
+		"modelOrientation": 0
+	},
+	"dataContext": {
+		"variables": [
+			{ "name": "projectCode", "direction": "in" },
+			{ "name": "loadLanding", "direction": "in", "defaultValue": "true" },
+			{ "name": "reviewRejects", "direction": "in", "defaultValue": "true" },
+			{ "name": "scope", "direction": "in", "defaultValue": "incremental" },
+			{ "name": "stagingScope", "direction": "in", "defaultValue": "new" },
+			{ "name": "masterScope", "direction": "in", "defaultValue": "changed" },
+			{ "name": "maxWaitMs", "direction": "in" },
+			{ "name": "intakeChain", "direction": "in" },
+			{ "name": "maxRejectPercent", "direction": "in" },
+			{ "name": "landingResult", "direction": "out" },
+			{ "name": "landingFailed", "direction": "out" },
+			{ "name": "stagingResult", "direction": "out" },
+			{ "name": "stagingRejected", "direction": "out" },
+			{ "name": "stagingWritten", "direction": "out" },
+			{ "name": "stagingStopped", "direction": "out" },
+			{ "name": "masterResult", "direction": "out" },
+			{ "name": "masterRejected", "direction": "out" },
+			{ "name": "masterWritten", "direction": "out" },
+			{ "name": "matchingResult", "direction": "out" }
+		]
+	},
+	"nodes": [
+		{
+			"nodeId": 1,
+			"kind": "condition",
+			"label": "Load the landing?",
+			"description": "True when loadLanding is 'true' (the default): run the landing load step first.",
+			"firstInProcess": true,
+			"hiddenInGraphicalView": false,
+			"scriptClass": "ebx-root-1.0@com.orchestranetworks.workflow.beans.ConditionIsValueEqualsTo",
+			"conditionLibrary": true,
+			"beanParams": [
+				{ "name": "value1", "value": "${loadLanding}" },
+				{ "name": "value2", "value": "true" }
+			]
+		},
+		{
+			"nodeId": 2,
+			"kind": "scriptTask",
+			"label": "Load the landing",
+			"description": "Loads every ProjectSource of the project into the landing zone (LandingLoadTaskBean, connectors preflight included).",
+			"hiddenInGraphicalView": false,
+			"scriptClass": "ebx-mdm-factory@com.on.ebx.factory.workflow.LandingLoadTaskBean",
+			"scriptMode": "library",
+			"scriptLibrary": true,
+			"beanParams": [
+				{ "name": "projectCode", "value": "${projectCode}" }
+			],
+			"outputMappingParams": [
+				{ "name": "resultJson", "value": "landingResult" },
+				{ "name": "failed", "value": "landingFailed" }
+			]
+		},
+		{
+			"nodeId": 3,
+			"kind": "scriptTask",
+			"label": "Load the staging",
+			"description": "Transfers the landing rows into the staging zone (StagingLoadTaskBean). scope is stagingScope: new (default) transfers only landing rows still at 'version received, not yet transferred' and skips an unchanged row's write; all re-transfers every landing row. maxRejectPercent (optional, automatic intake): when at least this share of the rows read is held back, stagingStopped is 'true' (100 = only when every row read is held back). In an intake chain (intakeChain set) a load that rejected every row read does not end in error: it sets stagingStopped to 'true' too.",
+			"hiddenInGraphicalView": false,
+			"scriptClass": "ebx-mdm-factory@com.on.ebx.factory.workflow.StagingLoadTaskBean",
+			"scriptMode": "library",
+			"scriptLibrary": true,
+			"beanParams": [
+				{ "name": "projectCode", "value": "${projectCode}" },
+				{ "name": "scope", "value": "${stagingScope}" },
+				{ "name": "maxRejectPercent", "value": "${maxRejectPercent}" },
+				{ "name": "intakeChain", "value": "${intakeChain}" }
+			],
+			"outputMappingParams": [
+				{ "name": "resultJson", "value": "stagingResult" },
+				{ "name": "rejected", "value": "stagingRejected" },
+				{ "name": "written", "value": "stagingWritten" },
+				{ "name": "stopped", "value": "stagingStopped" }
+			]
+		},
+		{
+			"nodeId": 4,
+			"kind": "condition",
+			"label": "No staging reject?",
+			"description": "True when the staging load rejected nothing: skip the review and go straight to the master load.",
+			"hiddenInGraphicalView": false,
+			"scriptClass": "ebx-root-1.0@com.orchestranetworks.workflow.beans.ConditionIsValueEqualsTo",
+			"conditionLibrary": true,
+			"beanParams": [
+				{ "name": "value1", "value": "${stagingRejected}" },
+				{ "name": "value2", "value": "0" }
+			]
+		},
+		{
+			"nodeId": 5,
+			"kind": "condition",
+			"label": "Review the rejects?",
+			"description": "True when reviewRejects is 'true' (the default): open the review task before the master load runs.",
+			"hiddenInGraphicalView": false,
+			"scriptClass": "ebx-root-1.0@com.orchestranetworks.workflow.beans.ConditionIsValueEqualsTo",
+			"conditionLibrary": true,
+			"beanParams": [
+				{ "name": "value1", "value": "${reviewRejects}" },
+				{ "name": "value2", "value": "true" }
+			]
+		},
+		{
+			"nodeId": 6,
+			"kind": "userTask",
+			"label": "Review the transfer rejects",
+			"description": "Review the landing-to-staging transfer rejects of this project before the master load runs.",
+			"hiddenInGraphicalView": false,
+			"userTaskVersion": 2,
+			"agentAccess": "blocked",
+			"serviceDeclarationKey": "ebx-root-1.0@default",
+			"profiles": ["Badministrator"],
+			"offeredToProfiles": ["Badministrator"],
+			"input": {
+				"parameters": [
+					{ "name": "branch", "value": "MdmFactory" },
+					{ "name": "instance", "value": "MdmFactory" },
+					{ "name": "xpath", "value": "/root/TransferReject[./project='${projectCode}' and ./stage='STAGING']" },
+					{ "name": "firstCallDisplay", "value": "view" }
+				]
+			},
+			"enableReject": true,
+			"enableConfirmationRequest": true,
+			"enableComment": true,
+			"commentStrategyCode": "requiredIfRejected",
+			"customizedAcceptLabel": { "en_US": "Continue to master", "fr_FR": "Continuer vers le MDM" },
+			"customizedRejectLabel": { "en_US": "Stop here", "fr_FR": "Arrêter ici" },
+			"termination": { "completionStrategy": "allWorkItemsCompleted", "rejectionThreshold": 0 }
+		},
+		{
+			"nodeId": 7,
+			"kind": "condition",
+			"label": "Continue to master?",
+			"description": "True when the reviewer chose 'Continue to master' on the review task.",
+			"hiddenInGraphicalView": false,
+			"scriptClass": "ebx-root-1.0@com.orchestranetworks.workflow.beans.ConditionIsLastUserTaskAccepted",
+			"conditionLibrary": true
+		},
+		{
+			"nodeId": 8,
+			"kind": "scriptTask",
+			"label": "Load the master",
+			"description": "Transfers the staging rows into the master (MDM) zone (MasterLoadTaskBean). scope is masterScope: changed (default) reads only the staging rows the journal recorded since the last successful master load and falls back to a full read entity by entity when the journal cannot stand for one; full reads every staging row.",
+			"hiddenInGraphicalView": false,
+			"scriptClass": "ebx-mdm-factory@com.on.ebx.factory.workflow.MasterLoadTaskBean",
+			"scriptMode": "library",
+			"scriptLibrary": true,
+			"beanParams": [
+				{ "name": "projectCode", "value": "${projectCode}" },
+				{ "name": "scope", "value": "${masterScope}" }
+			],
+			"outputMappingParams": [
+				{ "name": "resultJson", "value": "masterResult" },
+				{ "name": "rejected", "value": "masterRejected" },
+				{ "name": "written", "value": "masterWritten" }
+			]
+		},
+		{
+			"nodeId": 9,
+			"kind": "scriptTask",
+			"label": "Run matching",
+			"description": "Runs Match and Merge on the master zone (MatchingRunTaskBean - the same bean/model as MdmFactoryMatchingRun, §18 of docs/MATCHING.md).",
+			"hiddenInGraphicalView": false,
+			"scriptClass": "ebx-mdm-factory@com.on.ebx.factory.workflow.MatchingRunTaskBean",
+			"scriptMode": "library",
+			"scriptLibrary": true,
+			"beanParams": [
+				{ "name": "projectCode", "value": "${projectCode}" },
+				{ "name": "scope", "value": "${scope}" },
+				{ "name": "maxWaitMs", "value": "${maxWaitMs}" }
+			],
+			"outputMappingParams": [
+				{ "name": "resultJson", "value": "matchingResult" }
+			]
+		},
+		{
+			"nodeId": 10,
+			"kind": "scriptTask",
+			"label": "Review stopped",
+			"description": "The reviewer chose to stop: the staging transfer rejects need fixing before the master load and matching run again.",
+			"hiddenInGraphicalView": false,
+			"scriptClass": "ebx-root-1.0@com.orchestranetworks.workflow.beans.ScriptTaskUpdateWorkflowLabel",
+			"scriptMode": "library",
+			"scriptLibrary": true,
+			"beanParams": [
+				{ "name": "locale", "value": "en_US" },
+				{ "name": "label", "value": "MDM Factory pipeline: stopped at the transfer-reject review, master load not run." }
+			]
+		},
+		{
+			"nodeId": 11,
+			"kind": "condition",
+			"label": "Too many rows held back?",
+			"description": "True when the staging load held back at least maxRejectPercent percent of the rows it read, or - in an automatic intake chain - every row it read (nothing to carry to master): stop before the master load. stagingStopped is 'false' otherwise.",
+			"hiddenInGraphicalView": false,
+			"scriptClass": "ebx-root-1.0@com.orchestranetworks.workflow.beans.ConditionIsValueEqualsTo",
+			"conditionLibrary": true,
+			"beanParams": [
+				{ "name": "value1", "value": "${stagingStopped}" },
+				{ "name": "value2", "value": "true" }
+			]
+		},
+		{
+			"nodeId": 12,
+			"kind": "scriptTask",
+			"label": "Stopped at staging: rows held back, master load not run",
+			"description": "The staging load held back too many rows (at or over the threshold of the automatic intake, or every row read): the master load and matching did not run. The engine reports the chain as stopped (the intake pauses) or as done with rows held back (the review opens), by the project's own threshold.",
+			"hiddenInGraphicalView": false,
+			"scriptClass": "ebx-root-1.0@com.orchestranetworks.workflow.beans.ScriptTaskUpdateWorkflowLabel",
+			"scriptMode": "library",
+			"scriptLibrary": true,
+			"beanParams": [
+				{ "name": "locale", "value": "en_US" },
+				{ "name": "label", "value": "MDM Factory pipeline: stopped at staging, rows held back; master load not run." }
+			]
+		}
+	],
+	"links": [
+		{ "fromNodeId": 1, "toNodeId": 2, "role": "ifTrue" },
+		{ "fromNodeId": 1, "toNodeId": 3, "role": "ifFalse" },
+		{ "fromNodeId": 2, "toNodeId": 3, "role": "default" },
+		{ "fromNodeId": 3, "toNodeId": 11, "role": "default" },
+		{ "fromNodeId": 11, "toNodeId": 12, "role": "ifTrue" },
+		{ "fromNodeId": 11, "toNodeId": 4, "role": "ifFalse" },
+		{ "fromNodeId": 4, "toNodeId": 8, "role": "ifTrue" },
+		{ "fromNodeId": 4, "toNodeId": 5, "role": "ifFalse" },
+		{ "fromNodeId": 5, "toNodeId": 6, "role": "ifTrue" },
+		{ "fromNodeId": 5, "toNodeId": 8, "role": "ifFalse" },
+		{ "fromNodeId": 6, "toNodeId": 7, "role": "default" },
+		{ "fromNodeId": 7, "toNodeId": 8, "role": "ifTrue" },
+		{ "fromNodeId": 7, "toNodeId": 10, "role": "ifFalse" },
+		{ "fromNodeId": 8, "toNodeId": 9, "role": "default" }
+	]
+}

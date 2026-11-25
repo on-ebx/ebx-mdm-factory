@@ -1,0 +1,10 @@
+code,label_en,label_fr,country,pattern,checkLibrary
+SIREN,SIREN,SIREN,FR,[0-9]{9},Fasttrack.lib.validator.checkdigit.luhn
+SIRET,SIRET,SIRET,FR,[0-9]{14},Fasttrack.lib.validator.checkdigit.luhn
+VAT,VAT number,Numéro de TVA,,"[A-Z]{2}[A-Z0-9]{2,13}",
+LEI,Legal Entity Identifier,LEI,,[A-Z0-9]{18}[0-9]{2},
+DUNS,D-U-N-S number,Numéro DUNS,,[0-9]{9},
+EORI,EORI number,Numéro EORI,,"[A-Z]{2}[A-Z0-9]{1,15}",
+CRN,Company registration number,Numéro d'immatriculation,,,
+ERP,ERP number,Numéro ERP,,,
+CRM,CRM id,Identifiant CRM,,,

@@ -1,0 +1,556 @@
+{
+"rows": 534,
+"sampled": false,
+"recordsBySystem": {
+"ECOM": 160,
+"LOYALTY": 140,
+"STORES": 234
+},
+"keys": [
+{
+"name": "emailKey",
+"base": "email",
+"multiToken": false,
+"filledBySystem": {
+"ECOM": 160,
+"LOYALTY": 140,
+"STORES": 131
+},
+"sharedBySystem": {
+"ECOM": 124,
+"LOYALTY": 118,
+"STORES": 124
+},
+"distinct": 207,
+"pairsSharing": 341,
+"approximate": false
+},
+{
+"name": "addressKeys",
+"base": "addressKeys",
+"multiToken": true,
+"filledBySystem": {
+"ECOM": 160,
+"LOYALTY": 140
+},
+"sharedBySystem": {
+"ECOM": 106,
+"LOYALTY": 104
+},
+"distinct": 194,
+"pairsSharing": 109,
+"approximate": false
+},
+{
+"name": "prenom",
+"base": "prenom",
+"multiToken": false,
+"filledBySystem": {
+"ECOM": 160,
+"LOYALTY": 140,
+"STORES": 234
+},
+"sharedBySystem": {
+"ECOM": 160,
+"LOYALTY": 140,
+"STORES": 234
+},
+"distinct": 28,
+"pairsSharing": 5660,
+"approximate": false
+},
+{
+"name": "nom",
+"base": "nom",
+"multiToken": false,
+"filledBySystem": {
+"ECOM": 160,
+"LOYALTY": 140,
+"STORES": 234
+},
+"sharedBySystem": {
+"ECOM": 160,
+"LOYALTY": 140,
+"STORES": 234
+},
+"distinct": 54,
+"pairsSharing": 2914,
+"approximate": false
+},
+{
+"name": "telephone",
+"base": "telephone",
+"multiToken": false,
+"filledBySystem": {
+"ECOM": 160,
+"LOYALTY": 140,
+"STORES": 234
+},
+"sharedBySystem": {
+"LOYALTY": 75,
+"STORES": 222
+},
+"distinct": 345,
+"pairsSharing": 292,
+"approximate": false
+},
+{
+"name": "telephoneE164",
+"base": "telephoneE164",
+"multiToken": false,
+"filledBySystem": {
+"ECOM": 160,
+"LOYALTY": 140,
+"STORES": 234
+},
+"sharedBySystem": {
+"ECOM": 133,
+"LOYALTY": 124,
+"STORES": 230
+},
+"distinct": 212,
+"pairsSharing": 565,
+"approximate": false
+},
+{
+"name": "nomCompletKey",
+"base": "nomCompletKey",
+"multiToken": false,
+"filledBySystem": {
+"ECOM": 160,
+"LOYALTY": 140,
+"STORES": 234
+},
+"sharedBySystem": {
+"ECOM": 141,
+"LOYALTY": 129,
+"STORES": 231
+},
+"distinct": 187,
+"pairsSharing": 694,
+"approximate": false
+},
+{
+"name": "dateNaissance",
+"base": "dateNaissance",
+"multiToken": false,
+"filledBySystem": {
+"ECOM": 160,
+"LOYALTY": 140
+},
+"sharedBySystem": {
+"ECOM": 105,
+"LOYALTY": 105
+},
+"distinct": 195,
+"pairsSharing": 105,
+"approximate": false
+}
+],
+"agreements": [
+{
+"key": "emailKey",
+"other": "prenom",
+"pairs": 341,
+"agree": 341,
+"conflict": 0,
+"unknown": 0
+},
+{
+"key": "emailKey",
+"other": "nom",
+"pairs": 341,
+"agree": 154,
+"conflict": 187,
+"unknown": 0
+},
+{
+"key": "emailKey",
+"other": "telephone",
+"pairs": 341,
+"agree": 137,
+"conflict": 204,
+"unknown": 0
+},
+{
+"key": "emailKey",
+"other": "telephoneE164",
+"pairs": 341,
+"agree": 341,
+"conflict": 0,
+"unknown": 0
+},
+{
+"key": "emailKey",
+"other": "nomCompletKey",
+"pairs": 341,
+"agree": 341,
+"conflict": 0,
+"unknown": 0
+},
+{
+"key": "emailKey",
+"other": "dateNaissance",
+"pairs": 341,
+"agree": 103,
+"conflict": 0,
+"unknown": 238
+},
+{
+"key": "addressKeys",
+"other": "emailKey",
+"pairs": 109,
+"agree": 103,
+"conflict": 6,
+"unknown": 0
+},
+{
+"key": "addressKeys",
+"other": "prenom",
+"pairs": 109,
+"agree": 103,
+"conflict": 6,
+"unknown": 0
+},
+{
+"key": "addressKeys",
+"other": "nom",
+"pairs": 109,
+"agree": 103,
+"conflict": 6,
+"unknown": 0
+},
+{
+"key": "addressKeys",
+"other": "telephone",
+"pairs": 109,
+"agree": 0,
+"conflict": 109,
+"unknown": 0
+},
+{
+"key": "addressKeys",
+"other": "telephoneE164",
+"pairs": 109,
+"agree": 103,
+"conflict": 6,
+"unknown": 0
+},
+{
+"key": "addressKeys",
+"other": "nomCompletKey",
+"pairs": 109,
+"agree": 103,
+"conflict": 6,
+"unknown": 0
+},
+{
+"key": "addressKeys",
+"other": "dateNaissance",
+"pairs": 109,
+"agree": 103,
+"conflict": 6,
+"unknown": 0
+},
+{
+"key": "prenom",
+"other": "emailKey",
+"pairs": 5660,
+"agree": 341,
+"conflict": 3310,
+"unknown": 2009
+},
+{
+"key": "prenom",
+"other": "nom",
+"pairs": 5660,
+"agree": 308,
+"conflict": 5352,
+"unknown": 0
+},
+{
+"key": "prenom",
+"other": "telephone",
+"pairs": 5660,
+"agree": 292,
+"conflict": 5368,
+"unknown": 0
+},
+{
+"key": "prenom",
+"other": "telephoneE164",
+"pairs": 5660,
+"agree": 565,
+"conflict": 5095,
+"unknown": 0
+},
+{
+"key": "prenom",
+"other": "nomCompletKey",
+"pairs": 5660,
+"agree": 694,
+"conflict": 4966,
+"unknown": 0
+},
+{
+"key": "prenom",
+"other": "dateNaissance",
+"pairs": 5660,
+"agree": 104,
+"conflict": 1636,
+"unknown": 3920
+},
+{
+"key": "nom",
+"other": "emailKey",
+"pairs": 2914,
+"agree": 154,
+"conflict": 1944,
+"unknown": 816
+},
+{
+"key": "nom",
+"other": "prenom",
+"pairs": 2914,
+"agree": 308,
+"conflict": 2606,
+"unknown": 0
+},
+{
+"key": "nom",
+"other": "telephone",
+"pairs": 2914,
+"agree": 147,
+"conflict": 2767,
+"unknown": 0
+},
+{
+"key": "nom",
+"other": "telephoneE164",
+"pairs": 2914,
+"agree": 250,
+"conflict": 2664,
+"unknown": 0
+},
+{
+"key": "nom",
+"other": "nomCompletKey",
+"pairs": 2914,
+"agree": 308,
+"conflict": 2606,
+"unknown": 0
+},
+{
+"key": "nom",
+"other": "dateNaissance",
+"pairs": 2914,
+"agree": 103,
+"conflict": 1655,
+"unknown": 1156
+},
+{
+"key": "telephone",
+"other": "emailKey",
+"pairs": 292,
+"agree": 137,
+"conflict": 0,
+"unknown": 155
+},
+{
+"key": "telephone",
+"other": "prenom",
+"pairs": 292,
+"agree": 292,
+"conflict": 0,
+"unknown": 0
+},
+{
+"key": "telephone",
+"other": "nom",
+"pairs": 292,
+"agree": 147,
+"conflict": 145,
+"unknown": 0
+},
+{
+"key": "telephone",
+"other": "telephoneE164",
+"pairs": 292,
+"agree": 292,
+"conflict": 0,
+"unknown": 0
+},
+{
+"key": "telephone",
+"other": "nomCompletKey",
+"pairs": 292,
+"agree": 292,
+"conflict": 0,
+"unknown": 0
+},
+{
+"key": "telephone",
+"other": "dateNaissance",
+"pairs": 292,
+"agree": 0,
+"conflict": 0,
+"unknown": 292
+},
+{
+"key": "telephoneE164",
+"other": "emailKey",
+"pairs": 565,
+"agree": 341,
+"conflict": 0,
+"unknown": 224
+},
+{
+"key": "telephoneE164",
+"other": "prenom",
+"pairs": 565,
+"agree": 565,
+"conflict": 0,
+"unknown": 0
+},
+{
+"key": "telephoneE164",
+"other": "nom",
+"pairs": 565,
+"agree": 250,
+"conflict": 315,
+"unknown": 0
+},
+{
+"key": "telephoneE164",
+"other": "telephone",
+"pairs": 565,
+"agree": 292,
+"conflict": 273,
+"unknown": 0
+},
+{
+"key": "telephoneE164",
+"other": "nomCompletKey",
+"pairs": 565,
+"agree": 565,
+"conflict": 0,
+"unknown": 0
+},
+{
+"key": "telephoneE164",
+"other": "dateNaissance",
+"pairs": 565,
+"agree": 103,
+"conflict": 0,
+"unknown": 462
+},
+{
+"key": "nomCompletKey",
+"other": "emailKey",
+"pairs": 694,
+"agree": 341,
+"conflict": 89,
+"unknown": 264
+},
+{
+"key": "nomCompletKey",
+"other": "prenom",
+"pairs": 694,
+"agree": 694,
+"conflict": 0,
+"unknown": 0
+},
+{
+"key": "nomCompletKey",
+"other": "nom",
+"pairs": 694,
+"agree": 308,
+"conflict": 386,
+"unknown": 0
+},
+{
+"key": "nomCompletKey",
+"other": "telephone",
+"pairs": 694,
+"agree": 292,
+"conflict": 402,
+"unknown": 0
+},
+{
+"key": "nomCompletKey",
+"other": "telephoneE164",
+"pairs": 694,
+"agree": 565,
+"conflict": 129,
+"unknown": 0
+},
+{
+"key": "nomCompletKey",
+"other": "dateNaissance",
+"pairs": 694,
+"agree": 103,
+"conflict": 49,
+"unknown": 542
+},
+{
+"key": "dateNaissance",
+"other": "emailKey",
+"pairs": 105,
+"agree": 103,
+"conflict": 2,
+"unknown": 0
+},
+{
+"key": "dateNaissance",
+"other": "prenom",
+"pairs": 105,
+"agree": 104,
+"conflict": 1,
+"unknown": 0
+},
+{
+"key": "dateNaissance",
+"other": "nom",
+"pairs": 105,
+"agree": 103,
+"conflict": 2,
+"unknown": 0
+},
+{
+"key": "dateNaissance",
+"other": "telephone",
+"pairs": 105,
+"agree": 0,
+"conflict": 105,
+"unknown": 0
+},
+{
+"key": "dateNaissance",
+"other": "telephoneE164",
+"pairs": 105,
+"agree": 103,
+"conflict": 2,
+"unknown": 0
+},
+{
+"key": "dateNaissance",
+"other": "nomCompletKey",
+"pairs": 105,
+"agree": 103,
+"conflict": 2,
+"unknown": 0
+}
+],
+"masks": {
+"ECOM": {
+"255": 160
+},
+"LOYALTY": {
+"255": 140
+},
+"STORES": {
+"124": 103,
+"125": 131
+}
+}
+}

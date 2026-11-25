@@ -1,0 +1,10 @@
+{"format": "accelerator-pack-matching/1", "table": "/root/Company", "executionMode": "INLINE",
+ "candidateFields": [{"field": "/Legal/registrationNumber", "weight": 20}, {"field": "/Identification/name", "weight": 4}, {"field": "/HeadOffice/postcode", "weight": 2}],
+ "decisionTree": {"name": "Same registration number", "function": "All fields match",
+   "fields": [{"field": "/Legal/registrationNumber", "algorithm": "ebx-addon-mame@exact", "params": [{"name": "minimumScore", "value": "100"}], "bothNullValueHandling": "NOT_MATCH", "oneNullValueHandling": "NOT_MATCH"}],
+   "trueNode": {"name": "MATCHED", "function": null},
+   "falseNode": {"name": "Close name, same postcode", "function": "All fields match",
+     "fields": [{"field": "/Identification/name", "algorithm": "ebx-addon-mame@jarowinkler", "params": [{"name": "minimumScore", "value": "88"}, {"name": "jaroWinklerThreshold", "value": "0.7"}], "bothNullValueHandling": "NOT_MATCH", "oneNullValueHandling": "NOT_MATCH"},
+                {"field": "/HeadOffice/postcode", "algorithm": "ebx-addon-mame@exact", "params": [{"name": "minimumScore", "value": "100"}], "bothNullValueHandling": "NOT_MATCH", "oneNullValueHandling": "NOT_MATCH"}],
+     "trueNode": {"name": "SUSPECTED", "function": null}, "falseNode": {"name": "NOT_MATCHED", "function": null}}},
+ "note": "Sent to generate_matching_policy as material; the person decides; executionMode INLINE = matchingOnCreation 3 and matchingOnUpdate 3 (measurement 1)."}

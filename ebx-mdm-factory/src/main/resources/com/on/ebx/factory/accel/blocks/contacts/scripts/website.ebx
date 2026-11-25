@@ -1,0 +1,12 @@
+uses core.message as messageContext;
+uses core.validation as validationContext;
+import Fasttrack.lib.validator.url as url;
+export procedure check(record : .${table})
+begin
+  if isNull(record.${group}.website) then return;
+  if not url.isValid('' | record.${group}.website) then
+    messageContext.addWarning('The website address does not look like a URL.');
+end
+export procedure setup()
+begin
+end

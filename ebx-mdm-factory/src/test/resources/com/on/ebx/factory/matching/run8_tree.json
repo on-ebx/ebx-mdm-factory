@@ -1,0 +1,207 @@
+{
+"root": "N1",
+"nodes": [
+{
+"id": "N1",
+"function": "ALL_FIELDS",
+"fields": [
+{
+"field": "emailKey",
+"algorithm": "ebx-addon-mame@exact",
+"minimumScore": 100,
+"bothNull": "NOT_MATCH",
+"oneNull": "NOT_MATCH"
+},
+{
+"field": "mobileE164",
+"algorithm": "ebx-addon-mame@exact",
+"minimumScore": 100,
+"bothNull": "NOT_MATCH",
+"oneNull": "NOT_MATCH"
+}
+],
+"onTrue": "MATCH",
+"onFalse": "N2"
+},
+{
+"id": "N2",
+"function": "ALL_FIELDS",
+"fields": [
+{
+"field": "emailKey",
+"algorithm": "ebx-addon-mame@exact",
+"minimumScore": 100,
+"bothNull": "NOT_MATCH",
+"oneNull": "NOT_MATCH"
+}
+],
+"onTrue": "SUSPECTED",
+"onFalse": "N3"
+},
+{
+"id": "N3",
+"function": "ALL_FIELDS",
+"fields": [
+{
+"field": "mobileE164",
+"algorithm": "ebx-addon-mame@exact",
+"minimumScore": 100,
+"bothNull": "NOT_MATCH",
+"oneNull": "NOT_MATCH"
+}
+],
+"onTrue": "SUSPECTED",
+"onFalse": "N4"
+},
+{
+"id": "N4",
+"function": "ALL_FIELDS",
+"fields": [
+{
+"field": "addressKeys",
+"algorithm": "ebx-addon-mame@exactFullText",
+"minimumScore": 50,
+"bothNull": "NOT_MATCH",
+"oneNull": "NOT_MATCH"
+}
+],
+"onTrue": "N5",
+"onFalse": "N6"
+},
+{
+"id": "N5",
+"function": "ALL_FIELDS",
+"fields": [
+{
+"field": "street",
+"via": "Adresse",
+"algorithm": "ebx-addon-mame@exactFullText",
+"dataType": "STRING",
+"minimumScore": 100,
+"bothNull": "NOT_MATCH",
+"oneNull": "NOT_MATCH"
+}
+],
+"onTrue": "N7",
+"onFalse": "N8"
+},
+{
+"id": "N6",
+"function": "ALL_FIELDS",
+"fields": [
+{
+"field": "firstName",
+"algorithm": "ebx-addon-mame@exact",
+"minimumScore": 100,
+"bothNull": "NOT_MATCH",
+"oneNull": "NOT_MATCH"
+}
+],
+"onTrue": "N10",
+"onFalse": "NOT_MATCHED"
+},
+{
+"id": "N7",
+"function": "AVERAGE",
+"minimumScore": 85,
+"fields": [
+{
+"field": "firstName",
+"algorithm": "ebx-addon-mame@jarowinkler",
+"weight": 3,
+"bothNull": "NOT_MATCH",
+"oneNull": "NOT_MATCH"
+},
+{
+"field": "lastName",
+"algorithm": "ebx-addon-mame@jarowinkler",
+"weight": 3,
+"bothNull": "NOT_MATCH",
+"oneNull": "NOT_MATCH"
+}
+],
+"onTrue": "SUSPECTED",
+"onFalse": "NOT_MATCHED"
+},
+{
+"id": "N8",
+"function": "ALL_FIELDS",
+"fields": [
+{
+"field": "street",
+"via": "Adresse",
+"algorithm": "ebx-addon-mame@exactFullText",
+"dataType": "STRING",
+"minimumScore": 100,
+"bothNull": "NOT_MATCH",
+"oneNull": "NOT_MATCH"
+}
+],
+"onTrue": "SUSPECTED",
+"onFalse": "N9"
+},
+{
+"id": "N9",
+"function": "AVERAGE",
+"minimumScore": 85,
+"fields": [
+{
+"field": "firstName",
+"algorithm": "ebx-addon-mame@jarowinkler",
+"weight": 3,
+"bothNull": "NOT_MATCH",
+"oneNull": "NOT_MATCH"
+},
+{
+"field": "lastName",
+"algorithm": "ebx-addon-mame@jarowinkler",
+"weight": 3,
+"bothNull": "NOT_MATCH",
+"oneNull": "NOT_MATCH"
+}
+],
+"onTrue": "SUSPECTED",
+"onFalse": "NOT_MATCHED"
+},
+{
+"id": "N10",
+"function": "AVERAGE",
+"minimumScore": 85,
+"fields": [
+{
+"field": "firstName",
+"algorithm": "ebx-addon-mame@jarowinkler",
+"weight": 3,
+"bothNull": "NOT_MATCH",
+"oneNull": "NOT_MATCH"
+},
+{
+"field": "lastName",
+"algorithm": "ebx-addon-mame@jarowinkler",
+"weight": 3,
+"bothNull": "NOT_MATCH",
+"oneNull": "NOT_MATCH"
+}
+],
+"onTrue": "SUSPECTED",
+"onFalse": "N11"
+},
+{
+"id": "N11",
+"function": "ALL_FIELDS",
+"fields": [
+{
+"field": "street",
+"via": "Adresse",
+"algorithm": "ebx-addon-mame@exactFullText",
+"dataType": "STRING",
+"minimumScore": 100,
+"bothNull": "NOT_MATCH",
+"oneNull": "NOT_MATCH"
+}
+],
+"onTrue": "SUSPECTED",
+"onFalse": "NOT_MATCHED"
+}
+]
+}

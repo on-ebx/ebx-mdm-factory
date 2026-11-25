@@ -1,0 +1,272 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!--MasterJournal: data model of the ebx-mdm-factory module (com.on.ebx.factory), packaged separately from MdmFactory.xsd (tools/build_xsd.py only builds that
+    one file) so it can be instantiated as a dataset INSIDE a project's own STAGING dataspace, next to the Staging dataset - docs/VOLUME.md, lot M-INC. The
+    staging tables carry generated script triggers (MasterJournalAfterCreate / MasterJournalAfterModify) that journal every created or modified staging record
+    here, whoever wrote it (the staging loader, the derivation triggers and their backfill, a steward in the UI, a Data Services write). A table trigger cannot
+    open `execute transaction` (measured live in the distribution lot, PipelineStep 395), so it can only write through its own ambient `_ebx.transaction`, which
+    is scoped to `_ebx.dataspace` - the record's OWN dataspace: the journal therefore lives in that same dataspace, as a second dataset reached with
+    `db.findDataset(_ebx.dataspace, 'MdmFactoryMasterJournal')`; same design as IntakeSignal.xsd and DistributionOutbox.xsd. Control is the cheap primary-key
+    lookup that lets the trigger return at once for an entity that is not recording. ebx.MasterJournal creates the dataset (doCreateRoot, idempotent) at the
+    first master load.-->
+<xs:schema xmlns:osd="urn:ebx-schemas:common_1.0" xmlns:fmt="urn:ebx-schemas:format_1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:import namespace="urn:ebx-schemas:common_1.0" schemaLocation="http://schema.orchestranetworks.com/common_1.0.xsd"/>
+    <xs:annotation>
+        <xs:appinfo>
+            <osd:validation>
+                <validationMessageThreshold>1000</validationMessageThreshold>
+            </osd:validation>
+            <osd:inheritance>
+                <dataSetInheritance>none</dataSetInheritance>
+            </osd:inheritance>
+        </xs:appinfo>
+    </xs:annotation>
+    <xs:element name="root" osd:access="--">
+        <xs:complexType>
+            <xs:sequence>
+
+                <xs:element name="Control" minOccurs="0" maxOccurs="unbounded">
+                    <xs:annotation>
+                        <xs:documentation xml:lang="en-US">
+                            <osd:label>Journal control</osd:label>
+                            <osd:description>One row per promoted entity of the project: whether the generated staging triggers record changes for it (a row exists) and whether the journal can replace a full read at the next master load (armed). Written by ebx.MasterJournal only. See docs/VOLUME.md, lot M-INC.</osd:description>
+                        </xs:documentation>
+                        <xs:documentation xml:lang="fr-FR">
+                            <osd:label>Contrôle du journal</osd:label>
+                            <osd:description>Une ligne par entité promue du projet : si les déclencheurs de staging générés enregistrent ses changements (une ligne existe) et si le journal peut remplacer une lecture complète au prochain chargement du master (armé). Écrite uniquement par ebx.MasterJournal. Voir docs/VOLUME.md, lot M-INC.</osd:description>
+                        </xs:documentation>
+                        <xs:appinfo>
+                            <osd:table>
+                                <primaryKeys>/project /entity </primaryKeys>
+                                <defaultLabel>${./entity} (${./armed})</defaultLabel>
+                                <defaultView>
+                                    <defaultViewForGroups>expanded</defaultViewForGroups>
+                                </defaultView>
+                            </osd:table>
+                        </xs:appinfo>
+                    </xs:annotation>
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="project" minOccurs="1" maxOccurs="1">
+                                <xs:annotation>
+                                    <xs:documentation xml:lang="en-US">
+                                        <osd:label>Project</osd:label>
+                                        <osd:description>The project code. Constant of the generated triggers.</osd:description>
+                                    </xs:documentation>
+                                    <xs:documentation xml:lang="fr-FR">
+                                        <osd:label>Projet</osd:label>
+                                        <osd:description>Le code du projet. Constante des déclencheurs générés.</osd:description>
+                                    </xs:documentation>
+                                </xs:annotation>
+                                <xs:simpleType>
+                                    <xs:restriction base="xs:string">
+                                        <xs:maxLength value="120"/>
+                                    </xs:restriction>
+                                </xs:simpleType>
+                            </xs:element>
+                            <xs:element name="entity" minOccurs="1" maxOccurs="1">
+                                <xs:annotation>
+                                    <xs:documentation xml:lang="en-US">
+                                        <osd:label>Entity</osd:label>
+                                        <osd:description>The staging entity = the staging table name.</osd:description>
+                                    </xs:documentation>
+                                    <xs:documentation xml:lang="fr-FR">
+                                        <osd:label>Entité</osd:label>
+                                        <osd:description>L'entité de staging = le nom de la table de staging.</osd:description>
+                                    </xs:documentation>
+                                </xs:annotation>
+                                <xs:simpleType>
+                                    <xs:restriction base="xs:string">
+                                        <xs:maxLength value="200"/>
+                                    </xs:restriction>
+                                </xs:simpleType>
+                            </xs:element>
+                            <xs:element name="armed" type="xs:boolean" minOccurs="0" maxOccurs="1">
+                                <xs:annotation>
+                                    <xs:documentation xml:lang="en-US">
+                                        <osd:label>Armed</osd:label>
+                                        <osd:description>True once a full master load of this entity finished: the next load may read only the journal. Set false when a full load starts, and again if the plan fingerprint or the triggers no longer match.</osd:description>
+                                    </xs:documentation>
+                                    <xs:documentation xml:lang="fr-FR">
+                                        <osd:label>Armé</osd:label>
+                                        <osd:description>Vrai quand un chargement complet du master de cette entité s'est terminé : le suivant peut ne lire que le journal. Remis à faux au début d'un chargement complet.</osd:description>
+                                    </xs:documentation>
+                                </xs:annotation>
+                            </xs:element>
+                            <xs:element name="armedAt" type="xs:dateTime" minOccurs="0" maxOccurs="1">
+                                <xs:annotation>
+                                    <xs:documentation xml:lang="en-US">
+                                        <osd:label>Armed at</osd:label>
+                                        <osd:description>When the last full (or journal) load of this entity finished.</osd:description>
+                                    </xs:documentation>
+                                    <xs:documentation xml:lang="fr-FR">
+                                        <osd:label>Armé le</osd:label>
+                                        <osd:description>Quand le dernier chargement complet (ou par journal) de cette entité s'est terminé.</osd:description>
+                                    </xs:documentation>
+                                </xs:annotation>
+                            </xs:element>
+                            <xs:element name="recordingSince" type="xs:dateTime" minOccurs="0" maxOccurs="1">
+                                <xs:annotation>
+                                    <xs:documentation xml:lang="en-US">
+                                        <osd:label>Recording since</osd:label>
+                                        <osd:description>When the triggers started recording changes for this entity (the first full load that found them installed).</osd:description>
+                                    </xs:documentation>
+                                    <xs:documentation xml:lang="fr-FR">
+                                        <osd:label>Enregistré depuis</osd:label>
+                                        <osd:description>Depuis quand les déclencheurs enregistrent les changements de cette entité.</osd:description>
+                                    </xs:documentation>
+                                </xs:annotation>
+                            </xs:element>
+                            <xs:element name="planFingerprint" minOccurs="0" maxOccurs="1">
+                                <xs:annotation>
+                                    <xs:documentation xml:lang="en-US">
+                                        <osd:label>Plan fingerprint</osd:label>
+                                        <osd:description>Hash of what the master load copies for this entity (fields, foreign keys, REJECT rules, writable master fields) when it was last armed. A different value forces a full load.</osd:description>
+                                    </xs:documentation>
+                                    <xs:documentation xml:lang="fr-FR">
+                                        <osd:label>Empreinte du plan</osd:label>
+                                        <osd:description>Empreinte de ce que le chargement du master copie pour cette entité. Une valeur différente impose un chargement complet.</osd:description>
+                                    </xs:documentation>
+                                </xs:annotation>
+                                <xs:simpleType>
+                                    <xs:restriction base="xs:string">
+                                        <xs:maxLength value="128"/>
+                                    </xs:restriction>
+                                </xs:simpleType>
+                            </xs:element>
+                            <xs:element name="updatedBy" minOccurs="0" maxOccurs="1">
+                                <xs:annotation>
+                                    <xs:documentation xml:lang="en-US">
+                                        <osd:label>Updated by</osd:label>
+                                    </xs:documentation>
+                                    <xs:documentation xml:lang="fr-FR">
+                                        <osd:label>Mis à jour par</osd:label>
+                                    </xs:documentation>
+                                </xs:annotation>
+                                <xs:simpleType>
+                                    <xs:restriction base="xs:string">
+                                        <xs:maxLength value="120"/>
+                                    </xs:restriction>
+                                </xs:simpleType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+
+                <xs:element name="Change" minOccurs="0" maxOccurs="unbounded">
+                    <xs:annotation>
+                        <xs:documentation xml:lang="en-US">
+                            <osd:label>Staging change</osd:label>
+                            <osd:description>One row per staging record created or modified since the last master load that consumed it (primary key project + entity + sourceSystem + sourceId = the staging record, so a record changed twice is journaled once and its counter goes up). Written by the generated staging triggers MasterJournalAfterCreate / MasterJournalAfterModify, deleted by ebx.MasterJournal once the master load has copied it. See docs/VOLUME.md, lot M-INC.</osd:description>
+                        </xs:documentation>
+                        <xs:documentation xml:lang="fr-FR">
+                            <osd:label>Changement de staging</osd:label>
+                            <osd:description>Une ligne par enregistrement de staging créé ou modifié depuis le dernier chargement du master qui l'a consommé (clé primaire projet + entité + sourceSystem + sourceId = l'enregistrement de staging : un enregistrement modifié deux fois n'est journalisé qu'une fois et son compteur augmente). Écrite par les déclencheurs de staging générés MasterJournalAfterCreate / MasterJournalAfterModify, supprimée par ebx.MasterJournal une fois copiée vers le master. Voir docs/VOLUME.md, lot M-INC.</osd:description>
+                        </xs:documentation>
+                        <xs:appinfo>
+                            <osd:table>
+                                <primaryKeys>/project /entity /sourceSystem /sourceId </primaryKeys>
+                                <defaultLabel>${./entity} ${./sourceSystem}|${./sourceId}</defaultLabel>
+                                <defaultView>
+                                    <defaultViewForGroups>expanded</defaultViewForGroups>
+                                </defaultView>
+                            </osd:table>
+                        </xs:appinfo>
+                    </xs:annotation>
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="project" minOccurs="1" maxOccurs="1">
+                                <xs:annotation>
+                                    <xs:documentation xml:lang="en-US">
+                                        <osd:label>Project</osd:label>
+                                    </xs:documentation>
+                                    <xs:documentation xml:lang="fr-FR">
+                                        <osd:label>Projet</osd:label>
+                                    </xs:documentation>
+                                </xs:annotation>
+                                <xs:simpleType>
+                                    <xs:restriction base="xs:string">
+                                        <xs:maxLength value="120"/>
+                                    </xs:restriction>
+                                </xs:simpleType>
+                            </xs:element>
+                            <xs:element name="entity" minOccurs="1" maxOccurs="1">
+                                <xs:annotation>
+                                    <xs:documentation xml:lang="en-US">
+                                        <osd:label>Entity</osd:label>
+                                    </xs:documentation>
+                                    <xs:documentation xml:lang="fr-FR">
+                                        <osd:label>Entité</osd:label>
+                                    </xs:documentation>
+                                </xs:annotation>
+                                <xs:simpleType>
+                                    <xs:restriction base="xs:string">
+                                        <xs:maxLength value="200"/>
+                                    </xs:restriction>
+                                </xs:simpleType>
+                            </xs:element>
+                            <xs:element name="sourceSystem" minOccurs="1" maxOccurs="1">
+                                <xs:annotation>
+                                    <xs:documentation xml:lang="en-US">
+                                        <osd:label>Source system</osd:label>
+                                        <osd:description>The staging record sourceSystem. A plain string: the staging key is rebuilt in Java with computePrimaryKey, never by hand.</osd:description>
+                                    </xs:documentation>
+                                    <xs:documentation xml:lang="fr-FR">
+                                        <osd:label>Système source</osd:label>
+                                        <osd:description>Le sourceSystem de l'enregistrement de staging. Simple chaîne : la clé de staging est recalculée en Java avec computePrimaryKey, jamais à la main.</osd:description>
+                                    </xs:documentation>
+                                </xs:annotation>
+                                <xs:simpleType>
+                                    <xs:restriction base="xs:string">
+                                        <xs:maxLength value="1000"/>
+                                    </xs:restriction>
+                                </xs:simpleType>
+                            </xs:element>
+                            <xs:element name="sourceId" minOccurs="1" maxOccurs="1">
+                                <xs:annotation>
+                                    <xs:documentation xml:lang="en-US">
+                                        <osd:label>Source id</osd:label>
+                                        <osd:description>The staging record sourceId.</osd:description>
+                                    </xs:documentation>
+                                    <xs:documentation xml:lang="fr-FR">
+                                        <osd:label>Identifiant source</osd:label>
+                                        <osd:description>Le sourceId de l'enregistrement de staging.</osd:description>
+                                    </xs:documentation>
+                                </xs:annotation>
+                                <xs:simpleType>
+                                    <xs:restriction base="xs:string">
+                                        <xs:maxLength value="1000"/>
+                                    </xs:restriction>
+                                </xs:simpleType>
+                            </xs:element>
+                            <xs:element name="changedAt" type="xs:dateTime" minOccurs="0" maxOccurs="1">
+                                <xs:annotation>
+                                    <xs:documentation xml:lang="en-US">
+                                        <osd:label>Changed at</osd:label>
+                                        <osd:description>When the staging record was last created or modified.</osd:description>
+                                    </xs:documentation>
+                                    <xs:documentation xml:lang="fr-FR">
+                                        <osd:label>Modifié le</osd:label>
+                                        <osd:description>Quand l'enregistrement de staging a été créé ou modifié pour la dernière fois.</osd:description>
+                                    </xs:documentation>
+                                </xs:annotation>
+                            </xs:element>
+                            <xs:element name="changes" type="xs:int" minOccurs="0" maxOccurs="1">
+                                <xs:annotation>
+                                    <xs:documentation xml:lang="en-US">
+                                        <osd:label>Changes</osd:label>
+                                        <osd:description>How many times the record was written since it was journaled. The master load deletes a row only if this counter still has the value it read, so a change made during the load is never lost.</osd:description>
+                                    </xs:documentation>
+                                    <xs:documentation xml:lang="fr-FR">
+                                        <osd:label>Changements</osd:label>
+                                        <osd:description>Combien de fois l'enregistrement a été écrit depuis qu'il est journalisé. Le chargement du master ne supprime une ligne que si ce compteur a encore la valeur lue : un changement fait pendant le chargement n'est jamais perdu.</osd:description>
+                                    </xs:documentation>
+                                </xs:annotation>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>

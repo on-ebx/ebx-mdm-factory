@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Distribution modes</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:'Inter',system-ui,sans-serif;background:#f4f5f8;color:#172033}
+a{color:#684bc0;text-decoration:none}a:hover{text-decoration:underline}
+.chip{display:inline-flex;align-items:center;gap:4px;font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:999px;border:1px solid;white-space:nowrap}
+.good{background:#ecfdf3;color:#087443;border-color:#b7e3ca}
+.warn{background:#fffaeb;color:#93370d;border-color:#fedf89}
+.bad{background:#fef2f2;color:#b42318;border-color:#fecaca}
+.muted{background:#f2f4f7;color:#475467;border-color:#d0d5dd}
+.acc{background:#f0eefa;color:#684bc0;border-color:#d9d2f2}
+.btn{display:inline-flex;align-items:center;gap:6px;border:1px solid #d0d5dd;background:#fff;color:#344054;border-radius:9px;padding:8px 14px;font-size:12.5px;font-weight:700;cursor:pointer;font-family:inherit;text-decoration:none}
+.btn:hover{border-color:#684bc0;color:#684bc0;text-decoration:none}
+.pri{background:#684bc0;border-color:#684bc0;color:#fff}
+.pri:hover{background:#5a3fae;color:#fff}
+.big{white-space:nowrap;padding:13px 22px;font-size:14.5px;border-radius:11px}
+.quiet{background:transparent;border-color:transparent;color:#667085}
+.card{background:#fff;border:1px solid #e4e7ec;border-radius:14px}
+.eyebrow{font-size:10.5px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:#98a2b3}
+.mono{font-family:ui-monospace,Menlo,Consolas,monospace}
+.sf{background:#1d5fa8}.sap{background:#b54708}.live{background:#0e7c86}.ebx{background:#4d7c0f}
+.kc{display:inline-flex;align-items:center;gap:5px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:11.5px;font-weight:700;padding:3px 8px;border-radius:6px;background:#f0eefa;color:#4b2f9e;border:1px solid #d9d2f2;white-space:nowrap}
+.kplus{font-size:12px;font-weight:800;color:#98a2b3}
+.srcDot{display:inline-block;width:8px;height:8px;border-radius:50%;flex:none}
+.step{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:600;color:#667085}
+.step .n{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;border:1.5px solid #d0d5dd;background:#fff}
+.step.done .n{background:#ecfdf3;border-color:#87c9a3;color:#087443}
+.step.cur{color:#172033}.step.cur .n{background:#684bc0;border-color:#684bc0;color:#fff}
+.term{border-bottom:1px dotted #684bc0;color:#172033;font-weight:600}
+.inp{display:flex;align-items:center;gap:8px;border:1px solid #d0d5dd;border-radius:9px;padding:9px 12px;background:#fff;font-size:12.5px;color:#98a2b3}
+.inp input{border:0;outline:0;font:inherit;color:#172033;flex-grow:1;background:transparent}
+table.t{border-collapse:collapse;width:100%;font-size:12px}
+table.t th{font-size:10.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:#98a2b3;text-align:left;padding:8px 10px;border-bottom:1px solid #eef0f4}
+table.t td{padding:8px 10px;border-bottom:1px solid #f2f4f7;color:#344054;white-space:nowrap}
+table.t td.k,table.t th.k{background:#f5f2fd;color:#4b2f9e}
+
+.new{display:inline-flex;align-items:center;font-size:9.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:2px 7px;border-radius:5px;background:#fff3d6;color:#8a4b00;border:1px dashed #e0a93b}
+.deltaBox{outline:2px dashed #e0a93b;outline-offset:4px;border-radius:14px}
+.opt{display:flex;gap:12px;align-items:flex-start;padding:14px;border:1.5px solid #e4e7ec;border-radius:12px;background:#fff}
+.opt.sel{border-color:#684bc0;background:#faf8ff}
+.radio{width:16px;height:16px;border-radius:50%;border:1.5px solid #98a2b3;flex:none;margin-top:2px;box-sizing:border-box}
+.opt.sel .radio{border:5px solid #684bc0}
+.cb{width:15px;height:15px;border-radius:4px;border:1.5px solid #98a2b3;flex:none;box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center}
+.cb.on{background:#684bc0;border-color:#684bc0;color:#fff}
+.gate{display:flex;align-items:center;gap:8px;font-size:12px;color:#344054}
+.ok{color:#087443}.pend{color:#93370d}
+.sfb{background:#1d5fa8}.kafka{background:#231f20}.snow{background:#29b5e8}.dbx{background:#ff3621}
+.logo{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:800;flex:none}
+.sel2{display:flex;align-items:center;justify-content:space-between;border:1px solid #d0d5dd;border-radius:9px;padding:8px 12px;background:#fff;font-size:12.5px;color:#172033}
+</style>
+</helmet>
+<div style="width: 1280px; height: 1000px; box-sizing: border-box; display: flex; flex-direction: column; background: #f4f5f8">
+<div style="display: flex; align-items: center; justify-content: space-between; padding: 18px 32px; background: #fff; border-bottom: 1px solid #e4e7ec"><div style="display: flex; flex-direction: column; gap: 3px"><div class="eyebrow">MDM Factory · Project Personnes</div><div style="font-size: 13px; color: #475467">Step 7 of 8 · Salesforce CRM</div></div><div style="display: flex; align-items: center; gap: 6px"><div class="step done"><span class="n"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg></span>Project</div><div style="width: 14px; height: 1.5px; background: #d0d5dd"></div><div class="step done"><span class="n"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg></span>Sources</div><div style="width: 14px; height: 1.5px; background: #d0d5dd"></div><div class="step done"><span class="n"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg></span>Landing</div><div style="width: 14px; height: 1.5px; background: #d0d5dd"></div><div class="step done"><span class="n"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg></span>Staging</div><div style="width: 14px; height: 1.5px; background: #d0d5dd"></div><div class="step done"><span class="n"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg></span>Master</div><div style="width: 14px; height: 1.5px; background: #d0d5dd"></div><div class="step done"><span class="n"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg></span>Matching</div><div style="width: 14px; height: 1.5px; background: #d0d5dd"></div><div class="step cur"><span class="n">7</span>Distribution <span class="new">new</span></div><div style="width: 14px; height: 1.5px; background: #d0d5dd"></div><div class="step "><span class="n">8</span>Summary</div></div></div>
+<div style="flex-grow: 1; display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 24px; padding: 26px 32px">
+<div style="display: flex; flex-direction: column; gap: 14px">
+<div style="display: flex; align-items: center; gap: 12px"><div class="logo sfb">SF</div><div style="display: flex; flex-direction: column; gap: 2px"><div style="font-size: 22px; font-weight: 800">When does Salesforce CRM receive changes?</div>
+<div style="font-size: 13px; color: #475467">One way per target. You can change it later from the Cockpit.</div></div></div>
+<div class="opt sel" style="flex-direction: column; gap: 10px"><div style="display: flex; gap: 12px; align-items: flex-start"><span class="radio"></span><div style="color: #684bc0"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg></div><div style="display: flex; flex-direction: column; gap: 3px"><div style="font-size: 14px; font-weight: 800">Real time</div><div style="font-size: 12px; color: #475467; line-height: 1.45">Each golden record created or changed in the master is sent right after it is saved, by a trigger on the Person table.</div></div></div><div style="margin-left: 58px; display: flex; flex-direction: column; gap: 12px">
+<div style="border: 1px solid #e4e7ec; border-radius: 10px; background: #fff; padding: 14px; display: flex; flex-direction: column; gap: 9px">
+<div style="display: flex; align-items: center; justify-content: space-between"><div class="eyebrow">Armed only after the initial loads</div><span class="chip warn">3 of 4 done</span></div>
+<div class="gate"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#087443" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><polyline points="16 9 10.5 15 8 12.5"></polyline></svg><span>Landing loaded from every source <span style="color: #98a2b3">· 345 rows, 23 Sep 21:13</span></span></div>
+<div class="gate"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#087443" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><polyline points="16 9 10.5 15 8 12.5"></polyline></svg><span>Master built <span style="color: #98a2b3">· 342 persons</span></span></div>
+<div class="gate"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#087443" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><polyline points="16 9 10.5 15 8 12.5"></polyline></svg><span>First matching run finished <span style="color: #98a2b3">· 301 golden</span></span></div>
+<div class="gate"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#b54708" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><polyline points="12 7 12 12 15 14"></polyline></svg><span><b>First full send done</b> <span style="color: #98a2b3">· the 301 golden records go in one batch before any single change is sent</span></span></div>
+<div style="display: flex; gap: 8px; margin-top: 4px"><button class="btn pri" style="padding: 7px 13px">Run the first full send</button><button class="btn quiet" style="padding: 7px 13px">Arm without it</button></div>
+</div>
+<div class="gate"><span class="cb on"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg></span><span>Pause while a full reload runs, then send only what changed</span></div>
+<div class="gate"><span class="cb on"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg></span><span>Never block a save when Salesforce is down: the send is retried from the Cockpit</span></div>
+<div class="gate"><span class="cb"></span><span>Send only when one of these fields changes</span><span class="chip muted">last name, first name, email, phone</span></div>
+</div></div>
+<div class="opt" style="flex-direction: column; gap: 10px"><div style="display: flex; gap: 12px; align-items: flex-start"><span class="radio"></span><div style="color: #684bc0"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="6 4 20 12 6 20 6 4"></polygon></svg></div><div style="display: flex; flex-direction: column; gap: 3px"><div style="font-size: 14px; font-weight: 800">On demand</div><div style="font-size: 12px; color: #475467; line-height: 1.45">A workflow sends the changes when someone launches it, from the Cockpit or the inbox.</div></div></div><div style="margin-left: 58px; display: flex; gap: 10px; align-items: center; font-size: 12px; color: #475467">
+<span class="gate"><span class="cb"></span>A data steward approves before sending</span></div></div>
+<div class="opt" style="flex-direction: column; gap: 10px"><div style="display: flex; gap: 12px; align-items: flex-start"><span class="radio"></span><div style="color: #684bc0"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg></div><div style="display: flex; flex-direction: column; gap: 3px"><div style="font-size: 14px; font-weight: 800">Scheduled</div><div style="font-size: 12px; color: #475467; line-height: 1.45">The same workflow, launched by the scheduler.</div></div></div><div style="margin-left: 58px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; opacity: .6">
+<div class="sel2"><span>Every day</span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#667085" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"></polyline></svg></div><div class="sel2"><span>at 02:00</span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#667085" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"></polyline></svg></div><div class="sel2"><span>Changed since last send</span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#667085" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"></polyline></svg></div></div></div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 14px">
+<div class="card" style="padding: 18px; display: flex; flex-direction: column; gap: 10px; font-size: 12.5px; color: #475467; line-height: 1.5">
+<div class="eyebrow">Why wait for the initial loads</div>
+<div>A trigger sends one record at a time. During a first load of 345 rows, or a matching run that merges 38 groups, it would call Salesforce hundreds of times and send values that are about to change.</div>
+<div>So the first send is one batch, and real time starts from there.</div></div>
+<div class="card" style="padding: 18px; display: flex; flex-direction: column; gap: 10px">
+<div class="eyebrow">What EBX will set up</div>
+<div style="font-size: 12px; color: #344054; line-height: 1.6">
+<div>· A mapping <span class="mono">Person → Salesforce</span> in Connectors</div>
+<div>· A trigger on <span class="mono">Person</span>, off until armed</div>
+<div>· The workflow <span class="mono">MdmFactoryDistribution</span>, used for the full send and for replays</div></div>
+<a href="#" style="font-size: 12px; font-weight: 700">Open the mapping in the Feed designer</a></div>
+</div>
+</div>
+<div style="margin-top: auto; display: flex; align-items: center; justify-content: space-between; padding: 16px 32px; background: #fff; border-top: 1px solid #e4e7ec"><a class="btn quiet" href="Main.dc.html"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="11 6 5 12 11 18"></polyline></svg> Back</a><div style="display: flex; align-items: center; gap: 14px"><span style="font-size: 12px; color: #667085">Nothing is sent until the target is armed.</span><a class="btn pri big" href="Main.dc.html">Save <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="13 6 19 12 13 18"></polyline></svg></a></div></div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview": {"width": 1280, "height": 1000}}'>
+class Component extends DCLogic {
+renderVals(){return {};}
+}
+</script>
+</body>
+</html>

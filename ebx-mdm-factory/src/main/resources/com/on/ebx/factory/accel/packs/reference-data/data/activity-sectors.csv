@@ -1,0 +1,20 @@
+code,label_en,label_fr
+A,Agriculture forestry and fishing,Agriculture sylviculture et pêche
+B,Mining and quarrying,Industries extractives
+C,Manufacturing,Industrie manufacturière
+D,Electricity gas steam and air conditioning supply,Production et distribution d'électricité et de gaz
+E,Water supply sewerage and waste management,Eau assainissement et déchets
+F,Construction,Construction
+G,Wholesale and retail trade,Commerce
+H,Transportation and storage,Transports et entreposage
+I,Accommodation and food service activities,Hébergement et restauration
+J,Information and communication,Information et communication
+K,Financial and insurance activities,Activités financières et d'assurance
+L,Real estate activities,Activités immobilières
+M,Professional scientific and technical activities,Activités spécialisées scientifiques et techniques
+N,Administrative and support service activities,Activités de services administratifs et de soutien
+O,Public administration and defence,Administration publique
+P,Education,Enseignement
+Q,Human health and social work activities,Santé humaine et action sociale
+R,Arts entertainment and recreation,Arts spectacles et activités récréatives
+S,Other service activities,Autres activités de services

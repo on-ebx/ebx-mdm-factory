@@ -1,0 +1,285 @@
+/* Feed designer (MDM Factory) - FORK of ebx-connectors' mapping-designer.css, 2026-09-23. Classes/ids
+   renamed with the "mdfd" prefix (the original used "ftmd") so the two never collide on one page. The
+   call/response/children sections of the original have no equivalent here (a feed is landing columns
+   on the left, staging attributes on the right - see feed-designer.js's own header comment) and were
+   dropped; the feed-selector bar, the feed-meta header (parentLinkField/sourceIdPipeline) and the
+   greyed-out "link attribute" row are new. */
+/* staging-proposal "designer" lot: the second EBX submit button (guard/suggestion one-shot decisions,
+   FeedDesignerUserService#onDecide) is never meant to be a visible toolbar button - it lives OUTSIDE
+   #mdfd (in the shell's own button bar), so this rule is deliberately not scoped to #mdfd, same
+   precedent as review.css's own #mdmfSelectApplyBtn. */
+#mdfdDecideSubmit{display:none}
+/* "add a target field" lot: same posture as #mdfdDecideSubmit above - a third hidden one-shot EBX submit,
+   clicked only by feed-designer.js's own submitAddField(). */
+#mdfdAddFieldSubmit{display:none}
+/* fix/wizard-live-wave1 (2026-09-24, live bug item 4): same bottom clearance as the wizard's own .mdmf-wizard
+   and the Matrix's own #mdmm - EBX's fixed "Close" bar otherwise overlaps this screen's own last controls too. */
+/* audit F-44 (2026-10-07): the designer's blue follows the EBX perspective's main colour (ThemeTokens.java writes the
+   --ebx-* tokens on :root); the old blue stays the fallback, so a screen shown without a perspective looks as before. Tints are
+   mixed from the accent; the field-type badges, the green "suggestion/target" and the red "attention" colours carry a
+   meaning and stay. --mdfd-accent-fg (--ebx-main-ink: the main colour darkened until it reads on white) is the accent
+   as text or thin line on a light background. Declared on the two blocks rendered outside #mdfd too (.mdfdMsg, .mdfdBackToWizard). */
+#mdfd,.mdfdMsg,.mdfdBackToWizard{--mdfd-accent:var(--ebx-main,#1a73e8);--mdfd-accent-text:var(--ebx-main-text,#fff);--mdfd-accent-fg:var(--ebx-main-ink,#1a73e8);
+  --mdfd-soft:color-mix(in srgb,var(--mdfd-accent) 10%,#fff);--mdfd-soft-line:color-mix(in srgb,var(--mdfd-accent) 24%,#fff);
+  --mdfd-ink:color-mix(in srgb,var(--mdfd-accent) 70%,#000);--mdfd-focus:var(--ebx-focus,var(--mdfd-accent));
+  --mdfd-select:var(--ebx-selection,var(--mdfd-accent));--mdfd-th:var(--ebx-table-header,#f8f9fa);
+  --mdfd-rule:var(--ebx-main,#684bc0);--mdfd-rule-fg:var(--ebx-main-ink,#684bc0);--mdfd-rule-soft:color-mix(in srgb,var(--mdfd-rule) 9%,#fff)}
+#mdfd{font:12px/1.4 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;color:#202124;margin-top:6px;padding-bottom:60px;--mdfd-link:#5f6368;--mdfd-link-on:var(--mdfd-accent-fg);--mdfd-ok:#188038;--mdfd-bg:#f8f9fa;--mdfd-line:#dadce0}
+#mdfd *,#mdfd *:before,#mdfd *:after{box-sizing:border-box}
+#mdfd button{font:inherit}
+.mdfdMsg{margin:6px 0 10px;padding:8px 12px;border-radius:6px;background:var(--mdfd-soft);border:1px solid var(--mdfd-soft-line);color:var(--mdfd-ink)}
+/* fix/wizard-live-wave1 (2026-09-24, live bug item 2): "Back to the wizard" - rendered outside #mdfd (that
+   whole subtree is emptied and rebuilt by feed-designer.js), same visual family as #mdmm's own link. */
+.mdfdBackToWizard{font:12.5px/1.4 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;margin-bottom:8px}
+.mdfdBackToWizard a{color:#5f6368;text-decoration:none;font-weight:600}
+.mdfdBackToWizard a:hover{color:var(--mdfd-accent-fg);text-decoration:underline}
+.mdfdMsg.mdfdErr{background:#fce8e6;border-color:#f5c2c0;color:#c5221f}
+
+/* staging-proposal "designer" lot (docs/STAGING-PROPOSAL.md, docs/FEED-DESIGNER.md): mode-switch bar,
+   rule/check field badges, attention (flagged) links, suggested-fix links, the field inspector's two
+   columns and the guard cards inside it. Reuses every existing #mdfd custom property (--mdfd-*). */
+.mdfdModeBar{margin-bottom:8px}
+/* fix/designer-cosmetics (2026-09-24): the zoom control and fullscreen button now render at the right end of
+   THIS bar (feed-designer.js#renderModeSwitch), not the main toolbar - .mdfdModeBar is already a flex row via
+   .mdfdBar above, and reuses the same .mdfdSp{flex:1} spacer as the main toolbar to push them to the far
+   right, with plenty of room next to the Matrix|Designer segment at this page's usual ~620px width. */
+.mdfdBadgeSug{background:#e6f4ea;color:#137333}
+
+/* rule/check badges on a target field row */
+.mdfdGuardBadge{display:inline-flex;align-items:center;gap:3px;margin-left:6px;padding:1px 6px;border-radius:8px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.3px}
+.mdfdGuardRule{background:var(--mdfd-rule-soft);color:var(--mdfd-rule-fg)}
+.mdfdGuardCheck{background:#f1f3f4;color:#3c4043}
+
+/* attention (flagged) links and nodes */
+.mdfdSvg path.mdfdAttn{stroke:#c5221f;stroke-dasharray:5 4}
+.mdfdNode.mdfdNodeBad{border-color:#f5c2c0;color:#c5221f}
+.mdfdNode.mdfdNodeBad .mdfdGear{background:#c5221f}
+.mdfdAttnNote{margin-bottom:8px;padding:6px 10px;border-radius:6px;background:#fce8e6;color:#c5221f;font-size:11px}
+.mdfdAttnMark{color:#c5221f}
+.mdfdTable tr.mdfdRowAttn td{background:#fce8e6}
+
+/* suggested-fix links and nodes */
+.mdfdSvg path.mdfdSug{stroke:var(--mdfd-ok);stroke-width:2.2;stroke-dasharray:5 4}
+.mdfdSvg path.mdfdSug.mdfdSel{stroke-width:3}
+.mdfdNode.mdfdNodeSug{border:1.5px dashed var(--mdfd-ok);color:#137333;background:#e6f4ea}
+.mdfdNode.mdfdNodeSug .mdfdGear{background:var(--mdfd-ok)}
+.mdfdSuggestionReplaces{margin-bottom:8px;color:#5f6368}
+
+/* field inspector (two columns) */
+.mdfdFieldInspector{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:0}
+.mdfdFieldCol{padding:0 14px 0 0}
+.mdfdFieldColGuards{padding:0 0 0 14px;border-left:1px solid var(--mdfd-line)}
+.mdfdFieldRow{display:grid;grid-template-columns:110px 1fr;gap:8px;align-items:baseline;margin-bottom:6px;font-size:12px}
+.mdfdFieldRow label{color:#5f6368}
+.mdfdFieldSources{grid-template-columns:110px 1fr}
+.mdfdFieldSource{padding:4px 0;border-bottom:1px dotted var(--mdfd-line)}
+.mdfdFieldSourcePipe{color:#5f6368;font-family:Menlo,Consolas,monospace;font-size:11px}
+.mdfdFieldGuardsHead{display:flex;align-items:center;gap:8px;font-weight:600;margin-bottom:8px}
+.mdfdNewTag{font-size:8.5px;font-weight:800;padding:1px 6px;border-radius:5px;background:var(--mdfd-accent);color:var(--mdfd-accent-text);text-transform:uppercase}
+.mdfdGuardCard{border:1px solid var(--mdfd-line);border-radius:8px;padding:8px 10px;margin-bottom:8px}
+.mdfdGuardCardHead{display:flex;align-items:center;gap:8px}
+.mdfdGuardStatus{margin-left:auto;color:#5f6368;font-size:10px;text-transform:uppercase}
+.mdfdGuardRationale{margin-top:6px;color:#5f6368;font-size:11px}
+.mdfdGuardRow{display:flex;align-items:center;gap:8px;margin-top:8px}
+.mdfdGuardRow label{color:#5f6368}
+.mdfdGuardSeverity{font:inherit;padding:4px 6px;border:1px solid var(--mdfd-line);border-radius:4px}
+.mdfdGuardActions{display:flex;gap:8px;margin-top:8px}
+
+/* feed selector bar */
+.mdfdFeedList{display:flex;flex-direction:column;gap:6px;padding:8px 10px;border:1px solid var(--mdfd-line);border-radius:8px 8px 0 0;border-bottom:0;background:#fff}
+.mdfdFeedRow{display:flex;flex-wrap:wrap;align-items:center;gap:4px}
+.mdfdFeedRowLabel{min-width:84px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:#5f6368}
+.mdfdFeedItem{display:inline-block;padding:5px 10px;border:1px solid var(--mdfd-line);border-radius:14px;background:#fff;color:#3c4043;cursor:pointer;text-decoration:none;white-space:nowrap}
+.mdfdFeedItem:hover{background:#f1f3f4}
+.mdfdFeedItem.mdfdOn{background:var(--mdfd-soft);border-color:var(--mdfd-soft-line);color:var(--mdfd-ink);font-weight:600}
+.mdfdFeedItem.mdfdFeedChild{margin-left:0}
+.mdfdFeedItem.mdfdFeedChild:before{content:"\21B3 ";color:#9aa0a6}
+.mdfdFeedItem.mdfdFeedRejected{opacity:.55;text-decoration:line-through}
+
+/* feed meta (child parent-link / sourceIdPipeline) */
+.mdfdFeedMeta{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:8px 10px;border:1px solid var(--mdfd-line);border-top:0;background:#fbfbfb}
+.mdfdFeedMeta label{color:#5f6368}
+.mdfdFeedMeta input[type=text]{font:inherit;padding:4px 6px;border:1px solid var(--mdfd-line);border-radius:4px;min-width:220px}
+.mdfdFeedMetaLabel{color:#3c4043;background:#e8eaed;border-radius:10px;padding:2px 8px;font-size:11px}
+.mdfdFeedMetaWarn{color:#b06000;font-style:italic}
+
+/* "add a target field" lot (docs/FEED-DESIGNER.md): the small inline form opened by the toolbar's own
+   "+ Target field" button - same visual family as .mdfdFeedMeta (a bar of label+input pairs) rather than a
+   modal, consistent with this page never using one. */
+.mdfdAddFieldForm{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:8px 10px;border:1px solid var(--mdfd-line);border-radius:8px;background:#fbfbfb;margin:-2px 0 8px}
+.mdfdAddFieldForm label{color:#5f6368}
+.mdfdAddFieldForm input[type=text]{font:inherit;padding:4px 6px;border:1px solid var(--mdfd-line);border-radius:4px}
+.mdfdAddFieldForm select{font:inherit;padding:4px 6px;border:1px solid var(--mdfd-line);border-radius:4px}
+.mdfdAddFieldErr{color:#c5221f}
+/* fix/designer-cosmetics (2026-09-24, live screenshot): EBX's own stylesheet stretches a bare text input to
+   100% of its containing flex row's remaining width, which used to make each label+control wrap onto its own
+   line ("Name [.........] Label" / "[.......] Type" / ...) instead of sitting on one row. .mdfdAddFieldPair
+   keeps a label glued to its own control (never splits, per `white-space:nowrap`); the two text inputs and
+   the select get explicit widths, at #mdfd/.mdfdAddFieldForm/id specificity so they beat EBX's own rule.
+   .mdfdAddFieldActions keeps Create/Cancel/the error line together as one trailing group. */
+.mdfdAddFieldForm .mdfdAddFieldPair{display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.mdfdAddFieldForm .mdfdAddFieldActions{display:inline-flex;align-items:center;gap:8px}
+#mdfd .mdfdAddFieldForm input#mdfdAddFieldName{width:180px}
+#mdfd .mdfdAddFieldForm input#mdfdAddFieldLabel{width:220px}
+#mdfd .mdfdAddFieldForm select#mdfdAddFieldType{width:auto}
+
+/* toolbar */
+.mdfdBar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:8px 10px;border:1px solid var(--mdfd-line);border-radius:0 0 8px 8px;border-top:0;background:#fff;margin-bottom:8px}
+.mdfdBar .mdfdSp{flex:1}
+.mdfdBtn{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border:1px solid var(--mdfd-line);border-radius:4px;background:#fff;color:#202124;cursor:pointer;white-space:nowrap}
+.mdfdBtn:hover{background:#f1f3f4}
+.mdfdBtn.mdfdDanger{color:#c5221f;border-color:#f5c2c0}
+.mdfdBtn.mdfdDanger:hover{background:#fce8e6}
+.mdfdBtn.mdfdArmed{background:#fef7e0;border-color:#f9ab00}
+/* bug fix, 2026-09-24 (docs/FEED-DESIGNER.md): the Matrix|Designer control (renderModeSwitch) mixes an <a>,
+   an active <span class="mdfdOn"> and (when matrixUrl is empty) a plain <span> as its direct children,
+   while the Diagram|Table control (build) uses two <button>s - only ".mdfdSeg a"/".mdfdSeg button" were
+   styled, so the bare "Designer" span had no box at all and sat lower/higher than "Matrix". Every direct
+   child now gets the identical box (inline-flex, same height/padding/line-height) regardless of its tag,
+   and ".mdfdOn" (button OR span) is the one active-segment look - the Diagram|Table buttons keep their
+   exact previous appearance (same padding/colors), just expressed through the shared selector.  */
+.mdfdSeg{display:inline-flex;border:1px solid var(--mdfd-line);border-radius:4px;overflow:hidden}
+.mdfdSeg>a,.mdfdSeg>button,.mdfdSeg>span{display:inline-flex;align-items:center;height:28px;padding:0 12px;line-height:28px;border:0;background:#fff;color:#5f6368;text-decoration:none;cursor:pointer;font:inherit;white-space:nowrap}
+.mdfdSeg>a:hover,.mdfdSeg>button:hover{background:#f1f3f4;text-decoration:none}
+.mdfdSeg>.mdfdOn{background:var(--mdfd-soft);color:var(--mdfd-ink);font-weight:600;cursor:default}
+.mdfdSeg>.mdfdOn:hover{background:var(--mdfd-soft)}
+/* the divider between segments - neither control drew one explicitly before; a border-left on every
+   segment but the first works for any mix of a/button/span */
+.mdfdSeg>*+*{border-left:1px solid var(--mdfd-line)}
+.mdfdToggle{display:inline-flex;align-items:center;gap:6px;cursor:pointer;color:#5f6368;user-select:none}
+.mdfdToggle input{margin:0}
+.mdfdBadgeCount{display:inline-block;min-width:18px;padding:0 6px;border-radius:9px;background:var(--mdfd-soft);color:var(--mdfd-ink);font-weight:600;text-align:center}
+.mdfdDirty{display:none;color:#b06000;font-style:italic}
+.mdfdDirty.mdfdOn{display:inline}
+/* "N rule(s) point to a field not shown here" - a rule whose source/target no longer resolves (robustness
+   fix, docs/FEED-DESIGNER.md): never drawn on the canvas, only listed (mdfdRowUnresolved below) */
+.mdfdWarn{color:#c5221f}
+
+/* the two columns + canvas */
+.mdfdWork{--mdfd-scale:1;position:relative;display:grid;grid-template-columns:minmax(260px,1fr) minmax(220px,0.9fr) minmax(260px,1fr);height:480px;min-height:260px;resize:vertical;border:1px solid var(--mdfd-line);border-radius:8px;background:var(--mdfd-bg);overflow:hidden}
+.mdfdWork.mdfdTableMode{display:none}
+.mdfdPane{display:flex;flex-direction:column;background:#fff;min-width:0;min-height:0}
+.mdfdPane.mdfdLeftPane{border-right:1px solid var(--mdfd-line)}
+.mdfdPane.mdfdRightPane{border-left:1px solid var(--mdfd-line)}
+.mdfdPaneHead{padding:8px 10px 6px;border-bottom:1px solid var(--mdfd-line)}
+.mdfdPaneTitle{display:flex;align-items:baseline;gap:8px;font-weight:600;font-size:13px}
+.mdfdPaneTitle small{font-weight:400;color:#5f6368;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mdfdSearch{position:relative;margin-top:6px}
+.mdfdSearch input{width:100%;padding:5px 26px 5px 8px;border:1px solid var(--mdfd-line);border-radius:4px;font:inherit}
+.mdfdSearch span{position:absolute;right:8px;top:5px;color:#9aa0a6;pointer-events:none}
+.mdfdTreeTools{display:flex;gap:10px;margin-top:4px;font-size:11px}
+.mdfdTree{flex:1 1 0;min-height:0;overflow:auto;overscroll-behavior:contain;padding:4px 0 40px}
+.mdfdEmpty{color:#5f6368;padding:12px}
+
+/* tree rows */
+.mdfdRow{position:relative;display:flex;align-items:center;height:calc(26px * var(--mdfd-scale));font-size:calc(12px * var(--mdfd-scale));padding-right:14px;cursor:default;white-space:nowrap}
+.mdfdLeftPane .mdfdRow{padding-right:16px}
+.mdfdRightPane .mdfdRow{padding-left:16px}
+.mdfdRow:hover{background:#f1f3f4}
+.mdfdRow.mdfdSel{background:var(--mdfd-soft)}
+.mdfdRow.mdfdDropOk{background:#e6f4ea;outline:1px dashed var(--mdfd-ok);outline-offset:-1px}
+.mdfdIndent{display:inline-block;flex:none}
+.mdfdType{flex:none;min-width:34px;padding:1px 5px;margin-right:6px;border-radius:10px;background:#e8eaed;color:#3c4043;font-size:9px;font-weight:700;text-align:center;letter-spacing:.3px}
+.mdfdType.mdfdTNum{background:#e6f4ea;color:#137333}.mdfdType.mdfdTDate{background:#fef7e0;color:#b06000}.mdfdType.mdfdTBool{background:#f3e8fd;color:#7627bb}
+.mdfdType.mdfdTFk{background:#e8f0fe;color:#174ea6} /* theme-fixed: a field-type badge, like the number/date/boolean ones */
+.mdfdName{overflow:hidden;text-overflow:ellipsis}
+.mdfdRow.mdfdPk .mdfdName:after{content:"\2605";color:#b06000;font-size:9px;margin-left:4px;vertical-align:top}
+.mdfdReq{color:#c5221f;margin-left:2px}
+.mdfdSampleV{margin-left:8px;color:#9aa0a6;font-size:11px;overflow:hidden;text-overflow:ellipsis;max-width:40%}
+.mdfdRow.mdfdMapped .mdfdName{color:var(--mdfd-ink)}
+.mdfdPort{position:absolute;top:calc(50% - 5px);width:10px;height:10px;border-radius:50%;border:2px solid #9aa0a6;background:#fff;cursor:crosshair;z-index:2}
+.mdfdLeftPane .mdfdPort{right:2px}
+.mdfdRightPane .mdfdPort{left:2px}
+.mdfdRow.mdfdMapped .mdfdPort{border-color:var(--mdfd-accent);background:var(--mdfd-accent)}
+.mdfdRow:hover .mdfdPort,.mdfdPort:hover{transform:scale(1.3);border-color:var(--mdfd-accent-fg)}
+.mdfdRightPane .mdfdPort{cursor:copy}
+/* a locked target field - a technical (primary-key) attribute, or the child's own link attribute: shown
+   for context, never a rule target */
+.mdfdRow.mdfdLocked{opacity:.6;cursor:not-allowed}
+.mdfdRow.mdfdLocked .mdfdName{font-style:italic}
+.mdfdEngineTag{margin-left:auto;padding:1px 6px;border-radius:8px;background:#f1f3f4;color:#5f6368;font-size:9px;text-transform:uppercase;letter-spacing:.3px}
+/* a PROPOSED target attribute - still a normal, droppable row (never .mdfdLocked), just muted with a small
+   chip so a reviewer can tell it apart from a field already generated in the staging table */
+.mdfdRow.mdfdProposed .mdfdName{color:#5f6368;font-style:italic}
+.mdfdProposedTag{margin-left:6px;padding:1px 6px;border-radius:8px;background:#fef7e0;color:#b06000;font-size:9px;text-transform:uppercase;letter-spacing:.3px}
+
+/* canvas */
+.mdfdCanvas{position:relative;overflow:hidden;background:var(--mdfd-bg);background-image:radial-gradient(#dadce0 1px,transparent 1px);background-size:16px 16px}
+.mdfdCanvasHint{position:absolute;left:0;right:0;top:45%;text-align:center;color:#9aa0a6;padding:0 16px;pointer-events:none}
+.mdfdSvg{position:absolute;top:0;left:0;width:100%;height:100%;overflow:visible;pointer-events:none;z-index:4}
+.mdfdNodesLayer{position:absolute;top:0;left:0;width:0;height:0;overflow:visible;z-index:5}
+.mdfdSvg path{fill:none;stroke:var(--mdfd-link);stroke-width:1.6;pointer-events:stroke;cursor:pointer;transition:stroke .1s}
+.mdfdSvg path.mdfdHot{stroke:var(--mdfd-link-on);stroke-width:2.4}
+.mdfdSvg path.mdfdSel{stroke:var(--mdfd-link-on);stroke-width:3}
+.mdfdSvg path.mdfdOff{stroke-opacity:.25}
+.mdfdSvg path.mdfdTemp{stroke:var(--mdfd-ok);stroke-width:2;stroke-dasharray:6 4;pointer-events:none}
+/* Bug fix, 2026-09-24 (docs/FEED-DESIGNER.md): a node is now ONE LINE (gear + pipeline text, no separate
+   "Transformation"/"Constant" heading - that text is still in the element's own title tooltip), its height
+   set inline by drawAll() to match a tree row's own height so a 1:1 set of rules lines up node-per-row -
+   .mdfdNodeHead/.mdfdNodeBody are gone, replaced by .mdfdNodeLine below. No overflow:hidden on the node
+   itself: its in/out port dots sit at left/right:-6px and would be clipped - the ellipsis lives on .mdfdNodeLine. */
+.mdfdNode{position:absolute;z-index:3;display:flex;align-items:center;gap:6px;min-width:150px;max-width:210px;padding:0 10px 0 8px;border:1px solid var(--mdfd-line);border-radius:6px;background:#fff;box-shadow:0 1px 3px rgba(60,64,67,.25);cursor:pointer;user-select:none}
+.mdfdNode:hover{border-color:var(--mdfd-accent-fg)}
+.mdfdNode.mdfdSel{border-color:var(--mdfd-accent-fg);box-shadow:0 0 0 2px var(--mdfd-soft-line)}
+.mdfdNode.mdfdOff{opacity:.35}
+.mdfdNodeLine{flex:1;min-width:0;font-family:Menlo,Consolas,monospace;font-size:10.5px;color:#3c4043;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mdfdGear{display:inline-flex;width:16px;height:16px;border-radius:50%;background:var(--mdfd-accent);color:var(--mdfd-accent-text);align-items:center;justify-content:center;font-size:10px;flex:none}
+.mdfdNode.mdfdConst .mdfdGear{background:#b06000}
+.mdfdNodePort{position:absolute;top:50%;margin-top:-5px;width:10px;height:10px;border-radius:50%;border:2px solid var(--mdfd-accent-fg);background:#fff}
+.mdfdNodePort.mdfdIn{left:-6px}.mdfdNodePort.mdfdOut{right:-6px;background:var(--mdfd-accent);cursor:crosshair}
+
+/* inspector */
+.mdfdInspector{margin-top:10px;border:1px solid var(--mdfd-line);border-radius:8px;background:#fff}
+.mdfdInsHead{display:flex;align-items:center;gap:10px;padding:8px 12px;border-bottom:1px solid var(--mdfd-line);background:#f8f9fa;border-radius:8px 8px 0 0;font-weight:600}
+.mdfdInsHead .mdfdSp{flex:1}
+.mdfdInsBody{padding:10px 12px}
+.mdfdInsEmpty{color:#5f6368}
+.mdfdFlow{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+.mdfdChip{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border:1px solid var(--mdfd-line);border-radius:14px;background:#fff;max-width:340px}
+.mdfdChip code{font-size:11px;color:#202124;overflow:hidden;text-overflow:ellipsis}
+.mdfdChip.mdfdSrc{border-color:var(--mdfd-soft-line);background:var(--mdfd-soft)}.mdfdChip.mdfdDst{border-color:#ceead6;background:#e6f4ea}
+.mdfdArrow{color:#9aa0a6;font-size:16px}
+.mdfdGrid{display:grid;grid-template-columns:150px 1fr;gap:8px 12px;align-items:center}
+.mdfdGrid label{color:#5f6368}
+.mdfdGrid input[type=text]{font:inherit;padding:5px 7px;border:1px solid var(--mdfd-line);border-radius:4px;width:100%;max-width:640px}
+.mdfdStep{display:inline-flex;align-items:center;gap:4px;padding:3px 6px 3px 8px;border:1px solid var(--mdfd-soft-line);border-radius:4px;background:var(--mdfd-soft);font-family:Menlo,Consolas,monospace;font-size:11px}
+.mdfdStep input{font:inherit;border:0;border-bottom:1px dashed var(--mdfd-ink);background:transparent;width:90px;padding:0 2px}
+.mdfdStep b{color:var(--mdfd-ink);font-weight:600}
+.mdfdStep a{color:#5f6368;cursor:pointer;text-decoration:none;padding:0 2px}
+.mdfdStep a:hover{color:#c5221f}
+.mdfdStepArrow{color:#9aa0a6}
+.mdfdAddStep{font:inherit;padding:4px 6px;border:1px dashed var(--mdfd-line);border-radius:4px;background:#fff;color:#5f6368;max-width:260px}
+.mdfdInsFoot{display:flex;gap:8px;justify-content:flex-end;margin-top:10px}
+.mdfdHint{color:#5f6368;margin:4px 0 8px}
+
+/* table view */
+.mdfdTable{display:none;width:100%;border:1px solid var(--mdfd-line);border-radius:8px;border-collapse:separate;border-spacing:0;background:#fff}
+.mdfdTable.mdfdOn{display:table}
+.mdfdTable th,.mdfdTable td{padding:6px 10px;border-bottom:1px solid #eee;text-align:left;vertical-align:top}
+.mdfdTable th{background:var(--mdfd-th);color:#5f6368;font-weight:600}
+.mdfdTable tr{cursor:pointer}.mdfdTable tr:hover td{background:#f1f3f4}.mdfdTable tr.mdfdSel td{background:var(--mdfd-soft)}
+.mdfdTable code{font-size:11px}
+.mdfdTable tr.mdfdRowUnresolved{background:#fef7e0}
+.mdfdUnresolvedVal{color:#b06000;text-decoration:underline dotted}
+
+/* full screen + zoom */
+#mdfd.mdfdFull{position:fixed;top:0;left:0;right:0;bottom:0;z-index:100000;background:#fff;overflow:auto;padding:10px;margin:0}
+#mdfd.mdfdFull .mdfdWork{height:calc(100vh - 210px)}
+.mdfdZoom{display:inline-flex;align-items:center;gap:2px}
+.mdfdZoom button{width:26px;height:26px;padding:0;justify-content:center;gap:0;line-height:1;font-size:15px}
+.mdfdZoom span{min-width:36px;text-align:center;color:#5f6368}
+.mdfdWork .mdfdType{font-size:calc(9px * var(--mdfd-scale))}
+.mdfdWork .mdfdSampleV{font-size:calc(11px * var(--mdfd-scale))}
+/* the node's own height is set inline by drawAll() to match the scaled row height (NH) - its gear/text scale
+   down with it too, so a node never overflows its own box at a small zoom level */
+.mdfdWork .mdfdGear{width:calc(14px * var(--mdfd-scale));height:calc(14px * var(--mdfd-scale));font-size:calc(9px * var(--mdfd-scale))}
+.mdfdWork .mdfdNodeLine{font-size:calc(10.5px * var(--mdfd-scale))}
+
+/* audit F-45: the designer with the keyboard - a visible focus on everything that takes it (rows, feed items, buttons, fields, a
+   step's remove cross), the keyboard hint, and the live region that says what a key press did (read by a screen reader only). */
+#mdfd .mdfdRow:focus-visible,#mdfd .mdfdFeedItem:focus-visible,#mdfd [role="button"]:focus-visible,#mdfd button:focus-visible,
+#mdfd input:focus-visible,#mdfd select:focus-visible,#mdfd a:focus-visible,.mdfdBackToWizard a:focus-visible{outline:2px solid var(--mdfd-focus);outline-offset:1px}
+#mdfd .mdfdRow:focus-visible{background:var(--mdfd-soft)}
+#mdfd .mdfdRow[aria-pressed="true"]{box-shadow:inset 3px 0 0 var(--mdfd-select)}
+.mdfdKbdHint{margin:0 0 6px;color:#5f6368;font-size:11.5px}
+.mdfdSrOnly{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}

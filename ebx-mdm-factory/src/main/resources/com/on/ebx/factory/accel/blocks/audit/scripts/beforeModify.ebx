@@ -1,0 +1,9 @@
+// Audit block: stamp modification and refuse a forged creation stamp (the old value is written back).
+uses core.datetime as dt;
+export procedure onBeforeModify()
+begin
+  _ebx.nextRecord.${group}.createdOn := _ebx.record.${group}.createdOn;
+  _ebx.nextRecord.${group}.createdBy := _ebx.record.${group}.createdBy;
+  _ebx.nextRecord.${group}.changedOn := dt.now();
+  _ebx.nextRecord.${group}.changedBy := _ebx.session.userId;
+end

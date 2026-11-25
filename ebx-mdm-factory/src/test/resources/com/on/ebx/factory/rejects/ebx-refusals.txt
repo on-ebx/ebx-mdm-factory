@@ -1,0 +1,141 @@
+# EBX refusal classes lot H4 (2026-10-17): the REAL texts every classifier pattern was built from, business values replaced by neutral ones (V1, K1, ...).
+# One block per sample, introduced by "@@ <name>". Keys: "source" (where the text was read), "subject" (what EBX prints before it, optional), "text" (the message itself).
+# Two kinds of source, said plainly:
+#   live    = copied from a log of the 6.3.0-rc3 instance (validation.log: the report item of a record; kernel.log: a failed Procedure)
+#   bundle  = the message bundle of ebx-lib.jar (com/orchestranetworks/i18n/*.mxml), the text EBX prints for that class; the wording of a limit or bound is the bundle's
+# The shape a Procedure's failure takes around these texts (the user printer: "<subject> : <message>", or "Unexpected error... > Caused by: <message>") is read from the
+# bytecode of com.onwbp.adaptation.UowUserPrinter and, for the wrapper, from the live stored reject of 2026-10-17 (see the date conversion sample).
+
+@@ dateConversion
+source: live, TransferReject.reasons of project "Tiers B2C - retest landing", 2026-10-17 (lot B)
+text: Unexpected error...\n\r &gt; Caused by: ODateFormat[objectConverters=null, stringConverters=null]conversion error while handling input string '10/06/1963'
+
+@@ maxLength
+source: live, validation.log.2026-10-05 ("error [/root/CompanyAddress[./id=192]/Number]: ..."), bundle userMessages.mxml facet.facetMaxLength
+subject: [/root/Address[./id=1]/line1]
+text: Value must not exceed 20 character(s) long.
+
+@@ minLength
+source: bundle, userMessages.mxml facet.facetMinLength
+subject: [/root/Address[./id=1]/zip]
+text: Value must be at least 5 character(s) long.
+
+@@ exactLength
+source: bundle, userMessages.mxml facet.facetLength
+subject: [/root/Address[./id=1]/country]
+text: Value must be 2 character(s) long.
+
+@@ enumeration
+source: live, validation.log.2026-10-05 ("error [/root/Contact[./id=N]/civility]: The value 'Mrs' is not valid (see enumeration facet)."), bundle compilationMessages.mxml facetEnum.*
+subject: [/root/Contact[./id=1]/title]
+text: The value 'V1' is not valid (see enumeration facet).
+
+@@ foreignKey
+source: live, validation.log.2026-10-07 ("error [/root/Product[./id='PN']/family]: The value 'ACC-BAG' is not valid (record does not exist)."), bundle compilationMessages.mxml facetTableRef.occurrenceNotDefined
+subject: [/root/Product[./id='P1']/family]
+text: The value 'K1' is not valid (record does not exist).
+
+@@ mandatoryLabel
+source: live, validation.log.2026-09-26 ("error [/root/triggerHistory[./id=N]/revisionId]: Field 'Revision identifier' is mandatory.")
+subject: [/root/Contact[./id=1]/lastName]
+text: Field 'Last name' is mandatory.
+
+@@ mandatoryBare
+source: bundle, manager/validationMessages.mxml validation.mandatory
+subject: [/root/Contact[./id=1]/lastName]
+text: Field is mandatory.
+
+@@ patternBic
+source: live, validation.log.2026-10-05 ("error [/root/BankAccount[./id=1]/BIC]: The following pattern must be respected: [A-Z]{6}[A-Z0-9]{2}([A-Z0-9]{3})?")
+subject: [/root/Account[./id=1]/bic]
+text: The following pattern must be respected: [A-Z]{6}[A-Z0-9]{2}([A-Z0-9]{3})?
+
+@@ patternEmail
+source: live, validation.log.2026-10-05 ("error [/root/Contact[./id=21]/email]: The following pattern must be respected: [^@\s]+@[^@\s]+\.[^@\s]+")
+subject: [/root/Contact[./id=1]/email]
+text: The following pattern must be respected: [^@\s]+@[^@\s]+\.[^@\s]+
+
+@@ patternWithDot
+source: bundle, userMessages.mxml facet.facetPattern (the bundle adds its own full stop after the pattern)
+subject: [/root/Account[./id=1]/code]
+text: The following pattern must be respected: [A-Z]+.
+
+@@ totalDigits
+source: bundle, userMessages.mxml facet.facetTotalDigits
+subject: [/root/Order[./id=1]/amount]
+text: The number must have at most 5 digits.
+
+@@ fractionDigits
+source: bundle, userMessages.mxml facet.facetFractionDigits
+subject: [/root/Order[./id=1]/rate]
+text: Maximum number of decimal places is 2.
+
+@@ minInclusive
+source: bundle, userMessages.mxml facet.facetMinInclusive
+subject: [/root/Order[./id=1]/quantity]
+text: Value must be greater than or equal to 1.
+
+@@ maxInclusive
+source: bundle, userMessages.mxml facet.facetMaxInclusive
+subject: [/root/Order[./id=1]/quantity]
+text: Value must be less than or equal to 100.
+
+@@ minExclusive
+source: bundle, userMessages.mxml facet.facetMinExclusive
+subject: [/root/Order[./id=1]/rate]
+text: Value must be greater than 0.5.
+
+@@ maxExclusive
+source: bundle, userMessages.mxml facet.facetMaxExclusive
+subject: [/root/Order[./id=1]/rate]
+text: Value must be less than 99.5.
+
+@@ duplicateKeyLong
+source: live, kernel.log.2026-09-27 (UowErrorCannotCreateSincePrimaryKeyUsed, "Reason:" line of a cancelled unit of work), key, table and dataset replaced
+text: Cannot create record with primary key './sourceSystem='S1' and ./sourceId='K1'' on /root/Customer of content type=VALUES in dataset Staging in dataspace Project since a record with this key already exists, last update by tx: 1833000000000000, current procedure tx: 1833000000000001
+
+@@ duplicateKeyShort
+source: bundle, uowPrinter.mxml addErrorCannotCreateSincePrimaryKeyUsed (what the user printer prints; the bundle breaks the sentence over two lines)
+text: Cannot create the new record since\n\t\tits primary key is already used.
+
+@@ constraintScript
+source: live, validation.log.2026-10-06 ("error [/root/BankAccount[./id=N]/IBAN]: IBAN is incorrect.") - the message of a script constraint
+subject: [/root/Account[./id=1]/iban]
+text: IBAN is incorrect.
+
+@@ constraintTable
+source: live, validation.log.2026-10-07 ("error [In table '/root/Customer' - Selection xpath ./id=N]: A marketing consent needs its consent date.") - a table constraint
+subject: In table '/root/Customer' - Selection xpath ./id=1
+text: A marketing consent needs its consent date.
+
+@@ triggerScript
+source: live, kernel.log.2026-09-27 22:53:56 (table trigger after create on /root/Personne), dataset and dataspace names replaced; the cause as the user printer prints it
+text: Unexpected error...\n\r &gt; Caused by: Dataset 'Outbox' not found in dataspace 'Project_Master'
+
+@@ unknown
+source: live, kernel.log.2026-09-27 (UowErrorOperationNotAllowed, bundle uowPrinter.mxml addErrorOperationNotAllowed) - a refusal this lot does not classify
+text: Operation not allowed for this user.
+
+# The stack of the trigger failure above, copied from kernel.log.2026-09-27 (22:53:56, "Table trigger after create from dataset 'Master' for node '/root/Personne'"), top first:
+# frame: class | method | file | line
+@@ triggerStack
+source: live, kernel.log.2026-09-27 22:53:56 (stack of the ScriptRuntimeException of the table trigger "DistributionAfterCreate", MasterLoader.upsertOne at the bottom)
+frame: com.orchestranetworks.dsl.bc.runtime.unit.DataUnit | findDataset | DataUnit.java | 192
+frame: com.orchestranetworks.dsl.script.trigger.handler.ScriptTableTriggerAfterCreate$$74 | onHandle | DistributionAfterCreate | 26
+frame: com.orchestranetworks.dsl.script.trigger.handler.ScriptTableTriggerBase | handleInternal | ScriptTableTriggerBase.java | 201
+frame: com.orchestranetworks.dsl.script.trigger.handler.ScriptTableTriggerBase | handleOperation | ScriptTableTriggerBase.java | 162
+frame: com.orchestranetworks.dsl.script.trigger.handler.ScriptTableTriggerAfterCreateBase | handleAfterCreate | ScriptTableTriggerAfterCreateBase.java | 38
+frame: com.orchestranetworks.dsl.script.trigger.ScriptBuiltinTableTrigger | handleAfterCreate | ScriptBuiltinTableTrigger.java | 168
+frame: com.onwbp.adaptation.TrgCreateTriggerApply$TriggerApplyImpl | lambda$applyAfterTriggers$1 | TrgCreateOccurrenceTriggerApply.java | 103
+frame: com.onwbp.adaptation.TrgCreateTriggerApply$TriggerApplyImpl | applyAll | TrgCreateOccurrenceTriggerApply.java | 109
+frame: com.onwbp.adaptation.TrgCreateTriggerApply$TriggerApplyImpl | applyAfterTriggers | TrgCreateOccurrenceTriggerApply.java | 103
+frame: com.onwbp.adaptation.UowCfCreateOccurrence | executeImpl | UowCfCreateOccurrence.java | 407
+frame: com.onwbp.adaptation.ProcedureContextImpl | doCreateOccurrence | ProcedureContextImpl.java | 476
+frame: com.on.ebx.factory.ebx.MasterLoader | upsertOne | MasterLoader.java | 726
+
+# The stack of a plain failure (no trigger): the same Procedure frames without the trigger machinery.
+@@ plainStack
+source: live, the same Procedure frames of kernel.log.2026-09-27 without the trigger machinery (a failure raised by the save itself)
+frame: com.onwbp.adaptation.UowCfCreateOccurrence | executeImpl | UowCfCreateOccurrence.java | 407
+frame: com.onwbp.adaptation.ProcedureContextImpl | doCreateOccurrence | ProcedureContextImpl.java | 476
+frame: com.on.ebx.factory.ebx.MasterLoader | upsertOne | MasterLoader.java | 726

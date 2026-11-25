@@ -1,0 +1,12 @@
+{
+  "key": "company",
+  "version": "1.0.0",
+  "label": {"en-US": "Organisation / Company (B2B)", "fr-FR": "Organisation / Société (B2B)"},
+  "description": {"en-US": "A legal entity: identity, legal data, head-office address, identifiers, addresses, bank accounts, contacts. Extracted from the Companies model, reduced to what the data-model server generates.",
+                  "fr-FR": "Une entité légale : identité, données légales, adresse du siège, identifiants, adresses, comptes bancaires, contacts. Extrait du modèle Companies, réduit à ce que le serveur data-model génère."},
+  "requires": {"packs": ["reference-data"], "modules": [], "optionalModules": ["ebx-layout-designer", "ebx-addon-mame"]},
+  "blocks": ["audit", "contacts"],
+  "options": ["group-hierarchy", "e-invoicing", "bank-accounts"],
+  "mainTable": "/root/Company",
+  "keywords": ["supplier", "customer", "legal entity", "company", "organisation", "tiers", "fournisseur", "client", "société"]
+}

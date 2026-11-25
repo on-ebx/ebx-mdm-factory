@@ -1,0 +1,908 @@
+{
+ "format": "accelerator-pack-core/1",
+ "ops": [
+  {
+   "op": "create_group",
+   "arguments": {
+    "table_path": "/root",
+    "group_name": "ReferenceData"
+   }
+  },
+  {
+   "op": "create_table",
+   "arguments": {
+    "table_path": "/root/ReferenceData/Country"
+   }
+  },
+  {
+   "op": "create_field",
+   "arguments": {
+    "field_path": "/root/ReferenceData/Country/alpha2",
+    "field_type": "string",
+    "is_primary_key": true
+   }
+  },
+  {
+   "op": "set_element_property",
+   "arguments": {
+    "element_path": "/root/ReferenceData/Country/alpha2",
+    "property": "maxLength",
+    "value": "2"
+   }
+  },
+  {
+   "op": "create_field",
+   "arguments": {
+    "field_path": "/root/ReferenceData/Country/alpha3",
+    "field_type": "string"
+   }
+  },
+  {
+   "op": "set_element_property",
+   "arguments": {
+    "element_path": "/root/ReferenceData/Country/alpha3",
+    "property": "maxLength",
+    "value": "3"
+   }
+  },
+  {
+   "op": "create_field",
+   "arguments": {
+    "field_path": "/root/ReferenceData/Country/numeric",
+    "field_type": "string"
+   }
+  },
+  {
+   "op": "set_element_property",
+   "arguments": {
+    "element_path": "/root/ReferenceData/Country/numeric",
+    "property": "maxLength",
+    "value": "3"
+   }
+  },
+  {
+   "op": "create_field",
+   "arguments": {
+    "field_path": "/root/ReferenceData/Country/name",
+    "field_type": "string"
+   }
+  },
+  {
+   "op": "set_element_property",
+   "arguments": {
+    "element_path": "/root/ReferenceData/Country/name",
+    "property": "maxLength",
+    "value": "120"
+   }
+  },
+  {
+   "op": "set_element_property",
+   "arguments": {
+    "element_path": "/root/ReferenceData/Country/name",
+    "property": "mandatory",
+    "value": "true"
+   }
+  },
+  {
+   "op": "set_element_property",
+   "arguments": {
+    "element_path": "/root/ReferenceData/Country/name",
+    "property": "minOccurs",
+    "value": "1"
+   }
+  },
+  {
+   "op": "create_field",
+   "arguments": {
+    "field_path": "/root/ReferenceData/Country/nameFr",
+    "field_type": "string"
+   }
+  },
+  {
+   "op": "set_element_property",
+   "arguments": {
+    "element_path": "/root/ReferenceData/Country/nameFr",
+    "property": "maxLength",
+    "value": "120"
+   }
+  },
+  {
+   "op": "create_field",
+   "arguments": {
+    "field_path": "/root/ReferenceData/Country/dialCode",
+    "field_type": "string"
+   }
+  },
+  {
+   "op": "set_element_property",
+   "arguments": {
+    "element_path": "/root/ReferenceData/Country/dialCode",
+    "property": "maxLength",
+    "value": "8"
+   }
+  },
+  {
+   "op": "create_table",
+   "arguments": {
+    "table_path": "/root/ReferenceData/Currency"
+   }
+  },
+  {
+   "op": "create_field",
+   "arguments": {
+    "field_path": "/root/ReferenceData/Currency/code",
+    "field_type": "string",
+    "is_primary_key": true
+   }
+  },
+  {
+   "op": "set_element_property",
+   "arguments": {
+    "element_path": "/root/ReferenceData/Currency/code",
+    "property": "maxLength",
+    "value": "3"
+   }
+  },
+  {
+   "op": "create_field",
+   "arguments": {
+    "field_path": "/root/ReferenceData/Currency/numeric",
+    "field_type": "string"
+   }
+  },
+  {
+   "op": "set_element_property",
+   "arguments": {
+    "element_path": "/root/ReferenceData/Currency/numeric",
+    "property": "maxLength",
+    "value": "3"
+   }
+  },
+  {
+   "op": "create_field",
+   "arguments": {
+    "field_path": "/root/ReferenceData/Currency/name",
+    "field_type": "string"
+   }
+  },
+  {
+   "op": "set_element_property",
+   "arguments": {
+    "element_path": "/root/ReferenceData/Currency/name",
+    "property": "maxLength",
+    "value": "120"
+   }
+  },
+  {
+   "op": "set_element_property",
+   "arguments": {
+    "element_path": "/root/ReferenceData/Currency/name",
+    "property": "mandatory",
+    "value": "true"
+   }
+  },
+  {
+   "op": "set_element_property",
+   "arguments": {
+    "element_path": "/root/ReferenceData/Currency/name",
+    "property": "minOccurs",
+    "value": "1"
+   }
+  },
+  {
+   "op": "create_field",
+   "arguments": {
+    "field_path": "/root/ReferenceData/Currency/symbol",
+    "field_type": "string"
+   }
+  },
+  {
+   "op": "set_element_property",
+   "arguments": {
+    "element_path": "/root/ReferenceData/Currency/symbol",
+    "property": "maxLength",
+    "value": "8"
+   }
+  },
+  {
+   "op": "create_field",
+   "arguments": {
+    "field_path": "/root/ReferenceData/Currency/decimals",
+    "field_type": "int"
+   }
+  },
+  {
+   "op": "create_field",
+   "arguments": {
+    "field_path": "/root/ReferenceData/Currency/active",
+    "field_type": "boolean"
+   }
+  },
+  {
+   "op": "create_table",
+   "arguments": {
+    "table_path": "/root/ReferenceData/Language"
+   }
+  },
+  {
+   "op": "create_field",
+   "arguments": {
+    "field_path": "/root/ReferenceData/Language/code",
+    "field_type": "string",
+    "is_primary_key": true
+   }
+  },
+  {
+   "op": "set_element_property",
+   "arguments": {
+    "element_path": "/root/ReferenceData/Language/code",
+    "property": "maxLength",
+    "value": "2"
+   }
+  },
+  {
+   "op": "create_field",
+   "arguments": {
+    "field_path": "/root/ReferenceData/Language/label_en",
+    "field_type": "string"
+   }
+  },
+  {
+   "op": "set_element_property",
+   "arguments": {
+    "element_path": "/root/ReferenceData/Language/label_en",
+    "property": "maxLength",
+    "value": "120"
+   }
+  },
+  {
+   "op": "set_element_property",
+   "arguments": {
+    "element_path": "/root/ReferenceData/Language/label_en",
+    "property": "mandatory",
+    "value": "true"
+   }
+  },
+  {
+   "op": "set_element_property",
+   "arguments": {
+    "element_path": "/root/ReferenceData/Language/label_en",
+    "property": "minOccurs",
+    "value": "1"
+   }
+  },
+  {
+   "op": "create_table",
+   "arguments": {
+    "table_path": "/root/ReferenceData/Unit"
+   }
+  },
+  {
+   "op": "create_field",
+   "arguments": {
+    "field_path": "/root/ReferenceData/Unit/code",
+    "field_type": "string",
+    "is_primary_key": true
+   }
+  },
+  {
+   "op": "set_element_property",
+   "arguments": {
+    "element_path": "/root/ReferenceData/Unit/code",
+    "property": "maxLength",
+    "value": "3"
+   }
+  },
+  {
+   "op": "create_field",
+   "arguments": {
+    "field_path": "/root/ReferenceData/Unit/label_en",
+    "field_type": "string"
+   }
+  },
+  {
+   "op": "set_element_property",
+   "arguments": {
+    "element_path": "/root/ReferenceData/Unit/label_en",
+    "property": "maxLength",
+    "value": "120"
+   }
+  },
+  {
+   "op": "set_element_property",
+   "arguments": {
+    "element_path": "/root/ReferenceData/Unit/label_en",
+    "property": "mandatory",
+    "value": "true"
+   }
+  },
+  {
+   "op": "set_element_property",
+   "arguments": {
+    "element_path": "/root/ReferenceData/Unit/label_en",
+    "property": "minOccurs",
+    "value": "1"
+   }
+  },
+  {
+   "op": "create_field",
+   "arguments": {
+    "field_path": "/root/ReferenceData/Unit/label_fr",
+    "field_type": "string"
+   }
+  },
+  {
+   "op": "set_element_property",
+   "arguments": {
+    "element_path": "/root/ReferenceData/Unit/label_fr",
+    "property": "maxLength",
+    "value": "120"
+   }
+  },
+  {
+   "op": "create_field",
+   "arguments": {
+    "field_path": "/root/ReferenceData/Unit/kind",
+    "field_type": "string"
+   }
+  },
+  {
+   "op": "set_element_property",
+   "arguments": {
+    "element_path": "/root/ReferenceData/Unit/kind",
+    "property": "enumeration",
+    "value": "QUANTITY,MASS,LENGTH,AREA,VOLUME,TIME,ENERGY,POWER,TEMPERATURE,PACKAGING"
+   }
+  },
+  {
+   "op": "create_table",
+   "arguments": {
+    "table_path": "/root/ReferenceData/Incoterm"
+   }
+  },
+  {
+   "op": "create_field",
+   "arguments": {
+    "field_path": "/root/ReferenceData/Incoterm/code",
+    "field_type": "string",
+    "is_primary_key": true
+   }
+  },
+  {
+   "op": "set_element_property",
+   "arguments": {
+    "element_path": "/root/ReferenceData/Incoterm/code",
+    "property": "maxLength",
+    "value": "3"
+   }
+  },
+  {
+   "op": "create_field",
+   "arguments": {
+    "field_path": "/root/ReferenceData/Incoterm/label_en",
+    "field_type": "string"
+   }
+  },
+  {
+   "op": "set_element_property",
+   "arguments": {
+    "element_path": "/root/ReferenceData/Incoterm/label_en",
+    "property": "maxLength",
+    "value": "120"
+   }
+  },
+  {
+   "op": "set_element_property",
+   "arguments": {
+    "element_path": "/root/ReferenceData/Incoterm/label_en",
+    "property": "mandatory",
+    "value": "true"
+   }
+  },
+  {
+   "op": "set_element_property",
+   "arguments": {
+    "element_path": "/root/ReferenceData/Incoterm/label_en",
+    "property": "minOccurs",
+    "value": "1"
+   }
+  },
+  {
+   "op": "create_field",
+   "arguments": {
+    "field_path": "/root/ReferenceData/Incoterm/label_fr",
+    "field_type": "string"
+   }
+  },
+  {
+   "op": "set_element_property",
+   "arguments": {
+    "element_path": "/root/ReferenceData/Incoterm/label_fr",
+    "property": "maxLength",
+    "value": "120"
+   }
+  },
+  {
+   "op": "create_field",
+   "arguments": {
+    "field_path": "/root/ReferenceData/Incoterm/transportMode",
+    "field_type": "string"
+   }
+  },
+  {
+   "op": "set_element_property",
+   "arguments": {
+    "element_path": "/root/ReferenceData/Incoterm/transportMode",
+    "property": "enumeration",
+    "value": "ANY,SEA"
+   }
+  },
+  {
+   "op": "create_field",
+   "arguments": {
+    "field_path": "/root/ReferenceData/Incoterm/version",
+    "field_type": "string"
+   }
+  },
+  {
+   "op": "set_element_property",
+   "arguments": {
+    "element_path": "/root/ReferenceData/Incoterm/version",
+    "property": "maxLength",
+    "value": "4"
+   }
+  },
+  {
+   "op": "create_table",
+   "arguments": {
+    "table_path": "/root/ReferenceData/PaymentTerm"
+   }
+  },
+  {
+   "op": "create_field",
+   "arguments": {
+    "field_path": "/root/ReferenceData/PaymentTerm/code",
+    "field_type": "string",
+    "is_primary_key": true
+   }
+  },
+  {
+   "op": "set_element_property",
+   "arguments": {
+    "element_path": "/root/ReferenceData/PaymentTerm/code",
+    "property": "maxLength",
+    "value": "20"
+   }
+  },
+  {
+   "op": "create_field",
+   "arguments": {
+    "field_path": "/root/ReferenceData/PaymentTerm/label_en",
+    "field_type": "string"
+   }
+  },
+  {
+   "op": "set_element_property",
+   "arguments": {
+    "element_path": "/root/ReferenceData/PaymentTerm/label_en",
+    "property": "maxLength",
+    "value": "120"
+   }
+  },
+  {
+   "op": "set_element_property",
+   "arguments": {
+    "element_path": "/root/ReferenceData/PaymentTerm/label_en",
+    "property": "mandatory",
+    "value": "true"
+   }
+  },
+  {
+   "op": "set_element_property",
+   "arguments": {
+    "element_path": "/root/ReferenceData/PaymentTerm/label_en",
+    "property": "minOccurs",
+    "value": "1"
+   }
+  },
+  {
+   "op": "create_field",
+   "arguments": {
+    "field_path": "/root/ReferenceData/PaymentTerm/label_fr",
+    "field_type": "string"
+   }
+  },
+  {
+   "op": "set_element_property",
+   "arguments": {
+    "element_path": "/root/ReferenceData/PaymentTerm/label_fr",
+    "property": "maxLength",
+    "value": "120"
+   }
+  },
+  {
+   "op": "create_field",
+   "arguments": {
+    "field_path": "/root/ReferenceData/PaymentTerm/days",
+    "field_type": "int"
+   }
+  },
+  {
+   "op": "create_field",
+   "arguments": {
+    "field_path": "/root/ReferenceData/PaymentTerm/rule",
+    "field_type": "string"
+   }
+  },
+  {
+   "op": "set_element_property",
+   "arguments": {
+    "element_path": "/root/ReferenceData/PaymentTerm/rule",
+    "property": "enumeration",
+    "value": "NONE,END_OF_MONTH,PREPAID"
+   }
+  },
+  {
+   "op": "create_table",
+   "arguments": {
+    "table_path": "/root/ReferenceData/LegalForm"
+   }
+  },
+  {
+   "op": "create_field",
+   "arguments": {
+    "field_path": "/root/ReferenceData/LegalForm/code",
+    "field_type": "string",
+    "is_primary_key": true
+   }
+  },
+  {
+   "op": "set_element_property",
+   "arguments": {
+    "element_path": "/root/ReferenceData/LegalForm/code",
+    "property": "maxLength",
+    "value": "4"
+   }
+  },
+  {
+   "op": "create_field",
+   "arguments": {
+    "field_path": "/root/ReferenceData/LegalForm/name",
+    "field_type": "string"
+   }
+  },
+  {
+   "op": "set_element_property",
+   "arguments": {
+    "element_path": "/root/ReferenceData/LegalForm/name",
+    "property": "maxLength",
+    "value": "255"
+   }
+  },
+  {
+   "op": "create_field",
+   "arguments": {
+    "field_path": "/root/ReferenceData/LegalForm/transliteratedName",
+    "field_type": "string"
+   }
+  },
+  {
+   "op": "set_element_property",
+   "arguments": {
+    "element_path": "/root/ReferenceData/LegalForm/transliteratedName",
+    "property": "maxLength",
+    "value": "255"
+   }
+  },
+  {
+   "op": "create_field",
+   "arguments": {
+    "field_path": "/root/ReferenceData/LegalForm/abbreviation",
+    "field_type": "string"
+   }
+  },
+  {
+   "op": "set_element_property",
+   "arguments": {
+    "element_path": "/root/ReferenceData/LegalForm/abbreviation",
+    "property": "maxLength",
+    "value": "120"
+   }
+  },
+  {
+   "op": "create_field",
+   "arguments": {
+    "field_path": "/root/ReferenceData/LegalForm/country",
+    "field_type": "string"
+   }
+  },
+  {
+   "op": "set_element_property",
+   "arguments": {
+    "element_path": "/root/ReferenceData/LegalForm/country",
+    "property": "maxLength",
+    "value": "2"
+   }
+  },
+  {
+   "op": "create_field",
+   "arguments": {
+    "field_path": "/root/ReferenceData/LegalForm/language",
+    "field_type": "string"
+   }
+  },
+  {
+   "op": "set_element_property",
+   "arguments": {
+    "element_path": "/root/ReferenceData/LegalForm/language",
+    "property": "maxLength",
+    "value": "10"
+   }
+  },
+  {
+   "op": "create_field",
+   "arguments": {
+    "field_path": "/root/ReferenceData/LegalForm/status",
+    "field_type": "string"
+   }
+  },
+  {
+   "op": "set_element_property",
+   "arguments": {
+    "element_path": "/root/ReferenceData/LegalForm/status",
+    "property": "maxLength",
+    "value": "8"
+   }
+  },
+  {
+   "op": "create_table",
+   "arguments": {
+    "table_path": "/root/ReferenceData/IdentifierType"
+   }
+  },
+  {
+   "op": "create_field",
+   "arguments": {
+    "field_path": "/root/ReferenceData/IdentifierType/code",
+    "field_type": "string",
+    "is_primary_key": true
+   }
+  },
+  {
+   "op": "set_element_property",
+   "arguments": {
+    "element_path": "/root/ReferenceData/IdentifierType/code",
+    "property": "maxLength",
+    "value": "10"
+   }
+  },
+  {
+   "op": "create_field",
+   "arguments": {
+    "field_path": "/root/ReferenceData/IdentifierType/label_en",
+    "field_type": "string"
+   }
+  },
+  {
+   "op": "set_element_property",
+   "arguments": {
+    "element_path": "/root/ReferenceData/IdentifierType/label_en",
+    "property": "maxLength",
+    "value": "120"
+   }
+  },
+  {
+   "op": "set_element_property",
+   "arguments": {
+    "element_path": "/root/ReferenceData/IdentifierType/label_en",
+    "property": "mandatory",
+    "value": "true"
+   }
+  },
+  {
+   "op": "set_element_property",
+   "arguments": {
+    "element_path": "/root/ReferenceData/IdentifierType/label_en",
+    "property": "minOccurs",
+    "value": "1"
+   }
+  },
+  {
+   "op": "create_field",
+   "arguments": {
+    "field_path": "/root/ReferenceData/IdentifierType/label_fr",
+    "field_type": "string"
+   }
+  },
+  {
+   "op": "set_element_property",
+   "arguments": {
+    "element_path": "/root/ReferenceData/IdentifierType/label_fr",
+    "property": "maxLength",
+    "value": "120"
+   }
+  },
+  {
+   "op": "create_field",
+   "arguments": {
+    "field_path": "/root/ReferenceData/IdentifierType/country",
+    "field_type": "string"
+   }
+  },
+  {
+   "op": "set_element_property",
+   "arguments": {
+    "element_path": "/root/ReferenceData/IdentifierType/country",
+    "property": "maxLength",
+    "value": "2"
+   }
+  },
+  {
+   "op": "create_field",
+   "arguments": {
+    "field_path": "/root/ReferenceData/IdentifierType/pattern",
+    "field_type": "string"
+   }
+  },
+  {
+   "op": "set_element_property",
+   "arguments": {
+    "element_path": "/root/ReferenceData/IdentifierType/pattern",
+    "property": "maxLength",
+    "value": "120"
+   }
+  },
+  {
+   "op": "create_field",
+   "arguments": {
+    "field_path": "/root/ReferenceData/IdentifierType/checkLibrary",
+    "field_type": "string"
+   }
+  },
+  {
+   "op": "set_element_property",
+   "arguments": {
+    "element_path": "/root/ReferenceData/IdentifierType/checkLibrary",
+    "property": "maxLength",
+    "value": "120"
+   }
+  },
+  {
+   "op": "create_table",
+   "arguments": {
+    "table_path": "/root/ReferenceData/ActivitySector"
+   }
+  },
+  {
+   "op": "create_field",
+   "arguments": {
+    "field_path": "/root/ReferenceData/ActivitySector/code",
+    "field_type": "string",
+    "is_primary_key": true
+   }
+  },
+  {
+   "op": "set_element_property",
+   "arguments": {
+    "element_path": "/root/ReferenceData/ActivitySector/code",
+    "property": "maxLength",
+    "value": "2"
+   }
+  },
+  {
+   "op": "create_field",
+   "arguments": {
+    "field_path": "/root/ReferenceData/ActivitySector/label_en",
+    "field_type": "string"
+   }
+  },
+  {
+   "op": "set_element_property",
+   "arguments": {
+    "element_path": "/root/ReferenceData/ActivitySector/label_en",
+    "property": "maxLength",
+    "value": "120"
+   }
+  },
+  {
+   "op": "set_element_property",
+   "arguments": {
+    "element_path": "/root/ReferenceData/ActivitySector/label_en",
+    "property": "mandatory",
+    "value": "true"
+   }
+  },
+  {
+   "op": "set_element_property",
+   "arguments": {
+    "element_path": "/root/ReferenceData/ActivitySector/label_en",
+    "property": "minOccurs",
+    "value": "1"
+   }
+  },
+  {
+   "op": "create_field",
+   "arguments": {
+    "field_path": "/root/ReferenceData/ActivitySector/label_fr",
+    "field_type": "string"
+   }
+  },
+  {
+   "op": "set_element_property",
+   "arguments": {
+    "element_path": "/root/ReferenceData/ActivitySector/label_fr",
+    "property": "maxLength",
+    "value": "120"
+   }
+  },
+  {
+   "op": "add_foreign_key",
+   "arguments": {
+    "field_path": "/root/ReferenceData/LegalForm/country",
+    "target_table_path": "/root/ReferenceData/Country"
+   }
+  },
+  {
+   "op": "add_foreign_key",
+   "arguments": {
+    "field_path": "/root/ReferenceData/IdentifierType/country",
+    "target_table_path": "/root/ReferenceData/Country"
+   }
+  }
+ ],
+ "blockPlacements": [],
+ "labels": {
+  "/root/ReferenceData": {
+   "en-US": "Reference data",
+   "fr-FR": "Référentiels"
+  },
+  "/root/ReferenceData/Country": {
+   "en-US": "Countries (ISO 3166-1)",
+   "fr-FR": "Pays (ISO 3166-1)"
+  },
+  "/root/ReferenceData/Currency": {
+   "en-US": "Currencies (ISO 4217)",
+   "fr-FR": "Devises (ISO 4217)"
+  },
+  "/root/ReferenceData/Language": {
+   "en-US": "Languages (ISO 639-1)",
+   "fr-FR": "Langues (ISO 639-1)"
+  },
+  "/root/ReferenceData/Unit": {
+   "en-US": "Units of measure",
+   "fr-FR": "Unités de mesure"
+  },
+  "/root/ReferenceData/Incoterm": {
+   "en-US": "Incoterms",
+   "fr-FR": "Incoterms"
+  },
+  "/root/ReferenceData/PaymentTerm": {
+   "en-US": "Payment terms",
+   "fr-FR": "Conditions de paiement"
+  },
+  "/root/ReferenceData/LegalForm": {
+   "en-US": "Legal forms (ISO 20275)",
+   "fr-FR": "Formes juridiques (ISO 20275)"
+  },
+  "/root/ReferenceData/IdentifierType": {
+   "en-US": "Identifier types",
+   "fr-FR": "Types d'identifiant"
+  },
+  "/root/ReferenceData/ActivitySector": {
+   "en-US": "Activity sectors (NACE sections)",
+   "fr-FR": "Secteurs d'activité (sections NACE)"
+  }
+ },
+ "defaultLabels": {
+  "/root/ReferenceData/Country": "${./name}",
+  "/root/ReferenceData/Currency": "${./code} - ${./name}",
+  "/root/ReferenceData/Language": "${./label_en}",
+  "/root/ReferenceData/Unit": "${./code} - ${./label_en}",
+  "/root/ReferenceData/Incoterm": "${./code} - ${./label_en}",
+  "/root/ReferenceData/PaymentTerm": "${./label_en}",
+  "/root/ReferenceData/LegalForm": "${./code} - ${./name}",
+  "/root/ReferenceData/IdentifierType": "${./label_en}",
+  "/root/ReferenceData/ActivitySector": "${./code} - ${./label_en}"
+ },
+ "note": "The ReferenceData group is a plain group at /root; every other pack's foreign keys point at these paths. A deployment that already holds Geographies/Currencies datasets may re-point the keys at them in the adaptation step (a CHANGE difference)."
+}

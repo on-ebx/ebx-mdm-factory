@@ -1,0 +1,12 @@
+{"format": "accelerator-libraries/1",
+ "note": "Published script libraries the packs may wrap. Signatures read from the sources (get_api_help does not know published libraries). A rule the model proposes on one of these needs must USE_LIBRARY and wrap, never rewrite.",
+ "libraries": [
+  {"name": "Fasttrack.lib.phone", "functions": ["isValid(phone: string): boolean", "toE164(phone: string, country: string): string"], "covers": ["phone number validity", "E.164 normalisation"]},
+  {"name": "Fasttrack.lib.validator.email", "functions": ["isValid(s: string): boolean"], "covers": ["e-mail address validity"]},
+  {"name": "Fasttrack.lib.validator.url", "functions": ["isValid(s: string): boolean"], "covers": ["URL validity"]},
+  {"name": "Fasttrack.lib.validator.iban", "functions": ["isValid(s: string): boolean"], "covers": ["IBAN validity"]},
+  {"name": "Fasttrack.lib.validator.checkdigit.luhn", "functions": ["isValid(code: string): boolean", "calculate(code: string): string"], "covers": ["Luhn check digit: SIREN, SIRET, payment cards"]},
+  {"name": "Fasttrack.lib.validator.checkdigit.ean13", "functions": ["isValid(code: string): boolean"], "covers": ["EAN-13 / GTIN-13 check digit"]},
+  {"name": "Fasttrack.lib.validator.isin", "functions": ["isValid(s: string): boolean"], "covers": ["ISIN"]},
+  {"name": "Fasttrack.lib.validator.date", "functions": ["isValid(s: string, pattern: string): boolean"], "covers": ["a date written as text; useless on a typed date field"]}
+ ]}

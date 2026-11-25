@@ -1,0 +1,8 @@
+# Maven coordinates of the embedded jars that have some (1.4.1, X3-08). Read by tools/deps_check.py, which asks OSV (https://api.osv.dev) about each one.
+# Format: <jar name as pinned in tools/embedded-jars.sha256> <groupId:artifactId:version>
+# Download them from Maven Central by these coordinates and compare their SHA-256 with tools/embedded-jars.sha256 before use (the build refuses any other build).
+# on-ebx-agent.jar and on-ebx-mapping.jar are ON EBX code built by the ebx-connectors repository: they have no Maven coordinates and are covered by that repository's
+# own dependency check (its tools/deps_check.sh); tools/deps_check.py says so in its output.
+jackson-annotations-2.18.12.jar com.fasterxml.jackson.core:jackson-annotations:2.18.12
+jackson-core-2.18.12.jar com.fasterxml.jackson.core:jackson-core:2.18.12
+jackson-databind-2.18.12.jar com.fasterxml.jackson.core:jackson-databind:2.18.12
