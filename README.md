@@ -17,13 +17,17 @@ profiles of the sources: required in fact, the landing plan is refused without i
 Operators: [docs/OPERATIONS.md](docs/OPERATIONS.md) (install, configuration reference, security settings, background work, upgrade, diagnosis, known limits),
 [docs/UPGRADE.md](docs/UPGRADE.md) (upgrade and rollback; section 12 for 1.3.0 to 1.4.0), [docs/RELEASE-NOTES.md](docs/RELEASE-NOTES.md).
 
-## Status (version 1.4.2, 2026-11-12)
+## Status (version 1.4.3, 2026-11-12)
 
 The module runs the whole chain for real on the development instance (ON EBX 6.3.0.7-GP): sources, landing, staging, master with Match and Merge, lineage per
 record, distribution, delivery through EBX Staging, the assistant (wizard), the explorer and the cockpit. **Version 1.4.1 was installed on 2026-11-12 on a clean instance**
 (a new installation, and a start from 1.4.0 with Match and Merge and DAMA) **and on the FastTrack development instance**, where its integration suite (`tools/itest.sh`: 77 scenarios
 passed, 0 failed, with an administrator account and an account without rights) and its smoke test (`tools/smoke.sh`) passed. Not done: a whole project run on the clean instance
 (landing passed once `-Debx.factory.zonePermissionsFrom=Reference` was set; since 1.4.3 that is the default, docs/OPERATIONS.md section 2.6), the upgrade from 1.3.x on a copy, and any rollback (docs/UPGRADE.md section 12).
+
+**Version 1.4.3** (a new zone copies its parent's permissions by default) is the current tag and the first version with a GitHub release (package and checksum, published 2026-11-20).
+Its war as packaged has not been started on a server: a build made two commits before the tag (the wording of one message apart) passed the landing on the clean instance with no setting (12 stages of 12; the scenario then stops at the proposal step, that instance having no language-model connection),
+and the development instance still runs 1.4.2.
 
 Two functions delivered after 1.3.0 are in the code but **closed by default**: the governed agents ([docs/AGENTS.md](docs/AGENTS.md), `-Debx.factory.agents.enabled=true`)
 and the source-drift proposals ([docs/DRIFT.md](docs/DRIFT.md), `-Debx.factory.sourceDrift.enabled=true`). What is missing before a customer opens them is in the
